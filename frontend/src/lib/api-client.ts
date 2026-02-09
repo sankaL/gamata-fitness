@@ -8,6 +8,17 @@ import type {
   RegisterPayload,
   UserProfile,
 } from '@/types/auth'
+import type {
+  AdminUser,
+  AdminOverview,
+  AdminUserDetail,
+  CoachAssignmentPayload,
+  CoachAssignmentResponse,
+  PaginatedUsersResponse,
+  UserCreatePayload,
+  UserListQueryParams,
+  UserUpdatePayload,
+} from '@/types/users'
 
 export interface HealthResponse {
   status: 'ok'
@@ -16,6 +27,18 @@ export interface HealthResponse {
 interface ApiErrorPayload {
   detail?: string
   message?: string
+}
+
+function buildQueryString(params: Record<string, string | number | boolean | undefined>): string {
+  const searchParams = new URLSearchParams()
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined) {
+      return
+    }
+    searchParams.set(key, String(value))
+  })
+  const query = searchParams.toString()
+  return query ? `?${query}` : ''
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -90,5 +113,103 @@ export async function submitPasswordUpdate(
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
+  })
+}
+
+export async function getAdminOverview(token: string): Promise<AdminOverview> {
+  return request<AdminOverview>('/users/overview', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export async function getUsers(
+  token: string,
+  params: UserListQueryParams,
+): Promise<PaginatedUsersResponse> {
+  const queryString = buildQueryString({
+    page: params.page,
+    page_size: params.page_size,
+    role: params.role,
+    search: params.search,
+    is_active: params.is_active,
+  })
+
+  return request<PaginatedUsersResponse>(`/users${queryString}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export async function getUserById(token: string, userId: string): Promise<AdminUserDetail> {
+  return request<AdminUserDetail>(`/users/${userId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export async function createUser(token: string, payload: UserCreatePayload): Promise<AdminUser> {
+  return request<AdminUser>('/users', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function updateUser(
+  token: string,
+  userId: string,
+  payload: UserUpdatePayload,
+): Promise<AdminUser> {
+  return request<AdminUser>(`/users/${userId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deactivateUser(token: string, userId: string): Promise<AdminUser> {
+  return request<AdminUser>(`/users/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export async function assignCoaches(
+  token: string,
+  userId: string,
+  payload: CoachAssignmentPayload,
+): Promise<CoachAssignmentResponse> {
+  return request<CoachAssignmentResponse>(`/users/${userId}/coaches`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function removeCoachAssignment(
+  token: string,
+  userId: string,
+  coachId: string,
+): Promise<CoachAssignmentResponse> {
+  return request<CoachAssignmentResponse>(`/users/${userId}/coaches/${coachId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
 }

@@ -6,6 +6,7 @@ import { RoleGuard } from '@/components/auth/RoleGuard'
 import { useAuth } from '@/hooks/use-auth'
 import { getDashboardPath } from '@/lib/auth-routing'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
+import { AdminUsersPage } from '@/pages/admin/AdminUsersPage'
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { RegisterPage } from '@/pages/auth/RegisterPage'
@@ -60,6 +61,16 @@ function App() {
           <ProtectedRoute>
             <RoleGuard allowedRoles={['admin']}>
               <AdminDashboardPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['admin']}>
+              <AdminUsersPage />
             </RoleGuard>
           </ProtectedRoute>
         }

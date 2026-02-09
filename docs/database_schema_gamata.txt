@@ -1,6 +1,6 @@
 # GamataFitness Database Schema (Source of Truth)
 
-Version: 2.0.0  
+Version: 2.1.0  
 Last Updated: 2026-02-09
 
 This document is the source of truth for the implemented Phase 2 schema.
@@ -11,6 +11,7 @@ This document is the source of truth for the implemented Phase 2 schema.
 |---|---|---|
 | 1.0.0 | 2026-02-08 | Initial draft schema |
 | 2.0.0 | 2026-02-09 | Implemented Phase 2 schema, seed data, and RLS in Alembic |
+| 2.1.0 | 2026-02-09 | Added user soft-deactivation columns and user filtering indexes for Phase 4 admin management |
 
 ## Enums
 
@@ -26,6 +27,8 @@ This document is the source of truth for the implemented Phase 2 schema.
 - `name` VARCHAR(255), not null
 - `email` VARCHAR(320), not null, unique
 - `role` `user_role`, not null, default `user`
+- `is_active` BOOLEAN, not null, default `true`
+- `deactivated_at` TIMESTAMPTZ, nullable
 - `created_at` TIMESTAMPTZ, not null, default `now()`
 - `updated_at` TIMESTAMPTZ, not null, default `now()`
 
@@ -142,6 +145,8 @@ Constraints:
 
 - `ix_coach_user_assignments_coach_id`
 - `ix_coach_user_assignments_user_id`
+- `ix_users_role`
+- `ix_users_is_active`
 - `ix_workouts_type`
 - `ix_workouts_is_archived`
 - `ix_workout_plans_coach_id`
@@ -225,3 +230,4 @@ Policy implementation and helper functions are in:
 - `202602090001_phase2_schema.py`: tables, enums, constraints, indexes, triggers
 - `202602090002_phase2_seed_data.py`: default muscle groups, cardio types, workout library
 - `202602090003_phase2_rls_policies.py`: RLS helper functions and policies
+- `202602090004_phase4_user_deactivation.py`: `users.is_active`, `users.deactivated_at`, and supporting user list indexes
