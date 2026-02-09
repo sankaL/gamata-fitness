@@ -211,4 +211,37 @@ Developers need a fast, repeatable way to run the full stack locally, including 
 
 ---
 
+### [DECISION-007] Phase 2 Schema Baseline via Alembic with Seeded Reference Data and Supabase RLS
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Phase 2 requires a complete relational schema, deterministic starter data, and access control rules aligned with Supabase auth claims and coach-to-user assignment rules.
+
+**Decision:**  
+- Initialize Alembic under `database/migrations/` as the authoritative schema migration system.
+- Implement Phase 2 in three revisions:
+  - `202602090001`: enums, tables, constraints, indexes, and DB-side guardrails (coach assignment checks, updated-at triggers).
+  - `202602090002`: deterministic seed data for muscle groups, cardio types, and a 24-workout starter library.
+  - `202602090003`: RLS enablement + policies with helper functions (`current_user_role`, `is_admin`, `is_coach_of`, `can_access_user`).
+- Keep large policy DDL in SQL artifacts under `database/migrations/sql/` and execute them from revision files.
+
+**Rationale:**  
+- Alembic gives explicit, versioned schema history tied to backend models.
+- Splitting schema/seed/RLS revisions keeps rollbacks and debugging focused.
+- DB guardrails enforce core business rules independently from API logic.
+- SQL artifacts keep migration Python files under the repository file-size cap while preserving readability.
+
+**Alternatives Considered:**  
+- Supabase CLI SQL-only migrations without Alembic (rejected: weaker alignment with SQLAlchemy model evolution in backend code).
+- Single monolithic migration for schema + seeds + RLS (rejected: harder rollback and troubleshooting).
+- Application-only enforcement for assignment/active-plan constraints (rejected: leaves integrity gaps if API checks are bypassed).
+
+**Consequences:**  
+- Positive: repeatable schema bootstrapping, deterministic baseline data, and enforceable least-privilege table access.
+- Negative/Risks: policy complexity increases query-planning and testing burden, requiring deliberate API-level integration tests in later phases.
+
+---
+
 <!-- Add new decisions above this line -->
