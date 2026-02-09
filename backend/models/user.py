@@ -20,7 +20,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 
 from models.base import Base, TimestampMixin
-from models.enums import UserRole
+from models.enums import UserRole, enum_values
 
 
 class User(TimestampMixin, Base):
@@ -32,7 +32,7 @@ class User(TimestampMixin, Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(320), nullable=False, unique=True)
     role: Mapped[UserRole] = mapped_column(
-        SQLEnum(UserRole, name="user_role", create_type=False),
+        SQLEnum(UserRole, name="user_role", create_type=False, values_callable=enum_values),
         nullable=False,
         default=UserRole.USER,
         server_default=UserRole.USER.value,

@@ -22,7 +22,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 
 from models.base import Base, TimestampMixin
-from models.enums import PlanAssignmentStatus
+from models.enums import PlanAssignmentStatus, enum_values
 
 
 class WorkoutPlan(TimestampMixin, Base):
@@ -119,7 +119,12 @@ class PlanAssignment(Base):
         index=True,
     )
     status: Mapped[PlanAssignmentStatus] = mapped_column(
-        SQLEnum(PlanAssignmentStatus, name="plan_assignment_status", create_type=False),
+        SQLEnum(
+            PlanAssignmentStatus,
+            name="plan_assignment_status",
+            create_type=False,
+            values_callable=enum_values,
+        ),
         nullable=False,
         default=PlanAssignmentStatus.PENDING,
         server_default=PlanAssignmentStatus.PENDING.value,

@@ -244,4 +244,35 @@ Phase 2 requires a complete relational schema, deterministic starter data, and a
 
 ---
 
+### [DECISION-008] Phase 3 Auth Flow with Backend-Mediated Supabase Sessions and In-Memory Frontend Tokens
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Phase 3 requires complete auth flows (register, login, profile, password reset), JWT verification for protected API routes, and role-based routing in the React app while honoring project security rules (fail-closed config and no localStorage token storage).
+
+**Decision:**  
+- Implement auth endpoints in FastAPI (`/auth/register`, `/auth/login`, `/auth/me`, `/auth/password-reset`, `/auth/password-update`) that broker Supabase auth operations.
+- Add `JWTVerificationMiddleware` plus authenticated-user dependency and `@require_role([...])` decorator in backend permissions.
+- Store frontend access token and user profile only in React `AuthContext` memory (not localStorage/sessionStorage).
+- Configure local Supabase auth redirect URLs for `/auth/update-password` and route password recovery through backend endpoints.
+
+**Rationale:**  
+- Keeping auth orchestration in backend centralizes validation and RBAC enforcement logic.
+- Middleware + dependency layering gives clear separation: token verification, user resolution, and role checks.
+- In-memory token storage aligns with stated security constraints and reduces persistence risk on shared devices.
+- Backend-mediated reset/update flows keep Supabase coupling in one service boundary.
+
+**Alternatives Considered:**  
+- Frontend-only Supabase auth usage for all flows (rejected: duplicates auth logic across clients and weakens backend control points).
+- localStorage token persistence for convenience (rejected: violates project security rule).
+- Per-route inline JWT checks without middleware abstraction (rejected: repetitive and error-prone).
+
+**Consequences:**  
+- Positive: consistent auth contract across API and UI, clearer RBAC extension path for later phases.
+- Negative/Risks: memory-only sessions do not survive full page refresh; persistent session strategy may be revisited in a later security review.
+
+---
+
 <!-- Add new decisions above this line -->
