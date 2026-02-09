@@ -284,7 +284,7 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 12.7 | Add API rate limiting | BE | ⬜ | | Prevent abuse; use slowapi |
 | 12.8 | Add request logging | BE | ⬜ | | Log all API requests for debugging |
 | 12.9 | Write unit tests for critical backend services | BE | ⬜ | | pytest; focus on business logic |
-| 12.10 | Write integration tests for API endpoints | BE | ⬜ | | pytest + httpx async client |
+| 12.10 | Write integration tests for API endpoints | BE | ⬜ | | pytest + Python standard library request utilities (`urllib.request`) |
 | 12.11 | Write frontend component tests | FE | ⬜ | | Vitest + React Testing Library |
 | 12.12 | Performance audit with Lighthouse | OTHER | ⬜ | | Target 90+ score on mobile |
 | 12.13 | Accessibility audit | OTHER | ⬜ | | WCAG 2.1 AA compliance check |
@@ -311,6 +311,8 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 13.12 | Final security review | OTHER | ⬜ | | Check CORS, auth, RLS policies, Docker security best practices |
 | 13.13 | Production deployment | INFRA | ⬜ | | Deploy containers and verify all features |
 | 13.14 | Post-launch monitoring | OTHER | ⬜ | | Monitor container health for 48 hours; address issues |
+| 13.15 | Standardize root test directory structure and policy in docs (`tests/e2e`, `tests/api`, `tests/performance`) | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; documented in AGENTS/CLAUDE/tech stack |
+| 13.16 | Add root `.gitignore` with stack defaults and test artifact ignores (Playwright traces/results, Locust outputs) | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; includes frontend/backend/test artifacts |
 
 ---
 
@@ -356,8 +358,8 @@ Phase 5 (Workouts)─┘        ↓
 | 10. Plan Activation | 5 | 2 | 3 | 0 | 0 | 0 |
 | 11. CSV Import/Export | 9 | 3 | 6 | 0 | 0 | 0 |
 | 12. Polish | 15 | 7 | 4 | 0 | 0 | 4 |
-| 13. Documentation | 14 | 0 | 1 | 8 | 0 | 5 |
-| **TOTAL** | **193** | **77** | **65** | **22** | **16** | **13** |
+| 13. Documentation | 16 | 0 | 1 | 8 | 0 | 7 |
+| **TOTAL** | **195** | **77** | **65** | **22** | **16** | **15** |
 
 ---
 
@@ -389,8 +391,8 @@ This table tracks issues discovered during development that were not part of the
 
 | ID | Date Added | Description | Priority | Status | Assigned To | Notes |
 |----|------------|-------------|----------|--------|-------------|-------|
-| ENH-001 | | | | ⬜ | | |
-| ENH-002 | | | | ⬜ | | |
+| ENH-001 | February 9, 2026 | Standardize test placement under root `tests/` with `tests/e2e/frontend`, `tests/e2e/api`, `tests/api`, and `tests/performance` | P1 | 🟢 | Codex | Documentation and directory scaffolding completed |
+| ENH-002 | February 9, 2026 | Add root `.gitignore` for frontend/backend/test artifacts including Playwright traces/results and Locust reports | P1 | 🟢 | Codex | Added comprehensive ignore rules with test-output coverage |
 | ENH-003 | | | | ⬜ | | |
 | ENH-004 | | | | ⬜ | | |
 | ENH-005 | | | | ⬜ | | |
@@ -460,4 +462,4 @@ docker system prune -a
 
 ---
 
-*Last updated: February 8, 2026*
+*Last updated: February 9, 2026*

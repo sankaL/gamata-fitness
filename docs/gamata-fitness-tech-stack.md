@@ -85,6 +85,13 @@ gamata-fitness/
 │   ├── migrations/              # Alembic migrations
 │   └── seed/                    # Initial data (workout library)
 │
+├── tests/                       # Centralized automated test suites
+│   ├── e2e/                     # Playwright end-to-end tests
+│   │   ├── frontend/            # Frontend end-to-end scenarios
+│   │   └── api/                 # API end-to-end scenarios in Playwright
+│   ├── api/                     # API integration and endpoint tests
+│   └── performance/             # Performance and load tests
+│
 ├── docs/                        # Documentation
 └── README.md
 ```
@@ -151,6 +158,22 @@ gamata-fitness/
 ---
 
 ## Infrastructure
+
+### Testing Directory Convention
+- All automated tests must be stored under the root `tests/` directory.
+- Playwright end-to-end tests go in `tests/e2e/`.
+- End-to-end tests are organized by target in `tests/e2e/frontend/` and `tests/e2e/api/`.
+- API non-Playwright tests (integration/endpoint tests) go in `tests/api/`.
+- Performance and load tests go in `tests/performance/`.
+- Do not place new tests in `frontend/` or `backend/`.
+
+### Testing Tooling
+| Test Type | Tooling | Location |
+|-----------|---------|----------|
+| Frontend end-to-end | Playwright | `tests/e2e/frontend/` |
+| API tests | PyTest + Python standard library request utilities (`urllib.request`) | `tests/api/` |
+| API end-to-end (browser-driven/API-flow) | Playwright | `tests/e2e/api/` |
+| Performance/load | Locust (`locust.io`) | `tests/performance/` |
 
 ### Containerization Strategy
 | Component | Base Image | Purpose |
