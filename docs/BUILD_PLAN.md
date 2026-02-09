@@ -34,32 +34,32 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 1.1 | Create GitHub repository with branch protection rules | INFRA | ⬜ | | Main branch protected; require PR reviews |
-| 1.2 | Set up Supabase project (dev environment) | INFRA | ⬜ | | Create project at supabase.com; save connection strings |
-| 1.3 | Create root `docker-compose.yml` | INFRA | ⬜ | | Define frontend and backend services; shared network |
-| 1.4 | Create `docker-compose.dev.yml` override | INFRA | ⬜ | | Volume mounts for hot reload; dev environment variables |
-| 1.5 | Create `docker-compose.prod.yml` override | INFRA | ⬜ | | Production builds; no volume mounts; optimized settings |
-| 1.6 | Create `.dockerignore` file | INFRA | ⬜ | | Exclude node_modules, __pycache__, .git, .env files |
-| 1.7 | Initialize backend project structure | BE | ⬜ | | Follow repo structure in tech stack doc; use `pip` with requirements.txt |
-| 1.8 | Create backend `Dockerfile` (production) | BE | ⬜ | | Multi-stage build; Python 3.12-slim base; copy requirements, install, copy app |
-| 1.9 | Create backend `Dockerfile.dev` | BE | ⬜ | | Single stage; install requirements; uvicorn with --reload |
-| 1.10 | Initialize frontend project with Vite + React + TypeScript | FE | ⬜ | | Run `npm create vite@latest frontend -- --template react-ts` |
-| 1.11 | Create frontend `Dockerfile` (production) | FE | ⬜ | | Multi-stage: node build stage → nginx:alpine serving static files |
-| 1.12 | Create frontend `Dockerfile.dev` | FE | ⬜ | | Node:20-alpine; npm install; vite dev server with HMR |
-| 1.13 | Create frontend `nginx.conf` | FE | ⬜ | | SPA routing; gzip compression; cache headers for static assets |
-| 1.14 | Configure Tailwind CSS in frontend | FE | ⬜ | | Follow Tailwind + Vite setup guide |
-| 1.15 | Install and configure shadcn/ui | FE | ⬜ | | Run `npx shadcn-ui@latest init`; select components as needed |
-| 1.16 | Set up ESLint + Prettier for frontend | FE | ⬜ | | Consistent code formatting across team |
-| 1.17 | Set up Black + isort for backend | BE | ⬜ | | Python code formatting |
-| 1.18 | Create `.env.example` files for both frontend and backend | OTHER | ⬜ | | Document all required environment variables |
-| 1.19 | Set up Supabase client in backend (`supabase-py`) | BE | ⬜ | | Create `app/database.py` with connection logic |
-| 1.20 | Set up Supabase client in frontend | FE | ⬜ | | Create `lib/supabase.ts` with client initialization |
-| 1.21 | Configure CORS in FastAPI for frontend origin | BE | ⬜ | | Allow localhost:5173 (dev) and production URL |
-| 1.22 | Create basic health check endpoint (`GET /health`) | BE | ⬜ | | Returns `{ "status": "ok" }` for container health checks |
-| 1.23 | Add healthcheck to docker-compose for backend | INFRA | ⬜ | | `curl -f http://localhost:8000/health` with interval |
-| 1.24 | Verify `docker-compose up` runs both services | INFRA | ⬜ | | Frontend accessible at :5173, backend at :8000 |
-| 1.25 | Verify frontend can call backend health endpoint | FE | ⬜ | | Test CORS and connectivity within Docker network |
-| 1.26 | Set up Railway project with Docker deployment | INFRA | ⬜ | | Connect to GitHub repo; configure Dockerfile paths; set env vars |
+| 1.1 | Create GitHub repository with branch protection rules | INFRA | 🟢 | Codex | Completed February 9, 2026: repo set to public and branch protection applied on `main` (PR required, 1 approval, force-push disabled, deletion disabled, no required checks) |
+| 1.2 | Set up Supabase project (dev environment) | INFRA | 🟢 | Codex | Completed February 9, 2026: authenticated with Supabase management API and confirmed active dev project `gamata-fitness` (`nwkvtnbwkvgxzivuhxnl`) with required URL and API keys |
+| 1.3 | Create root `docker-compose.yml` | INFRA | 🟢 | Codex | Completed February 9, 2026: created shared-network compose with backend/frontend services and dependency wiring |
+| 1.4 | Create `docker-compose.dev.yml` override | INFRA | 🟢 | Codex | Completed February 9, 2026: added dev Dockerfiles, bind mounts, HMR command, and dev environment settings |
+| 1.5 | Create `docker-compose.prod.yml` override | INFRA | 🟢 | Codex | Completed February 9, 2026: production Dockerfiles, restart policies, and frontend static serving port mapping |
+| 1.6 | Create `.dockerignore` file | INFRA | 🟢 | Codex | Completed February 9, 2026: root `.dockerignore` plus service-level `.dockerignore` files to trim build context |
+| 1.7 | Initialize backend project structure | BE | 🟢 | Codex | Completed February 9, 2026: scaffolded `backend/app`, `api`, `models`, `schemas`, `services`, `core` with module placeholders |
+| 1.8 | Create backend `Dockerfile` (production) | BE | 🟢 | Codex | Completed February 9, 2026: multi-stage Python 3.12-slim build with dependency install and runtime stage |
+| 1.9 | Create backend `Dockerfile.dev` | BE | 🟢 | Codex | Completed February 9, 2026: reload-ready dev image with requirements install and uvicorn `--reload` command |
+| 1.10 | Initialize frontend project with Vite + React + TypeScript | FE | 🟢 | Codex | Completed February 9, 2026: initialized `frontend/` via Vite React TypeScript template and installed dependencies |
+| 1.11 | Create frontend `Dockerfile` (production) | FE | 🟢 | Codex | Completed February 9, 2026: Node build stage + `nginx:alpine` runtime serving `dist/` |
+| 1.12 | Create frontend `Dockerfile.dev` | FE | 🟢 | Codex | Completed February 9, 2026: Node 20 alpine dev image with Vite dev server command on `0.0.0.0:5173` |
+| 1.13 | Create frontend `nginx.conf` | FE | 🟢 | Codex | Completed February 9, 2026: SPA fallback, gzip enabled, and static asset cache headers configured |
+| 1.14 | Configure Tailwind CSS in frontend | FE | 🟢 | Codex | Completed February 9, 2026: Tailwind + PostCSS configured with `src` content globs and design tokens |
+| 1.15 | Install and configure shadcn/ui | FE | 🟢 | Codex | Completed February 9, 2026: initialized shadcn (`components.json`) and added base `button`/`card` components |
+| 1.16 | Set up ESLint + Prettier for frontend | FE | 🟢 | Codex | Completed February 9, 2026: added prettier config, eslint-prettier integration, and lint/format scripts |
+| 1.17 | Set up Black + isort for backend | BE | 🟢 | Codex | Completed February 9, 2026: configured Black/isort via backend `pyproject.toml` and requirements |
+| 1.18 | Create `.env.example` files for both frontend and backend | OTHER | 🟢 | Codex | Completed February 9, 2026: added `frontend/.env.example` and `backend/.env.example` with required vars |
+| 1.19 | Set up Supabase client in backend (`supabase-py`) | BE | 🟢 | Codex | Completed February 9, 2026: implemented Supabase client initialization in `backend/app/database.py` |
+| 1.20 | Set up Supabase client in frontend | FE | 🟢 | Codex | Completed February 9, 2026: implemented client bootstrap in `frontend/src/lib/supabase.ts` |
+| 1.21 | Configure CORS in FastAPI for frontend origin | BE | 🟢 | Codex | Completed February 9, 2026: CORS configured from env in `backend/app/main.py` and verified with Origin header |
+| 1.22 | Create basic health check endpoint (`GET /health`) | BE | 🟢 | Codex | Completed February 9, 2026: `GET /health` returns `{"status":"ok"}` |
+| 1.23 | Add healthcheck to docker-compose for backend | INFRA | 🟢 | Codex | Completed February 9, 2026: compose healthcheck uses `curl -f http://localhost:8000/health` |
+| 1.24 | Verify `docker-compose up` runs both services | INFRA | 🟢 | Codex | Completed February 9, 2026: validated dev and prod compose bring up frontend (`:5173`) + backend (`:8000`) |
+| 1.25 | Verify frontend can call backend health endpoint | FE | 🟢 | Codex | Completed February 9, 2026: frontend health UI implemented and backend CORS response validated for `http://localhost:5173` |
+| 1.26 | Set up Railway project with Docker deployment | INFRA | 🟢 | Codex | Completed February 9, 2026: created Railway project `gamata-fitness` with `backend` + `frontend` services, configured env vars, deployed both containers, and verified public health/frontend reachability |
 
 ---
 
@@ -313,6 +313,7 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 13.14 | Post-launch monitoring | OTHER | ⬜ | | Monitor container health for 48 hours; address issues |
 | 13.15 | Standardize root test directory structure and policy in docs (`tests/e2e`, `tests/api`, `tests/performance`) | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; documented in AGENTS/CLAUDE/tech stack |
 | 13.16 | Add root `.gitignore` with stack defaults and test artifact ignores (Playwright traces/results, Locust outputs) | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; includes frontend/backend/test artifacts |
+| 13.17 | Add and maintain root `.env.example`; document env-example sync rules in agent docs | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; created root `.env.example` and added maintenance rules to AGENTS/CLAUDE |
 
 ---
 
@@ -358,8 +359,8 @@ Phase 5 (Workouts)─┘        ↓
 | 10. Plan Activation | 5 | 2 | 3 | 0 | 0 | 0 |
 | 11. CSV Import/Export | 9 | 3 | 6 | 0 | 0 | 0 |
 | 12. Polish | 15 | 7 | 4 | 0 | 0 | 4 |
-| 13. Documentation | 16 | 0 | 1 | 8 | 0 | 7 |
-| **TOTAL** | **195** | **77** | **65** | **22** | **16** | **15** |
+| 13. Documentation | 17 | 0 | 1 | 8 | 0 | 8 |
+| **TOTAL** | **196** | **77** | **65** | **22** | **16** | **16** |
 
 ---
 
@@ -393,7 +394,7 @@ This table tracks issues discovered during development that were not part of the
 |----|------------|-------------|----------|--------|-------------|-------|
 | ENH-001 | February 9, 2026 | Standardize test placement under root `tests/` with `tests/e2e/frontend`, `tests/e2e/api`, `tests/api`, and `tests/performance` | P1 | 🟢 | Codex | Documentation and directory scaffolding completed |
 | ENH-002 | February 9, 2026 | Add root `.gitignore` for frontend/backend/test artifacts including Playwright traces/results and Locust reports | P1 | 🟢 | Codex | Added comprehensive ignore rules with test-output coverage |
-| ENH-003 | | | | ⬜ | | |
+| ENH-003 | February 9, 2026 | Add root `.env.example` and enforce updating env-example files whenever new variables are introduced | P1 | 🟢 | Codex | Added root template and synced agent documentation rules in AGENTS/CLAUDE |
 | ENH-004 | | | | ⬜ | | |
 | ENH-005 | | | | ⬜ | | |
 

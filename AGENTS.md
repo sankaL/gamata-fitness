@@ -82,6 +82,12 @@ cd backend && black . && isort . # Python formatting
 2. Create an Alembic migration
 3. Update relevant SQLAlchemy models in `backend/models/`
 
+### Environment Variables
+
+- Root `.env.example` must exist and include every key from root `.env` with placeholder values only.
+- If new environment variables are added for any feature, service, or integration, update every relevant example file in the same change (`.env.example`, `frontend/.env.example`, `backend/.env.example`).
+- Never commit real secrets to any `*.env.example` file.
+
 ### Task Completion
 
 **MANDATORY:** After completing any task:
