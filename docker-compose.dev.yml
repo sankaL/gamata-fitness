@@ -16,7 +16,7 @@ services:
       dockerfile: Dockerfile.dev
     env_file:
       - ${FRONTEND_ENV_FILE:-./frontend/.env}
-    command: npm run dev -- --host 0.0.0.0 --port 5173
+    command: sh ./docker/dev-start.sh
     ports:
       - "5173:5173"
     volumes:

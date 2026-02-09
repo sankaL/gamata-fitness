@@ -61,6 +61,7 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 1.25 | Verify frontend can call backend health endpoint | FE | 🟢 | Codex | Completed February 9, 2026: frontend health UI implemented and backend CORS response validated for `http://localhost:5173` |
 | 1.26 | Set up Railway project with Docker deployment | INFRA | 🟢 | Codex | Completed February 9, 2026: created Railway project `gamata-fitness` with `backend` + `frontend` services, configured env vars, deployed both containers, and verified public health/frontend reachability |
 | 1.27 | Fix local profile env generation so Dockerized backend can reach local Supabase host services | BUG | 🟢 | Codex | Completed February 9, 2026: updated `scripts/run-profile.sh` to rewrite `localhost/127.0.0.1` to `host.docker.internal` for backend `SUPABASE_URL` and `DATABASE_URL` in generated local profile envs |
+| 1.28 | Ensure frontend dev container refreshes dependencies when lockfile changes | BUG | 🟢 | Codex | Completed February 9, 2026: added `frontend/docker/dev-start.sh` lockfile-hash check + `npm ci` bootstrap and updated `docker-compose.dev.yml` frontend command to prevent stale `frontend_node_modules` volume dependency drift |
 
 ---
 
@@ -115,20 +116,20 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 4.1 | Create Pydantic schemas for users (create, update, list) | BE | ⬜ | | In `backend/schemas/users.py` |
-| 4.2 | Create `GET /users` endpoint (admin only) | BE | ⬜ | | Return paginated user list with role filter |
-| 4.3 | Create `GET /users/{id}` endpoint | BE | ⬜ | | Return single user details |
-| 4.4 | Create `POST /users` endpoint (admin only) | BE | ⬜ | | Create new user with specified role |
-| 4.5 | Create `PUT /users/{id}` endpoint (admin only) | BE | ⬜ | | Update user name, email, role |
-| 4.6 | Create `DELETE /users/{id}` endpoint (admin only) | BE | ⬜ | | Soft delete (deactivate) user |
-| 4.7 | Create Admin Users List page | FE | ⬜ | | Table with search, role filter, pagination |
-| 4.8 | Create User Create/Edit form modal | FE | ⬜ | | Form with validation; role dropdown |
-| 4.9 | Create User deactivation confirmation modal | FE | ⬜ | | Confirm before deactivating |
-| 4.10 | Implement coach assignment UI | FE | ⬜ | | Multi-select dropdown to assign coaches to users |
-| 4.11 | Create `POST /users/{id}/coaches` endpoint | BE | ⬜ | | Assign coaches to user (many-to-many) |
-| 4.12 | Create `DELETE /users/{id}/coaches/{coach_id}` endpoint | BE | ⬜ | | Remove coach assignment |
-| 4.13 | Implement 50-user limit check for coaches | BE | ⬜ | | Return error if coach already has 50 users |
-| 4.14 | Create Admin dashboard overview | FE | ⬜ | | Total users, coaches, workouts counts; quick action buttons |
+| 4.1 | Create Pydantic schemas for users (create, update, list) | BE | 🟢 | Codex | Completed February 9, 2026: added `backend/schemas/users.py` with create/update/list query schemas, coach assignment schemas, detail/list responses, and admin overview response |
+| 4.2 | Create `GET /users` endpoint (admin only) | BE | 🟢 | Codex | Completed February 9, 2026: implemented paginated admin-only listing with role/search/status filters in `backend/api/users.py` + `backend/services/users.py` |
+| 4.3 | Create `GET /users/{id}` endpoint | BE | 🟢 | Codex | Completed February 9, 2026: added admin-only user detail endpoint returning assigned coaches |
+| 4.4 | Create `POST /users` endpoint (admin only) | BE | 🟢 | Codex | Completed February 9, 2026: implemented admin create flow with Supabase auth user creation and local profile persistence |
+| 4.5 | Create `PUT /users/{id}` endpoint (admin only) | BE | 🟢 | Codex | Completed February 9, 2026: implemented admin update for name/email/role with role-transition safety and Supabase sync |
+| 4.6 | Create `DELETE /users/{id}` endpoint (admin only) | BE | 🟢 | Codex | Completed February 9, 2026: implemented soft deactivation (`is_active`, `deactivated_at`) plus self-deactivation guard |
+| 4.7 | Create Admin Users List page | FE | 🟢 | Codex | Completed February 9, 2026: added `/admin/users` page with searchable/filterable/paginated table (`frontend/src/pages/admin/AdminUsersPage.tsx`) |
+| 4.8 | Create User Create/Edit form modal | FE | 🟢 | Codex | Completed February 9, 2026: added reusable create/edit modal with validation and role selection (`frontend/src/components/admin/UserFormModal.tsx`) |
+| 4.9 | Create User deactivation confirmation modal | FE | 🟢 | Codex | Completed February 9, 2026: added confirmation modal before deactivation (`frontend/src/components/admin/DeactivateUserModal.tsx`) |
+| 4.10 | Implement coach assignment UI | FE | 🟢 | Codex | Completed February 9, 2026: added coach assignment modal with multi-select and remove actions (`frontend/src/components/admin/CoachAssignmentModal.tsx`) |
+| 4.11 | Create `POST /users/{id}/coaches` endpoint | BE | 🟢 | Codex | Completed February 9, 2026: implemented admin endpoint to assign one or more coaches to a user |
+| 4.12 | Create `DELETE /users/{id}/coaches/{coach_id}` endpoint | BE | 🟢 | Codex | Completed February 9, 2026: implemented admin endpoint to remove a coach-user assignment |
+| 4.13 | Implement 50-user limit check for coaches | BE | 🟢 | Codex | Completed February 9, 2026: added application-level capacity validation (`MAX_USERS_PER_COACH = 50`) before insert with guarded error response |
+| 4.14 | Create Admin dashboard overview | FE | 🟢 | Codex | Completed February 9, 2026: upgraded admin dashboard with live overview cards and quick actions powered by `GET /users/overview` |
 
 ---
 

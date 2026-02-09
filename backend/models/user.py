@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     DateTime,
 )
@@ -36,7 +38,16 @@ class User(TimestampMixin, Base):
         nullable=False,
         default=UserRole.USER,
         server_default=UserRole.USER.value,
+        index=True,
     )
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+        server_default="true",
+        index=True,
+    )
+    deactivated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     coach_assignments: Mapped[list["CoachUserAssignment"]] = relationship(
         back_populates="coach",
@@ -55,20 +66,14 @@ class User(TimestampMixin, Base):
 
     workout_plans: Mapped[list["WorkoutPlan"]] = relationship(back_populates="coach")
     assigned_plans: Mapped[list["PlanAssignment"]] = relationship(back_populates="user")
-    workout_sessions: Mapped[list["WorkoutSession"]] = relationship(
-        back_populates="user"
-    )
+    workout_sessions: Mapped[list["WorkoutSession"]] = relationship(back_populates="user")
 
 
 class CoachUserAssignment(Base):
     __tablename__ = "coach_user_assignments"
     __table_args__ = (
-        UniqueConstraint(
-            "coach_id", "user_id", name="uq_coach_user_assignments_coach_user"
-        ),
-        CheckConstraint(
-            "coach_id <> user_id", name="ck_coach_user_assignments_distinct"
-        ),
+        UniqueConstraint("coach_id", "user_id", name="uq_coach_user_assignments_coach_user"),
+        CheckConstraint("coach_id <> user_id", name="ck_coach_user_assignments_distinct"),
     )
 
     id: Mapped[UUID] = mapped_column(
@@ -95,12 +100,8 @@ class CoachUserAssignment(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
 
-    coach: Mapped[User] = relationship(
-        back_populates="coach_assignments", foreign_keys=[coach_id]
-    )
-    user: Mapped[User] = relationship(
-        back_populates="user_assignments", foreign_keys=[user_id]
-    )
+    coach: Mapped[User] = relationship(back_populates="coach_assignments", foreign_keys=[coach_id])
+    user: Mapped[User] = relationship(back_populates="user_assignments", foreign_keys=[user_id])
     assigned_by_user: Mapped[User] = relationship(
         back_populates="assignments_created", foreign_keys=[assigned_by]
     )

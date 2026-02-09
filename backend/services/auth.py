@@ -105,6 +105,9 @@ def _get_or_create_local_user(
 
     user = db.scalar(select(User).where(User.id == auth_user_id))
     if user is not None:
+        if not user.is_active:
+            raise AuthServiceError("User account is deactivated.", 403)
+
         # Keep local profile in sync for name/email changes.
         user.email = auth_email
         if preferred_name:
@@ -182,7 +185,9 @@ def register_user(db: Session, payload: RegisterRequest) -> AuthResponse:
         raise exc
     except Exception as exc:  # noqa: BLE001
         db.rollback()
-        logger.exception("Unexpected local profile creation error for auth user %s", created_auth_user_id)
+        logger.exception(
+            "Unexpected local profile creation error for auth user %s", created_auth_user_id
+        )
         try:
             supabase_admin.auth.admin.delete_user(str(created_auth_user_id))
         except Exception:  # noqa: BLE001
@@ -241,6 +246,8 @@ def get_user_profile(db: Session, user_id: UUID) -> User:
     user = db.scalar(select(User).where(User.id == user_id))
     if user is None:
         raise AuthServiceError("User profile not found.", 404)
+    if not user.is_active:
+        raise AuthServiceError("User account is deactivated.", 403)
     return user
 
 

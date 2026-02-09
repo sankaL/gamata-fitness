@@ -275,4 +275,36 @@ Phase 3 requires complete auth flows (register, login, profile, password reset),
 
 ---
 
+### [DECISION-009] Phase 4 Admin User Lifecycle with Soft Deactivation and Explicit Coach-Capacity Enforcement
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Phase 4 requires admin-managed user CRUD, coach assignment management, and dashboard overview metrics while preserving historical data and enforcing the 50-user coach limit.
+
+**Decision:**  
+- Implement admin user management endpoints under `/users` with strict `admin` RBAC.
+- Use soft deactivation for users via `users.is_active` + `users.deactivated_at` (no hard deletes).
+- Add application-level coach-capacity validation (`MAX_USERS_PER_COACH = 50`) before assignment inserts, while retaining DB-level guardrails.
+- Add `GET /users/overview` for admin dashboard counts (athletes, coaches, workouts, active/inactive accounts).
+- Build frontend admin pages with React Query-backed data fetching and mutation invalidation for users, coach assignments, and overview cards.
+
+**Rationale:**  
+- Soft deactivation preserves relationships and historical records needed for plans/sessions while preventing access.
+- Layered validation (API + DB constraints) gives clearer client errors and protects integrity under race conditions.
+- A dedicated overview endpoint keeps dashboard reads lightweight and avoids expensive client-side aggregation.
+- React Query reduces ad-hoc state management and keeps admin screens coherent after mutations.
+
+**Alternatives Considered:**  
+- Hard delete users (rejected: breaks historical integrity and relationship traceability).
+- Rely only on DB trigger for 50-user enforcement (rejected: poorer API error clarity and UX).
+- Build dashboard counts from multiple list endpoints (rejected: extra round-trips and brittle client aggregation logic).
+
+**Consequences:**  
+- Positive: safer account lifecycle management, clearer admin workflows, and better mutation consistency in UI.
+- Negative/Risks: introduces schema evolution (`is_active`, `deactivated_at`) and requires auth/profile checks to consistently honor deactivated state.
+
+---
+
 <!-- Add new decisions above this line -->

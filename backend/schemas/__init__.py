@@ -9,6 +9,18 @@ from schemas.auth import (
     RegisterRequest,
     UserResponse,
 )
+from schemas.users import (
+    AdminOverviewResponse,
+    CoachAssignmentRequest,
+    CoachAssignmentResponse,
+    CoachSummaryResponse,
+    PaginatedUsersResponse,
+    UserCreateRequest,
+    UserDetailResponse,
+    UserListItemResponse,
+    UserListQuery,
+    UserUpdateRequest,
+)
 
 __all__ = [
     "AuthResponse",
@@ -18,4 +30,14 @@ __all__ = [
     "PasswordUpdateRequest",
     "RegisterRequest",
     "UserResponse",
+    "UserCreateRequest",
+    "UserUpdateRequest",
+    "UserListQuery",
+    "UserListItemResponse",
+    "PaginatedUsersResponse",
+    "UserDetailResponse",
+    "CoachSummaryResponse",
+    "CoachAssignmentRequest",
+    "CoachAssignmentResponse",
+    "AdminOverviewResponse",
 ]
