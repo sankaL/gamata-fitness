@@ -67,4 +67,117 @@ Need to select a tech stack for the GamataFitness MVP that balances development 
 
 ---
 
+### [DECISION-002] Docker Compose Baseline + Environment Overrides
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Phase 1 requires both local development (hot reload) and production-like container flows without duplicating configuration.
+
+**Decision:**  
+- Use a base `docker-compose.yml` for shared service wiring and network.
+- Use `docker-compose.dev.yml` for bind mounts, HMR, and dev Dockerfiles.
+- Use `docker-compose.prod.yml` for production Dockerfiles and runtime settings.
+- Keep service build contexts at `./backend` and `./frontend` with service-level `.dockerignore` files.
+
+**Rationale:**  
+- Shared base prevents drift between environments.
+- Override files keep environment-specific behavior explicit and small.
+- Per-service context + `.dockerignore` significantly reduce build transfer size.
+
+**Alternatives Considered:**  
+- Single compose file with profile conditionals (rejected: less clear separation of dev/prod concerns)
+- Separate fully independent compose files (rejected: higher duplication and maintenance cost)
+
+**Consequences:**  
+- Positive: predictable local/prod parity and simpler verification commands
+- Negative/Risks: override list-merging semantics require careful port definitions to avoid conflicts
+
+---
+
+### [DECISION-003] Fail-Closed Environment Configuration for Backend and Frontend
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+The project has explicit security requirements to fail closed when required secrets or configuration are missing.
+
+**Decision:**  
+- Backend settings in `backend/app/config.py` require Supabase URL/keys and CORS origins at startup.
+- Frontend Supabase/API client initialization throws startup errors when required `VITE_*` variables are missing.
+- Production origin is environment-driven through `CORS_ALLOWED_ORIGINS` rather than hardcoded.
+
+**Rationale:**  
+- Prevents insecure implicit defaults.
+- Makes misconfiguration obvious during startup instead of failing at runtime in partial states.
+- Supports per-environment deployment without code changes.
+
+**Alternatives Considered:**  
+- Soft defaults for missing keys (rejected: violates fail-closed security rule)
+- Hardcoded dev/prod origins in code (rejected: brittle and environment-coupled)
+
+**Consequences:**  
+- Positive: safer startup behavior and consistent deploy-time configuration
+- Negative/Risks: stricter startup requirements increase initial setup friction
+
+---
+
+### [DECISION-004] Railway Deployment Topology: Two Services from One Repository
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Phase 1 includes Railway deployment design for frontend and backend containers.
+
+**Decision:**  
+- Deploy two Railway services from this repository: `backend` and `frontend`.
+- Backend serves FastAPI on port `8000`; frontend serves static Vite build via Nginx.
+- Keep cross-service connectivity/env configuration through Railway environment variables.
+
+**Rationale:**  
+- Matches project separation of concerns.
+- Enables independent service restarts and scaling.
+- Aligns with Dockerfiles already defined in repo.
+
+**Alternatives Considered:**  
+- Single combined container for frontend + backend (rejected: less operational flexibility)
+- Separate repositories per service (rejected for MVP due to workflow overhead)
+
+**Consequences:**  
+- Positive: cleaner operational boundaries and straightforward CI/deploy mapping
+- Negative/Risks: requires coordinated environment variable management across two services
+
+---
+
+### [DECISION-005] Frontend Runtime Environment Injection for Docker Deployments
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Vite `VITE_*` variables are compiled at build time, but Railway service variables are managed at runtime. Static frontend bundles built without build-time vars can start with missing API/Supabase configuration.
+
+**Decision:**  
+- Inject frontend runtime config through `/config.js` served by Nginx.
+- Generate `/config.js` at container startup via `frontend/docker/runtime-env.sh` using service environment variables.
+- Frontend reads `window.__APP_CONFIG__` first, then falls back to `import.meta.env` for local dev.
+
+**Rationale:**  
+- Keeps one immutable image reusable across environments.
+- Avoids embedding environment-specific endpoints/keys at build time.
+- Preserves smooth local Vite developer experience while fixing cloud runtime behavior.
+
+**Alternatives Considered:**  
+- Build-time `ARG`-based env injection per environment (rejected: image must be rebuilt per env; brittle CI wiring)
+- Hardcoded API/Supabase endpoints (rejected: environment-coupled and not secure/maintainable)
+
+**Consequences:**  
+- Positive: reliable runtime configuration in Railway and future container platforms
+- Negative/Risks: adds one startup script and an extra static config asset to maintain
+
+---
+
 <!-- Add new decisions above this line -->
