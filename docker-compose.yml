@@ -4,7 +4,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     env_file:
-      - ./backend/.env
+      - ${BACKEND_ENV_FILE:-./backend/.env}
     ports:
       - "8000:8000"
     healthcheck:
@@ -21,7 +21,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     env_file:
-      - ./frontend/.env
+      - ${FRONTEND_ENV_FILE:-./frontend/.env}
     depends_on:
       backend:
         condition: service_healthy

@@ -42,6 +42,8 @@ gamata-fitness/
 │   ├── api/                    # API integration/endpoint tests
 │   └── performance/            # Performance and load tests
 ├── docs/                       # decisions_made.md, etc.
+├── scripts/                    # Profile runners and local automation helpers
+├── supabase/                   # Local Supabase CLI config (`config.toml`)
 ├── docker-compose.yml
 ├── database_schema_gamata.txt  # Source of truth for DB schema
 └── BUILD_PLAN.md               # Task tracking
@@ -69,7 +71,22 @@ cd backend && alembic revision --autogenerate -m "..."  # Create
 # Linting
 cd frontend && npm run lint      # ESLint + Prettier
 cd backend && black . && isort . # Python formatting
+
+# One-command local profile switching (includes local Supabase)
+make local       # local dev profile (HMR + backend reload)
+make prod-like   # production-like profile (production Dockerfiles, local runtime)
+make down        # stop app stack + local Supabase
 ```
+
+### Local Profiles (Required Workflow)
+
+- Use `make local` for day-to-day development with local Supabase.
+- Use `make prod-like` to validate production Docker behavior locally before Railway deployment.
+- Use `make down` before switching profiles if you stopped containers manually.
+- Do not commit generated profile env files:
+  - `backend/.env.local-profile`
+  - `frontend/.env.local-profile`
+- Keep `supabase/config.toml` in version control so local Supabase startup remains reproducible.
 
 ## Critical Development Rules
 

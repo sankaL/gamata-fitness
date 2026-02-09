@@ -180,4 +180,35 @@ Vite `VITE_*` variables are compiled at build time, but Railway service variable
 
 ---
 
+### [DECISION-006] Local-Only Profile Runner with Supabase CLI Integration
+
+**Date:** 2026-02-09  
+**Status:** Accepted
+
+**Context:**  
+Developers need a fast, repeatable way to run the full stack locally, including Supabase, and to switch between development and production-like container modes without manual env rewiring.
+
+**Decision:**  
+- Add `scripts/run-profile.sh` as the single entrypoint for local profile switching.
+- Support `local`, `prod-like`, and `down` commands.
+- Use Supabase CLI to start local services and derive runtime values from `supabase status -o env`.
+- Generate profile-scoped env files (`backend/.env.local-profile`, `frontend/.env.local-profile`) and route compose `env_file` through `BACKEND_ENV_FILE`/`FRONTEND_ENV_FILE`.
+- Add root `Makefile` targets as short aliases (`make local`, `make prod-like`, `make down`).
+
+**Rationale:**  
+- Eliminates repetitive manual steps for local Supabase keys/URLs and app env wiring.
+- Keeps local profile switching one-command and reproducible.
+- Avoids overwriting manually maintained `backend/.env` and `frontend/.env`.
+
+**Alternatives Considered:**  
+- Manual env editing before each run (rejected: error-prone and slow)
+- Hardcoding local Supabase credentials in committed env files (rejected: brittle and poor secret hygiene)
+- Separate compose files per profile with duplicated service definitions (rejected: high maintenance cost)
+
+**Consequences:**  
+- Positive: predictable local setup, lower onboarding friction, cleaner pre-deploy validation path
+- Negative/Risks: relies on local Docker + Supabase CLI availability and first-run image pulls can be slow
+
+---
+
 <!-- Add new decisions above this line -->
