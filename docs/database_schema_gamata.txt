@@ -1,0 +1,382 @@
+# GamataFitness MVP - Database Schema (ASCII)
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Schema Version History                                     │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+| Version | Date       | Reason                                                          |
+|---------|------------|----------------------------------------------------------------|
+| 1.0.0   | 2026-02-08 | Initial schema creation for GamataFitness MVP                  |
+|         |            |                                                                 |
+|         |            |                                                                 |
+|         |            |                                                                 |
+|         |            |                                                                 |
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   PostgreSQL Tables                                     │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────┐
+│       users         │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ email (VARCHAR) UK  │
+│ password_hash       │
+│ first_name (VARCHAR)│
+│ last_name (VARCHAR) │
+│ role (ENUM)         │  'admin', 'coach', 'user'
+│ is_active (BOOLEAN) │
+│ email_verified      │
+│ account_status (ENUM)│
+│ invite_token_hash   │
+│ invite_token_expires│
+│   _at               │
+│ invited_by (UUID FK)│
+│ invited_at          │
+│ password_reset_token│
+│   _hash             │
+│ password_reset      │
+│   _expires_at       │
+│ failed_login_attempts│
+│ locked_until        │
+│ last_login_at       │
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌──────────────────────────┐
+│   coach_user_assignments │   Many-to-Many relationship
+├──────────────────────────┤
+│ id (UUID) PK             │
+│ coach_id (UUID FK)       │   references users.id
+│ user_id (UUID FK)        │   references users.id
+│ assigned_by (UUID FK)    │   admin who created relationship
+│ assigned_at              │
+│ is_active (BOOLEAN)      │
+│ created_at               │
+│ updated_at               │
+└──────────────────────────┘
+
+NOTE: Constraint - A coach can have maximum 50 active users.
+      UK on (coach_id, user_id) to prevent duplicates.
+
+┌─────────────────────┐
+│   muscle_groups     │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ name (VARCHAR) UK   │   e.g., 'Chest', 'Back', 'Legs'
+│ icon (VARCHAR)      │   icon identifier for UI
+│ is_default (BOOLEAN)│   true for built-in, false for admin-added
+│ display_order (INT) │   for UI ordering
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│    cardio_types     │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ name (VARCHAR) UK   │   e.g., 'HIIT', 'Steady State', 'Interval', 'Circuit'
+│ description (TEXT)  │
+│ is_active (BOOLEAN) │
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│      workouts       │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ name (VARCHAR)      │
+│ description (TEXT)  │
+│ instructions (TEXT) │
+│ type (ENUM)         │   'strength' or 'cardio'
+│ target_sets (INT)   │   strength only (nullable)
+│ target_reps (INT)   │   strength only (nullable)
+│ suggested_weight    │   strength only (nullable)
+│   (DECIMAL)         │
+│ target_duration_min │   cardio only (nullable)
+│   (INT)             │
+│ difficulty_level    │   cardio only (nullable)
+│   (ENUM)            │   'easy', 'medium', 'hard'
+│ cardio_type_id      │   cardio only (nullable)
+│   (UUID FK)         │
+│ is_archived (BOOLEAN)│  soft delete flag
+│ archived_at         │
+│ archived_by (UUID FK)│
+│ created_by (UUID FK)│
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌───────────────────────────┐
+│   workout_muscle_groups   │   Many-to-Many junction
+├───────────────────────────┤
+│ id (UUID) PK              │
+│ workout_id (UUID FK)      │
+│ muscle_group_id (UUID FK) │
+│ is_primary (BOOLEAN)      │   true = main target muscle
+│ created_at                │
+└───────────────────────────┘
+
+UK on (workout_id, muscle_group_id)
+
+┌─────────────────────┐
+│   workout_plans     │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ name (VARCHAR)      │
+│ description (TEXT)  │
+│ coach_id (UUID FK)  │   references users.id
+│ start_date (DATE)   │
+│ end_date (DATE)     │
+│ is_template (BOOLEAN)│  for reusable plan templates
+│ is_active (BOOLEAN) │
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│     plan_days       │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ plan_id (UUID FK)   │
+│ day_of_week (ENUM)  │   'monday' through 'sunday'
+│ day_order (INT)     │   for ordering within plan
+│ notes (TEXT)        │   optional coach notes for the day
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│  plan_day_workouts  │   Junction: workouts per day
+├─────────────────────┤
+│ id (UUID) PK        │
+│ plan_day_id (UUID FK)│
+│ workout_id (UUID FK)│
+│ sequence_order (INT)│   order of workouts on that day
+│ created_at          │
+└─────────────────────┘
+
+UK on (plan_day_id, workout_id)
+
+┌─────────────────────┐
+│  plan_assignments   │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ plan_id (UUID FK)   │
+│ user_id (UUID FK)   │
+│ status (ENUM)       │   'pending', 'active', 'inactive', 'completed'
+│ assigned_by (UUID FK)│  coach who assigned
+│ assigned_at         │
+│ activated_at        │
+│ deactivated_at      │
+│ completed_at        │
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+NOTE: Only ONE plan can be 'active' per user at any time.
+      Constraint enforced via partial unique index.
+
+┌─────────────────────┐
+│  workout_sessions   │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ user_id (UUID FK)   │
+│ workout_id (UUID FK)│
+│ plan_assignment_id  │   null if ad hoc
+│   (UUID FK nullable)│
+│ session_type (ENUM) │   'assigned', 'swap', 'adhoc'
+│ original_workout_id │   for swaps: the workout that was replaced
+│   (UUID FK nullable)│
+│ status (ENUM)       │   'in_progress', 'completed', 'cancelled'
+│ started_at          │
+│ completed_at        │
+│ duration_seconds    │   total session duration
+│ notes (TEXT)        │   user notes for session
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│   exercise_logs     │   Individual exercise data within a session
+├─────────────────────┤
+│ id (UUID) PK        │
+│ session_id (UUID FK)│
+│ exercise_name       │   denormalized for flexibility
+│   (VARCHAR)         │
+│ exercise_order (INT)│   sequence within session
+│ set_number (INT)    │   for strength: which set
+│ reps (INT)          │   strength only
+│ weight (DECIMAL)    │   strength only
+│ weight_unit (ENUM)  │   'kg', 'lbs'
+│ duration_seconds    │   cardio only
+│   (INT)             │
+│ distance (DECIMAL)  │   cardio only (optional)
+│ distance_unit (ENUM)│   'km', 'miles' (optional)
+│ notes (TEXT)        │
+│ logged_at           │
+│ updated_at          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│   refresh_tokens    │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ user_id (UUID FK)   │
+│ token_hash (VARCHAR)│
+│ family_id (UUID)    │
+│ expires_at          │
+│ created_at          │
+│ revoked_at          │
+│ replaced_by (UUID)  │
+│ device_info (JSONB) │
+└─────────────────────┘
+
+┌─────────────────────┐
+│  auth_audit_logs    │
+├─────────────────────┤
+│ id (UUID) PK        │
+│ event_type (VARCHAR)│
+│ email (VARCHAR)     │
+│ user_id (UUID)      │
+│ success (BOOLEAN)   │
+│ ip (VARCHAR)        │
+│ user_agent (TEXT)   │
+│ details (JSONB)     │
+│ created_at          │
+└─────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                  Relationships                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+users.id ────────────┐
+                     ├── coach_user_assignments.coach_id (coach role)
+                     ├── coach_user_assignments.user_id (user role)
+                     ├── coach_user_assignments.assigned_by (admin role)
+                     ├── workout_plans.coach_id (coach creates plans)
+                     ├── plan_assignments.user_id (users receive assignments)
+                     ├── plan_assignments.assigned_by (coach)
+                     ├── workout_sessions.user_id (users have sessions)
+                     ├── workouts.created_by (admin/coach creates)
+                     ├── workouts.archived_by (admin archives)
+                     └── refresh_tokens.user_id
+
+muscle_groups.id ────┐
+                     └── workout_muscle_groups.muscle_group_id
+
+cardio_types.id ─────┐
+                     └── workouts.cardio_type_id
+
+workouts.id ─────────┐
+                     ├── workout_muscle_groups.workout_id
+                     ├── plan_day_workouts.workout_id
+                     ├── workout_sessions.workout_id
+                     └── workout_sessions.original_workout_id (for swaps)
+
+workout_plans.id ────┐
+                     ├── plan_days.plan_id
+                     └── plan_assignments.plan_id
+
+plan_days.id ────────┐
+                     └── plan_day_workouts.plan_day_id
+
+plan_assignments.id ─┐
+                     └── workout_sessions.plan_assignment_id
+
+workout_sessions.id ─┐
+                     └── exercise_logs.session_id
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    Enums                                                │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+user_role: ['admin', 'coach', 'user']
+account_status: ['pending_setup', 'active', 'suspended']
+workout_type: ['strength', 'cardio']
+difficulty_level: ['easy', 'medium', 'hard']
+day_of_week: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+plan_assignment_status: ['pending', 'active', 'inactive', 'completed']
+session_type: ['assigned', 'swap', 'adhoc']
+session_status: ['in_progress', 'completed', 'cancelled']
+weight_unit: ['kg', 'lbs']
+distance_unit: ['km', 'miles']
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Default Seed Data                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+muscle_groups (is_default = true):
+- Chest
+- Back
+- Shoulders
+- Biceps
+- Triceps
+- Legs (Quadriceps)
+- Legs (Hamstrings)
+- Legs (Calves)
+- Core
+- Glutes
+- Full Body
+
+cardio_types:
+- HIIT (High-Intensity Interval Training)
+- Steady State
+- Interval
+- Circuit
+- Tabata
+- Fartlek
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Constraints & Business Rules                               │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+1. COACH_USER_LIMIT: Each coach can have maximum 50 active user assignments.
+   Enforced via application logic + DB trigger.
+
+2. SINGLE_ACTIVE_PLAN: A user can only have ONE plan with status='active' at any time.
+   Enforced via partial unique index: CREATE UNIQUE INDEX ON plan_assignments(user_id)
+   WHERE status = 'active';
+
+3. WORKOUT_ARCHIVE_PROTECTION: Workouts that are part of active plans cannot be archived.
+   Enforced via application logic with clear error messaging.
+
+4. SESSION_EDIT_WINDOW: Users can edit completed sessions within 24 hours.
+   Enforced via application logic.
+
+5. SOFT_DELETE: Workouts use is_archived flag instead of hard delete to maintain
+   session history integrity.
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Indexes (Recommended)                                      │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+-- Users
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role ON users(role);
+
+-- Coach-User Assignments
+CREATE INDEX idx_coach_assignments_coach ON coach_user_assignments(coach_id);
+CREATE INDEX idx_coach_assignments_user ON coach_user_assignments(user_id);
+
+-- Workouts
+CREATE INDEX idx_workouts_type ON workouts(type);
+CREATE INDEX idx_workouts_archived ON workouts(is_archived);
+
+-- Plan Assignments
+CREATE INDEX idx_plan_assignments_user ON plan_assignments(user_id);
+CREATE INDEX idx_plan_assignments_status ON plan_assignments(status);
+CREATE UNIQUE INDEX idx_plan_assignments_active ON plan_assignments(user_id) 
+  WHERE status = 'active';
+
+-- Workout Sessions
+CREATE INDEX idx_sessions_user ON workout_sessions(user_id);
+CREATE INDEX idx_sessions_workout ON workout_sessions(workout_id);
+CREATE INDEX idx_sessions_completed ON workout_sessions(completed_at);
+CREATE INDEX idx_sessions_type ON workout_sessions(session_type);
+
+-- Exercise Logs
+CREATE INDEX idx_exercise_logs_session ON exercise_logs(session_id);
+CREATE INDEX idx_exercise_logs_logged ON exercise_logs(logged_at);
