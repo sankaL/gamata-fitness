@@ -1,0 +1,2 @@
+-- Local Supabase seed placeholder.
+-- Add deterministic seed data for local development as needed.

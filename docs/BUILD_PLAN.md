@@ -395,7 +395,7 @@ This table tracks issues discovered during development that were not part of the
 | ENH-001 | February 9, 2026 | Standardize test placement under root `tests/` with `tests/e2e/frontend`, `tests/e2e/api`, `tests/api`, and `tests/performance` | P1 | 🟢 | Codex | Documentation and directory scaffolding completed |
 | ENH-002 | February 9, 2026 | Add root `.gitignore` for frontend/backend/test artifacts including Playwright traces/results and Locust reports | P1 | 🟢 | Codex | Added comprehensive ignore rules with test-output coverage |
 | ENH-003 | February 9, 2026 | Add root `.env.example` and enforce updating env-example files whenever new variables are introduced | P1 | 🟢 | Codex | Added root template and synced agent documentation rules in AGENTS/CLAUDE |
-| ENH-004 | | | | ⬜ | | |
+| ENH-004 | February 9, 2026 | Add one-command local profile runner with local Supabase (`local`, `prod-like`, `down`) and document workflow in README/AGENTS/CLAUDE | P1 | 🟢 | Codex | Added `scripts/run-profile.sh`, root `Makefile` targets, root `README.md`, and repo instructions updates |
 | ENH-005 | | | | ⬜ | | |
 
 ### Priority Legend
