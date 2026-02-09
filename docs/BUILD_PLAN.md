@@ -60,6 +60,7 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 1.24 | Verify `docker-compose up` runs both services | INFRA | 🟢 | Codex | Completed February 9, 2026: validated dev and prod compose bring up frontend (`:5173`) + backend (`:8000`) |
 | 1.25 | Verify frontend can call backend health endpoint | FE | 🟢 | Codex | Completed February 9, 2026: frontend health UI implemented and backend CORS response validated for `http://localhost:5173` |
 | 1.26 | Set up Railway project with Docker deployment | INFRA | 🟢 | Codex | Completed February 9, 2026: created Railway project `gamata-fitness` with `backend` + `frontend` services, configured env vars, deployed both containers, and verified public health/frontend reachability |
+| 1.27 | Fix local profile env generation so Dockerized backend can reach local Supabase host services | BUG | 🟢 | Codex | Completed February 9, 2026: updated `scripts/run-profile.sh` to rewrite `localhost/127.0.0.1` to `host.docker.internal` for backend `SUPABASE_URL` and `DATABASE_URL` in generated local profile envs |
 
 ---
 
@@ -92,21 +93,21 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 3.1 | Configure Supabase Auth settings | INFRA | ⬜ | | Enable email/password auth; configure redirect URLs |
-| 3.2 | Create Pydantic schemas for auth (login, register, user response) | BE | ⬜ | | In `backend/schemas/auth.py` |
-| 3.3 | Implement JWT verification middleware in FastAPI | BE | ⬜ | | Verify Supabase JWT tokens on protected routes |
-| 3.4 | Create `POST /auth/register` endpoint | BE | ⬜ | | Register user in Supabase Auth + create user record in users table |
-| 3.5 | Create `POST /auth/login` endpoint | BE | ⬜ | | Return JWT token and user info |
-| 3.6 | Create `GET /auth/me` endpoint | BE | ⬜ | | Return current user profile from token |
-| 3.7 | Implement RBAC permission decorator | BE | ⬜ | | `@require_role(["admin", "coach"])` decorator in `core/permissions.py` |
-| 3.8 | Create Login page component | FE | ⬜ | | Use React Hook Form + Zod validation; shadcn/ui inputs |
-| 3.9 | Create Registration page component | FE | ⬜ | | Name, email, password fields |
-| 3.10 | Create AuthContext provider | FE | ⬜ | | Store user, token; provide login/logout functions |
-| 3.11 | Create ProtectedRoute component | FE | ⬜ | | Redirect to login if not authenticated |
-| 3.12 | Create RoleGuard component | FE | ⬜ | | Show content only for specific roles |
-| 3.13 | Implement role-based routing in App.tsx | FE | ⬜ | | Redirect to correct dashboard based on role |
-| 3.14 | Create logout functionality | FE | ⬜ | | Clear token; redirect to login |
-| 3.15 | Create password reset flow | FE/BE | ⬜ | | Use Supabase built-in password reset |
+| 3.1 | Configure Supabase Auth settings | INFRA | 🟢 | Codex | Completed February 9, 2026: updated `supabase/config.toml` auth site URL/redirect allowlist for local app (`http://localhost:5173`) and password update route |
+| 3.2 | Create Pydantic schemas for auth (login, register, user response) | BE | 🟢 | Codex | Completed February 9, 2026: added auth request/response schemas and validation in `backend/schemas/auth.py` |
+| 3.3 | Implement JWT verification middleware in FastAPI | BE | 🟢 | Codex | Completed February 9, 2026: added `JWTVerificationMiddleware` in `backend/core/permissions.py` and registered middleware in `backend/app/main.py` |
+| 3.4 | Create `POST /auth/register` endpoint | BE | 🟢 | Codex | Completed February 9, 2026: implemented registration flow in `backend/api/auth.py` + `backend/services/auth.py` (Supabase sign-up + local users table profile create) |
+| 3.5 | Create `POST /auth/login` endpoint | BE | 🟢 | Codex | Completed February 9, 2026: implemented password login returning JWT/session tokens and local user profile in `backend/api/auth.py` |
+| 3.6 | Create `GET /auth/me` endpoint | BE | 🟢 | Codex | Completed February 9, 2026: added authenticated profile endpoint backed by JWT verification and local user lookup |
+| 3.7 | Implement RBAC permission decorator | BE | 🟢 | Codex | Completed February 9, 2026: added `@require_role([...])` decorator in `backend/core/permissions.py` with current-user role enforcement |
+| 3.8 | Create Login page component | FE | 🟢 | Codex | Completed February 9, 2026: added login page with React Hook Form + Zod and shadcn input/button components (`frontend/src/pages/auth/LoginPage.tsx`) |
+| 3.9 | Create Registration page component | FE | 🟢 | Codex | Completed February 9, 2026: added registration page with name/email/password validation and backend register integration |
+| 3.10 | Create AuthContext provider | FE | 🟢 | Codex | Completed February 9, 2026: implemented `AuthProvider` with in-memory token/user state and login/logout/register/password helpers (`frontend/src/context/AuthContext.tsx`) |
+| 3.11 | Create ProtectedRoute component | FE | 🟢 | Codex | Completed February 9, 2026: added guarded route wrapper redirecting unauthenticated users to `/login` |
+| 3.12 | Create RoleGuard component | FE | 🟢 | Codex | Completed February 9, 2026: added role gate component restricting dashboard routes by `admin`/`coach`/`user` |
+| 3.13 | Implement role-based routing in App.tsx | FE | 🟢 | Codex | Completed February 9, 2026: replaced app shell with role-aware route tree and root redirect logic in `frontend/src/App.tsx` |
+| 3.14 | Create logout functionality | FE | 🟢 | Codex | Completed February 9, 2026: added logout action in auth context and dashboard shell to clear in-memory auth state and return to login flow |
+| 3.15 | Create password reset flow | FE/BE | 🟢 | Codex | Completed February 9, 2026: added backend reset/update endpoints plus frontend forgot/update password pages using Supabase recovery tokens |
 
 ---
 

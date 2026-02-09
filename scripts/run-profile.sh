@@ -42,6 +42,13 @@ extract_env_value() {
   printf '%s\n' "$payload" | sed -n "s/^${key}=\"\\(.*\\)\"$/\\1/p" | head -n 1
 }
 
+to_container_reachable_host() {
+  local value="$1"
+  value="${value//127.0.0.1/host.docker.internal}"
+  value="${value//localhost/host.docker.internal}"
+  printf '%s' "$value"
+}
+
 ensure_supabase_initialized() {
   if [ ! -f "$ROOT_DIR/supabase/config.toml" ]; then
     echo "Initializing Supabase project..."
@@ -63,7 +70,9 @@ write_local_profile_env_files() {
   local status_output="$1"
 
   local api_url
+  local backend_api_url
   local db_url
+  local backend_db_url
   local publishable_key
   local anon_key
   local service_role_key
@@ -88,13 +97,16 @@ write_local_profile_env_files() {
     exit 1
   fi
 
+  backend_api_url="$(to_container_reachable_host "$api_url")"
+  backend_db_url="$(to_container_reachable_host "$db_url")"
+
   cat >"$ROOT_DIR/backend/.env.local-profile" <<EOF
 APP_ENV=development
-SUPABASE_URL=${api_url}
+SUPABASE_URL=${backend_api_url}
 SUPABASE_ANON_KEY=${publishable_key}
 SUPABASE_SERVICE_ROLE_KEY=${service_role_key}
-DATABASE_URL=${db_url}
-CORS_ALLOWED_ORIGINS=http://localhost:5173
+DATABASE_URL=${backend_db_url}
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 EOF
 
   cat >"$ROOT_DIR/frontend/.env.local-profile" <<EOF

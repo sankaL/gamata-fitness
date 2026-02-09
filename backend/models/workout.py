@@ -14,7 +14,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 
 from models.base import Base, TimestampMixin
-from models.enums import WorkoutType
+from models.enums import WorkoutType, enum_values
 
 
 class MuscleGroup(Base):
@@ -64,7 +64,8 @@ class Workout(TimestampMixin, Base):
     description: Mapped[Optional[str]] = mapped_column(Text)
     instructions: Mapped[Optional[str]] = mapped_column(Text)
     type: Mapped[WorkoutType] = mapped_column(
-        SQLEnum(WorkoutType, name="workout_type", create_type=False), nullable=False
+        SQLEnum(WorkoutType, name="workout_type", create_type=False, values_callable=enum_values),
+        nullable=False,
     )
     cardio_type_id: Mapped[Optional[UUID]] = mapped_column(
         PGUUID(as_uuid=True), ForeignKey("cardio_types.id", ondelete="SET NULL")

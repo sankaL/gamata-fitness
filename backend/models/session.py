@@ -23,7 +23,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 
 from models.base import Base
-from models.enums import SessionType
+from models.enums import SessionType, enum_values
 
 
 class WorkoutSession(Base):
@@ -50,7 +50,7 @@ class WorkoutSession(Base):
         index=True,
     )
     session_type: Mapped[SessionType] = mapped_column(
-        SQLEnum(SessionType, name="session_type", create_type=False),
+        SQLEnum(SessionType, name="session_type", create_type=False, values_callable=enum_values),
         nullable=False,
         default=SessionType.ASSIGNED,
         server_default=SessionType.ASSIGNED.value,
