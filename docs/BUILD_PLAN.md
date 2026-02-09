@@ -67,24 +67,24 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 2.1 | Design and create `users` table in Supabase | DB | ⬜ | | id (UUID), name, email, role (enum: admin/coach/user), created_at, updated_at |
-| 2.2 | Create `coach_user_assignments` table | DB | ⬜ | | id, coach_id (FK), user_id (FK), assigned_at, assigned_by |
-| 2.3 | Create `muscle_groups` table | DB | ⬜ | | id, name, icon, is_default, created_at |
-| 2.4 | Create `cardio_types` table | DB | ⬜ | | id, name, description |
-| 2.5 | Create `workouts` table | DB | ⬜ | | id, name, description, instructions, type (strength/cardio), is_archived, created_at, updated_at |
-| 2.6 | Create `workout_muscle_groups` junction table | DB | ⬜ | | workout_id, muscle_group_id (many-to-many) |
-| 2.7 | Create `workout_plans` table | DB | ⬜ | | id, name, coach_id (FK), start_date, end_date, created_at, updated_at |
-| 2.8 | Create `plan_days` table | DB | ⬜ | | id, plan_id (FK), day_of_week (0-6) |
-| 2.9 | Create `plan_day_workouts` junction table | DB | ⬜ | | plan_day_id, workout_id (multiple workouts per day) |
-| 2.10 | Create `plan_assignments` table | DB | ⬜ | | id, plan_id (FK), user_id (FK), status (pending/active/inactive), assigned_at, activated_at, deactivated_at |
-| 2.11 | Create `workout_sessions` table | DB | ⬜ | | id, user_id (FK), workout_id (FK), plan_id (FK nullable), session_type (assigned/swap/adhoc), completed_at, updated_at |
-| 2.12 | Create `exercise_logs` table | DB | ⬜ | | id, session_id (FK), sets, reps, weight, duration, notes, logged_at, updated_at |
-| 2.13 | Set up Alembic for migrations | BE | ⬜ | | Initialize Alembic in `database/migrations/` |
-| 2.14 | Create SQLAlchemy models matching database schema | BE | ⬜ | | Create models in `backend/models/` directory |
-| 2.15 | Seed muscle groups with default values | DB | ⬜ | | Chest, Back, Legs, Shoulders, Arms, Core, Full-Body |
-| 2.16 | Seed cardio types with default values | DB | ⬜ | | HIIT, Steady State, Interval, Circuit |
-| 2.17 | Seed initial workout library | DB | ⬜ | | 20-30 common exercises (bench press, squat, deadlift, etc.) |
-| 2.18 | Configure Row Level Security (RLS) policies in Supabase | DB | ⬜ | | Users can only access their own data; coaches can access assigned users |
+| 2.1 | Design and create `users` table in Supabase | DB | 🟢 | Codex | Completed February 9, 2026: created in Alembic revision `202602090001` with role enum + timestamps |
+| 2.2 | Create `coach_user_assignments` table | DB | 🟢 | Codex | Completed February 9, 2026: created with FK wiring, uniqueness, role validation trigger, and 50-user coach limit enforcement |
+| 2.3 | Create `muscle_groups` table | DB | 🟢 | Codex | Completed February 9, 2026: created in revision `202602090001`; default values seeded in `202602090002` |
+| 2.4 | Create `cardio_types` table | DB | 🟢 | Codex | Completed February 9, 2026: created in revision `202602090001`; default values seeded in `202602090002` |
+| 2.5 | Create `workouts` table | DB | 🟢 | Codex | Completed February 9, 2026: created with archive flag, timestamps, workout type enum, and optional cardio type linkage |
+| 2.6 | Create `workout_muscle_groups` junction table | DB | 🟢 | Codex | Completed February 9, 2026: created composite PK junction table in revision `202602090001` |
+| 2.7 | Create `workout_plans` table | DB | 🟢 | Codex | Completed February 9, 2026: created with coach FK, date-range constraint, and timestamps |
+| 2.8 | Create `plan_days` table | DB | 🟢 | Codex | Completed February 9, 2026: created with day-of-week check (`0-6`) and per-plan uniqueness |
+| 2.9 | Create `plan_day_workouts` junction table | DB | 🟢 | Codex | Completed February 9, 2026: created composite PK junction table in revision `202602090001` |
+| 2.10 | Create `plan_assignments` table | DB | 🟢 | Codex | Completed February 9, 2026: created with status enum and active-plan partial unique index (`uq_plan_assignments_user_active`) |
+| 2.11 | Create `workout_sessions` table | DB | 🟢 | Codex | Completed February 9, 2026: created with nullable plan FK and session type enum in revision `202602090001` |
+| 2.12 | Create `exercise_logs` table | DB | 🟢 | Codex | Completed February 9, 2026: created with non-negative checks and timestamp fields |
+| 2.13 | Set up Alembic for migrations | BE | 🟢 | Codex | Completed February 9, 2026: initialized Alembic in `database/migrations/` (`alembic.ini`, `env.py`, revisions, SQL assets) |
+| 2.14 | Create SQLAlchemy models matching database schema | BE | 🟢 | Codex | Completed February 9, 2026: added full Phase 2 ORM models in `backend/models/` and exports in `backend/models/__init__.py` |
+| 2.15 | Seed muscle groups with default values | DB | 🟢 | Codex | Completed February 9, 2026: seeded Chest, Back, Legs, Shoulders, Arms, Core, Full-Body in revision `202602090002` |
+| 2.16 | Seed cardio types with default values | DB | 🟢 | Codex | Completed February 9, 2026: seeded HIIT, Steady State, Interval, Circuit in revision `202602090002` |
+| 2.17 | Seed initial workout library | DB | 🟢 | Codex | Completed February 9, 2026: seeded 24-workout starter library and muscle-group mappings in revision `202602090002` |
+| 2.18 | Configure Row Level Security (RLS) policies in Supabase | DB | 🟢 | Codex | Completed February 9, 2026: enabled RLS on all Phase 2 tables with 36 policies via revision `202602090003` and SQL policy script |
 
 ---
 
