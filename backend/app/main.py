@@ -1,13 +1,10 @@
 """FastAPI application entrypoint."""
 
+from importlib import import_module
 import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
-from slowapi.middleware import SlowAPIMiddleware
-from slowapi.util import get_remote_address
 
 from api.auth import router as auth_router
 from api.import_export import router as import_export_router
@@ -27,17 +24,57 @@ app = FastAPI(title=settings.app_name)
 
 logging.basicConfig(level=logging.INFO)
 
+
+def _load_rate_limit_dependencies() -> tuple[object, object, object, object, object]:
+    slowapi_module = import_module("slowapi")
+    slowapi_errors_module = import_module("slowapi.errors")
+    slowapi_middleware_module = import_module("slowapi.middleware")
+    slowapi_util_module = import_module("slowapi.util")
+    return (
+        slowapi_module.Limiter,
+        slowapi_module._rate_limit_exceeded_handler,
+        slowapi_errors_module.RateLimitExceeded,
+        slowapi_middleware_module.SlowAPIMiddleware,
+        slowapi_util_module.get_remote_address,
+    )
+
+
+def _configure_rate_limit(app_instance: FastAPI, *, enabled: bool, api_rate_limit: str) -> None:
+    if not enabled:
+        return
+
+    try:
+        (
+            limiter_cls,
+            exceeded_handler,
+            rate_limit_exceeded_error,
+            slowapi_middleware_cls,
+            get_remote_address_func,
+        ) = _load_rate_limit_dependencies()
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "Rate limiting is enabled but 'slowapi' is not installed. "
+            "Install backend dependencies with `pip install -r requirements.txt` "
+            "or set `ENABLE_RATE_LIMIT=false`."
+        ) from exc
+
+    limiter = limiter_cls(
+        key_func=get_remote_address_func,
+        default_limits=[api_rate_limit],
+    )
+    app_instance.state.limiter = limiter
+    app_instance.add_exception_handler(rate_limit_exceeded_error, exceeded_handler)
+    app_instance.add_middleware(slowapi_middleware_cls)
+
+
 if settings.enable_request_logging:
     app.add_middleware(RequestLoggingMiddleware)
 
-if settings.enable_rate_limit:
-    limiter = Limiter(
-        key_func=get_remote_address,
-        default_limits=[settings.api_rate_limit],
-    )
-    app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-    app.add_middleware(SlowAPIMiddleware)
+_configure_rate_limit(
+    app,
+    enabled=settings.enable_rate_limit,
+    api_rate_limit=settings.api_rate_limit,
+)
 
 app.add_middleware(JWTVerificationMiddleware)
 

@@ -293,6 +293,7 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 12.13 | Accessibility audit | OTHER | ⬜ | | WCAG 2.1 AA compliance check |
 | 12.14 | Mobile responsiveness QA | OTHER | ⬜ | | Test on 320px, 375px, 428px viewports |
 | 12.15 | Cross-browser testing | OTHER | ⬜ | | Chrome, Safari, Firefox, Edge |
+| 12.16 | Prevent backend startup crash when rate limiting dependency is missing | BUG | 🟢 | Codex | Completed February 11, 2026: made `slowapi` import lazy behind `ENABLE_RATE_LIMIT` and added regression tests for enabled/disabled startup behavior |
 
 ---
 
