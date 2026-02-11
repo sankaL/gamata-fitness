@@ -63,6 +63,27 @@ make local-prepare
 make prod-like-prepare
 ```
 
+## Seed Deterministic QA Data
+
+After local services are prepared/running, seed correlated test data (users, workouts, plans, assignments, and history):
+
+```bash
+python scripts/seed_test_data.py
+```
+
+What it does:
+- Uses `backend/.env.local-profile` by default (falls back to root `.env`).
+- Seeds deterministic accounts: 1 admin, 3 coaches, and 10 users.
+- Seeds correlated domain data: lookup tables, workouts, coach assignments, plans, plan assignments, sessions, and logs.
+- Outputs credentials and seeded counts to terminal.
+- Writes machine-readable credentials/output to `tmp/seeded_credentials.json`.
+
+Optional flags:
+
+```bash
+python scripts/seed_test_data.py --seed-tag seed-v1 --coaches 3 --users 10 --shared-password "GamataSeed!123" --output tmp/seeded_credentials.json
+```
+
 ## Run Against Cloud Supabase (manual)
 
 If you want local app containers to use your hosted Supabase project:

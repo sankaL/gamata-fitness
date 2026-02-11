@@ -318,6 +318,8 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 | 13.15 | Standardize root test directory structure and policy in docs (`tests/e2e`, `tests/api`, `tests/performance`) | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; documented in AGENTS/CLAUDE/tech stack |
 | 13.16 | Add root `.gitignore` with stack defaults and test artifact ignores (Playwright traces/results, Locust outputs) | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; includes frontend/backend/test artifacts |
 | 13.17 | Add and maintain root `.env.example`; document env-example sync rules in agent docs | ENHANCEMENT | 🟢 | Codex | Completed February 9, 2026; created root `.env.example` and added maintenance rules to AGENTS/CLAUDE |
+| 13.18 | Add deterministic QA data seeding script (`scripts/seed_test_data.py`) with auth accounts, correlated plans/assignments/history, and credentials export | ENHANCEMENT | 🟢 | Codex | Completed February 11, 2026; added idempotent merge-mode seed tooling with JSON credentials artifact (`tmp/seeded_credentials.json`) and README usage docs |
+| 13.19 | Add Makefile seed workflow targets (`seed`, `seed-local`) with optional `SEED_ARGS` passthrough | ENHANCEMENT | 🟢 | Codex | Completed February 11, 2026; added one-command local seeding targets and migration-aware `seed-local` path |
 
 ---
 
@@ -363,8 +365,8 @@ Phase 5 (Workouts)─┘        ↓
 | 10. Plan Activation | 5 | 2 | 3 | 0 | 0 | 0 |
 | 11. CSV Import/Export | 9 | 3 | 6 | 0 | 0 | 0 |
 | 12. Polish | 15 | 7 | 4 | 0 | 0 | 4 |
-| 13. Documentation | 17 | 0 | 1 | 8 | 0 | 8 |
-| **TOTAL** | **197** | **77** | **65** | **22** | **16** | **17** |
+| 13. Documentation | 19 | 0 | 1 | 8 | 0 | 10 |
+| **TOTAL** | **199** | **77** | **65** | **22** | **16** | **19** |
 
 ---
 
