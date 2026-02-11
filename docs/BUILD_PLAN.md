@@ -186,30 +186,30 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 7.1 | Create `GET /users/me/today` endpoint | BE | ⬜ | | Return today's workout from active plan |
-| 7.2 | Create `GET /users/me/plan` endpoint | BE | ⬜ | | Return current week's plan preview |
-| 7.3 | Create `GET /users/me/stats` endpoint | BE | ⬜ | | Return quick stats (sessions this week, streak) |
-| 7.4 | Create `GET /users/me/coaches` endpoint | BE | ⬜ | | Return list of assigned coaches |
-| 7.5 | Create User Dashboard page | FE | ⬜ | | Today's workout card prominent; week preview; stats |
-| 7.6 | Create Today's Workout card component | FE | ⬜ | | Workout name, muscle groups, "Start" button |
-| 7.7 | Create Weekly Plan preview component | FE | ⬜ | | 7-day strip showing workout per day |
-| 7.8 | Create Quick Stats component | FE | ⬜ | | Sessions this week, streak counter |
-| 7.9 | Create My Coaches page | FE | ⬜ | | List of coaches with names |
-| 7.10 | Create `POST /sessions` endpoint | BE | ⬜ | | Start a workout session |
-| 7.11 | Create `PUT /sessions/{id}` endpoint | BE | ⬜ | | Update session (add exercise logs) |
-| 7.12 | Create `POST /sessions/{id}/complete` endpoint | BE | ⬜ | | Mark session complete |
-| 7.13 | Create `POST /sessions/{id}/logs` endpoint | BE | ⬜ | | Add exercise log to session |
-| 7.14 | Create `PUT /sessions/{id}/logs/{log_id}` endpoint | BE | ⬜ | | Edit exercise log |
-| 7.15 | Create Workout Execution page | FE | ⬜ | | Full-screen workout view; exercise list |
-| 7.16 | Create Exercise Card component (strength) | FE | ⬜ | | Large weight slider, rep stepper, set checkboxes |
-| 7.17 | Create weight input slider component | FE | ⬜ | | 56px+ touch target; +/- buttons; presets |
-| 7.18 | Create rep input stepper component | FE | ⬜ | | Large buttons; common values (8, 10, 12) as quick buttons |
-| 7.19 | Create set completion checklist | FE | ⬜ | | Visual checkboxes; tap to complete set |
-| 7.20 | Create Exercise Card component (cardio) | FE | ⬜ | | Duration timer, notes field |
-| 7.21 | Create cardio timer component | FE | ⬜ | | Start/pause/stop; large display |
-| 7.22 | Create workout completion flow | FE | ⬜ | | "Finish Workout" button; save all logs |
-| 7.23 | Create workout complete celebration | FE | ⬜ | | Success animation; summary stats |
-| 7.24 | Implement optimistic UI updates | FE | ⬜ | | Log sets locally; sync in background |
+| 7.1 | Create `GET /users/me/today` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added user dashboard endpoint returning today’s assigned workouts and completion count |
+| 7.2 | Create `GET /users/me/plan` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added current-week plan preview endpoint with Monday-Sunday day mapping |
+| 7.3 | Create `GET /users/me/stats` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added quick stats endpoint for weekly sessions, completed today, total sessions, and current streak |
+| 7.4 | Create `GET /users/me/coaches` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added assigned-coaches endpoint for athlete dashboard/contact views |
+| 7.5 | Create User Dashboard page | FE | 🟢 | Codex | Completed February 11, 2026: replaced placeholder with `/user/dashboard` experience using today card, week preview, and quick stats |
+| 7.6 | Create Today's Workout card component | FE | 🟢 | Codex | Completed February 11, 2026: added `TodaysWorkoutCard` with workout summary and start action |
+| 7.7 | Create Weekly Plan preview component | FE | 🟢 | Codex | Completed February 11, 2026: added `WeeklyPlanPreview` 7-day strip with scheduled/rest indicators |
+| 7.8 | Create Quick Stats component | FE | 🟢 | Codex | Completed February 11, 2026: added `QuickStatsCards` for sessions/streak/today/total metrics |
+| 7.9 | Create My Coaches page | FE | 🟢 | Codex | Completed February 11, 2026: added `/user/coaches` page with assigned coach list and mail actions |
+| 7.10 | Create `POST /sessions` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented session start endpoint with assigned/swap/adhoc validation rules |
+| 7.11 | Create `PUT /sessions/{id}` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented session update endpoint with log upsert support |
+| 7.12 | Create `POST /sessions/{id}/complete` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented session completion endpoint setting `completed_at` |
+| 7.13 | Create `POST /sessions/{id}/logs` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented add-log endpoint for active session execution |
+| 7.14 | Create `PUT /sessions/{id}/logs/{log_id}` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented per-log edit endpoint with ownership/edit-window checks |
+| 7.15 | Create Workout Execution page | FE | 🟢 | Codex | Completed February 11, 2026: added `/user/workout` full-screen execution flow with session lifecycle handling |
+| 7.16 | Create Exercise Card component (strength) | FE | 🟢 | Codex | Completed February 11, 2026: added `StrengthExerciseCard` with touch-first strength logging controls |
+| 7.17 | Create weight input slider component | FE | 🟢 | Codex | Completed February 11, 2026: added `WeightInputSlider` with +/- buttons, range slider, and presets |
+| 7.18 | Create rep input stepper component | FE | 🟢 | Codex | Completed February 11, 2026: added `RepInputStepper` with large increment controls and quick-rep presets |
+| 7.19 | Create set completion checklist | FE | 🟢 | Codex | Completed February 11, 2026: added `SetCompletionChecklist` tappable set-complete tracker |
+| 7.20 | Create Exercise Card component (cardio) | FE | 🟢 | Codex | Completed February 11, 2026: added `CardioExerciseCard` with timer and note capture |
+| 7.21 | Create cardio timer component | FE | 🟢 | Codex | Completed February 11, 2026: added `CardioTimer` with start/pause/stop and large elapsed-time display |
+| 7.22 | Create workout completion flow | FE | 🟢 | Codex | Completed February 11, 2026: implemented finish workflow with final sync and completion API call |
+| 7.23 | Create workout complete celebration | FE | 🟢 | Codex | Completed February 11, 2026: added `WorkoutCelebration` post-completion success/summary view |
+| 7.24 | Implement optimistic UI updates | FE | 🟢 | Codex | Completed February 11, 2026: local-first log state with debounced background sync to session update endpoint |
 
 ---
 
@@ -217,12 +217,12 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 8.1 | Create `GET /workouts/alternatives/{workout_id}` endpoint | BE | ⬜ | | Return workouts with same muscle group |
-| 8.2 | Create Swap Workout modal | FE | ⬜ | | Show alternatives; allow selection |
-| 8.3 | Implement swap session creation | BE | ⬜ | | Session with session_type = "swap" |
-| 8.4 | Create Ad Hoc workout selection page | FE | ⬜ | | Browse full workout library |
-| 8.5 | Implement ad hoc session creation | BE | ⬜ | | Session with session_type = "adhoc", plan_id = null |
-| 8.6 | Create "Swap" and "Ad Hoc" buttons on dashboard | FE | ⬜ | | Below today's workout card |
+| 8.1 | Create `GET /workouts/alternatives/{workout_id}` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added alternatives endpoint returning same-muscle-group workouts ordered by overlap |
+| 8.2 | Create Swap Workout modal | FE | 🟢 | Codex | Completed February 11, 2026: added `SwapWorkoutModal` with alternatives list and selection action |
+| 8.3 | Implement swap session creation | BE | 🟢 | Codex | Completed February 11, 2026: implemented swap validation and creation through `POST /sessions` with `session_type=swap` |
+| 8.4 | Create Ad Hoc workout selection page | FE | 🟢 | Codex | Completed February 11, 2026: added `/user/workouts/adhoc` library browse/start workflow |
+| 8.5 | Implement ad hoc session creation | BE | 🟢 | Codex | Completed February 11, 2026: implemented ad hoc session creation guardrails through `POST /sessions` with `session_type=adhoc` |
+| 8.6 | Create "Swap" and "Ad Hoc" buttons on dashboard | FE | 🟢 | Codex | Completed February 11, 2026: added swap/ad-hoc actions on dashboard today-workout card |
 
 ---
 
@@ -230,19 +230,19 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 9.1 | Create `GET /users/me/sessions` endpoint | BE | ⬜ | | Paginated session history with filters |
-| 9.2 | Create `GET /users/me/progress/muscle-groups` endpoint | BE | ⬜ | | Aggregate volume by muscle group over time |
-| 9.3 | Create `GET /users/me/progress/frequency` endpoint | BE | ⬜ | | Weekly/monthly workout frequency |
-| 9.4 | Install and configure Recharts | FE | ⬜ | | `npm install recharts` |
-| 9.5 | Create Progress Dashboard page | FE | ⬜ | | Tab layout: History, Trends, Stats |
-| 9.6 | Create Session History list | FE | ⬜ | | Chronological list; expandable for details |
-| 9.7 | Create date range filter | FE | ⬜ | | Last 7 days, 30 days, custom range |
-| 9.8 | Create workout type filter | FE | ⬜ | | Strength, Cardio, All |
-| 9.9 | Create muscle group filter | FE | ⬜ | | Multi-select muscle groups |
-| 9.10 | Create Muscle Group chart | FE | ⬜ | | Bar chart showing volume per muscle group |
-| 9.11 | Create Weekly Frequency chart | FE | ⬜ | | Bar chart of sessions per week |
-| 9.12 | Create Session Edit modal | FE | ⬜ | | Allow editing logged sets/reps/weight after completion |
-| 9.13 | Create max weight tracking display | FE | ⬜ | | Show PR (personal record) per exercise |
+| 9.1 | Create `GET /users/me/sessions` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added paginated session history endpoint with date/type/muscle filters |
+| 9.2 | Create `GET /users/me/progress/muscle-groups` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added muscle-group progress aggregation endpoint for selected range |
+| 9.3 | Create `GET /users/me/progress/frequency` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added weekly/monthly frequency endpoint with configurable range buckets |
+| 9.4 | Install and configure Recharts | FE | 🟢 | Codex | Completed February 11, 2026: installed `recharts` and wired chart components into progress UI |
+| 9.5 | Create Progress Dashboard page | FE | 🟢 | Codex | Completed February 11, 2026: added `/user/progress` with tabbed history/trends/stats layout |
+| 9.6 | Create Session History list | FE | 🟢 | Codex | Completed February 11, 2026: added expandable `SessionHistoryList` chronological log viewer |
+| 9.7 | Create date range filter | FE | 🟢 | Codex | Completed February 11, 2026: added range presets (7/30/custom) in `ProgressFilters` |
+| 9.8 | Create workout type filter | FE | 🟢 | Codex | Completed February 11, 2026: added strength/cardio/all filter integrated with session query params |
+| 9.9 | Create muscle group filter | FE | 🟢 | Codex | Completed February 11, 2026: added multi-select muscle-group chips for history/trend filtering |
+| 9.10 | Create Muscle Group chart | FE | 🟢 | Codex | Completed February 11, 2026: added `MuscleGroupChart` bar visualization for volume by muscle group |
+| 9.11 | Create Weekly Frequency chart | FE | 🟢 | Codex | Completed February 11, 2026: added `WeeklyFrequencyChart` for sessions-per-week trends |
+| 9.12 | Create Session Edit modal | FE | 🟢 | Codex | Completed February 11, 2026: added `SessionEditModal` with save flow to session update endpoint |
+| 9.13 | Create max weight tracking display | FE | 🟢 | Codex | Completed February 11, 2026: added `PersonalRecordsCard` PR display by exercise |
 
 ---
 
@@ -466,4 +466,4 @@ docker system prune -a
 
 ---
 
-*Last updated: February 9, 2026*
+*Last updated: February 11, 2026*

@@ -27,6 +27,7 @@ from services.workouts import (
     create_muscle_group,
     create_workout,
     get_workout_detail,
+    list_alternative_workouts,
     list_cardio_types,
     list_muscle_groups,
     list_workouts,
@@ -83,6 +84,21 @@ def get_workout(
     _ = current_user
     try:
         return get_workout_detail(db=db, workout_id=workout_id)
+    except WorkoutServiceError as exc:
+        raise _to_http_exception(exc) from exc
+
+
+@router.get("/workouts/alternatives/{workout_id}", response_model=list[WorkoutResponse])
+@require_role([UserRole.ADMIN, UserRole.COACH, UserRole.USER])
+def get_workout_alternatives(
+    workout_id: UUID,
+    limit: int = Query(default=12, ge=1, le=50),
+    db: Session = Depends(get_db_session),
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> list[WorkoutResponse]:
+    _ = current_user
+    try:
+        return list_alternative_workouts(db=db, workout_id=workout_id, limit=limit)
     except WorkoutServiceError as exc:
         raise _to_http_exception(exc) from exc
 

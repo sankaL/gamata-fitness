@@ -9,6 +9,14 @@ from schemas.auth import (
     RegisterRequest,
     UserResponse,
 )
+from schemas.dashboard import (
+    UserCoachResponse,
+    UserCoachesResponse,
+    UserQuickStatsResponse,
+    UserTodayWorkoutResponse,
+    UserWeekPlanDayResponse,
+    UserWeekPlanResponse,
+)
 from schemas.plans import (
     CoachRosterResponse,
     PaginatedPlansResponse,
@@ -20,6 +28,27 @@ from schemas.plans import (
     PlanListQuery,
     PlanUpdateRequest,
     PlanUsersResponse,
+)
+from schemas.progress import (
+    FrequencyBucketResponse,
+    FrequencyProgressQuery,
+    FrequencyProgressResponse,
+    MuscleGroupProgressItemResponse,
+    MuscleGroupProgressResponse,
+    PaginatedUserSessionsResponse,
+    ProgressDateRangeQuery,
+    SessionHistoryItemResponse,
+    SessionHistoryLogResponse,
+    UserSessionHistoryQuery,
+)
+from schemas.sessions import (
+    SessionCreateRequest,
+    SessionLogCreateRequest,
+    SessionLogInput,
+    SessionLogResponse,
+    SessionLogUpdateRequest,
+    SessionResponse,
+    SessionUpdateRequest,
 )
 from schemas.users import (
     AdminOverviewResponse,
@@ -84,4 +113,27 @@ __all__ = [
     "PlanAssignResponse",
     "PlanUsersResponse",
     "CoachRosterResponse",
+    "UserTodayWorkoutResponse",
+    "UserWeekPlanDayResponse",
+    "UserWeekPlanResponse",
+    "UserQuickStatsResponse",
+    "UserCoachResponse",
+    "UserCoachesResponse",
+    "SessionLogInput",
+    "SessionLogCreateRequest",
+    "SessionLogUpdateRequest",
+    "SessionCreateRequest",
+    "SessionUpdateRequest",
+    "SessionLogResponse",
+    "SessionResponse",
+    "UserSessionHistoryQuery",
+    "SessionHistoryLogResponse",
+    "SessionHistoryItemResponse",
+    "PaginatedUserSessionsResponse",
+    "ProgressDateRangeQuery",
+    "MuscleGroupProgressItemResponse",
+    "MuscleGroupProgressResponse",
+    "FrequencyProgressQuery",
+    "FrequencyBucketResponse",
+    "FrequencyProgressResponse",
 ]

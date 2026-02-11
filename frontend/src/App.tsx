@@ -14,7 +14,11 @@ import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { UpdatePasswordPage } from '@/pages/auth/UpdatePasswordPage'
 import { CoachDashboardPage } from '@/pages/coach/CoachDashboardPage'
 import { CoachPlansPage } from '@/pages/coach/CoachPlansPage'
+import { AdHocWorkoutPage } from '@/pages/user/AdHocWorkoutPage'
+import { MyCoachesPage } from '@/pages/user/MyCoachesPage'
+import { ProgressDashboardPage } from '@/pages/user/ProgressDashboardPage'
 import { UserDashboardPage } from '@/pages/user/UserDashboardPage'
+import { WorkoutExecutionPage } from '@/pages/user/WorkoutExecutionPage'
 
 function RootRedirect() {
   const { isAuthenticated, user } = useAuth()
@@ -113,6 +117,46 @@ function App() {
           <ProtectedRoute>
             <RoleGuard allowedRoles={['user']}>
               <UserDashboardPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user/coaches"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['user']}>
+              <MyCoachesPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user/workout"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['user']}>
+              <WorkoutExecutionPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user/workouts/adhoc"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['user']}>
+              <AdHocWorkoutPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user/progress"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['user']}>
+              <ProgressDashboardPage />
             </RoleGuard>
           </ProtectedRoute>
         }

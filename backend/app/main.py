@@ -5,6 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.auth import router as auth_router
 from api.plans import router as plans_router
+from api.progress import router as progress_router
+from api.sessions import router as sessions_router
+from api.user_dashboard import router as user_dashboard_router
 from api.users import router as users_router
 from api.workouts import router as workouts_router
 from app.config import settings
@@ -27,6 +30,9 @@ app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(workouts_router)
 app.include_router(plans_router)
+app.include_router(user_dashboard_router)
+app.include_router(sessions_router)
+app.include_router(progress_router)
 
 
 @app.get("/health")

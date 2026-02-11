@@ -144,6 +144,42 @@ def list_workouts(db: Session, query: WorkoutListQuery) -> PaginatedWorkoutsResp
     )
 
 
+def list_alternative_workouts(
+    db: Session,
+    *,
+    workout_id: UUID,
+    limit: int = 12,
+) -> list[WorkoutResponse]:
+    source_workout = _get_workout_or_404(db, workout_id)
+    source_group_ids = [group.id for group in source_workout.muscle_groups]
+    if not source_group_ids:
+        return []
+
+    candidates = (
+        db.scalars(
+            select(Workout)
+            .where(
+                Workout.id != source_workout.id,
+                Workout.is_archived.is_(False),
+                Workout.muscle_groups.any(MuscleGroup.id.in_(source_group_ids)),
+            )
+            .options(*_with_workout_relations())
+        )
+        .unique()
+        .all()
+    )
+
+    source_group_set = set(source_group_ids)
+    ordered = sorted(
+        candidates,
+        key=lambda workout: (
+            -len(source_group_set.intersection({group.id for group in workout.muscle_groups})),
+            workout.name.lower(),
+        ),
+    )
+    return [_to_workout_response(workout) for workout in ordered[: max(limit, 1)]]
+
+
 def get_workout_detail(db: Session, workout_id: UUID) -> WorkoutResponse:
     workout = _get_workout_or_404(db, workout_id)
     return _to_workout_response(workout)
