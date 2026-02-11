@@ -1,4 +1,6 @@
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { UserWeekPlanResponse } from '@/types/user-dashboard'
 
 interface WeeklyPlanPreviewProps {
@@ -15,9 +17,16 @@ export function WeeklyPlanPreview({ weekPlan, isLoading }: WeeklyPlanPreviewProp
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <p className="text-sm text-slate-600">Loading weekly plan...</p>
+          <div className="grid gap-2 md:grid-cols-7">
+            {Array.from({ length: 7 }).map((_, index) => (
+              <Skeleton key={index} className="h-20 w-full" />
+            ))}
+          </div>
         ) : !weekPlan ? (
-          <p className="text-sm text-slate-600">No plan available.</p>
+          <EmptyState
+            title="No Active Plan"
+            description="You do not have an active weekly plan yet."
+          />
         ) : (
           <div className="grid gap-2 md:grid-cols-7">
             {weekPlan.days.map((day) => {

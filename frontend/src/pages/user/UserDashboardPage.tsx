@@ -6,6 +6,7 @@ import { TodaysWorkoutCard } from '@/components/user/TodaysWorkoutCard'
 import { UserShell } from '@/components/user/UserShell'
 import { WeeklyPlanPreview } from '@/components/user/WeeklyPlanPreview'
 import { SwapWorkoutModal } from '@/components/workout/SwapWorkoutModal'
+import { useToast } from '@/components/ui/toast-provider'
 import {
   useCreateSessionMutation,
   useUserQuickStatsQuery,
@@ -16,6 +17,7 @@ import {
 import type { DashboardWorkoutSummary } from '@/types/user-dashboard'
 
 export function UserDashboardPage() {
+  const { showToast } = useToast()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [isSwapModalOpen, setIsSwapModalOpen] = useState(false)
@@ -42,9 +44,13 @@ export function UserDashboardPage() {
         plan_id: planId,
       })
       setIsSwapModalOpen(false)
+      showToast('Workout started.', 'success')
       navigate(`/user/workout?sessionId=${session.id}`)
     } catch (mutationError) {
-      setError(mutationError instanceof Error ? mutationError.message : 'Unable to start workout.')
+      const message =
+        mutationError instanceof Error ? mutationError.message : 'Unable to start workout.'
+      setError(message)
+      showToast(message, 'error')
     }
   }
 

@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react'
 
 import { AdminShell } from '@/components/admin/AdminShell'
 import { ArchiveWorkoutModal } from '@/components/admin/ArchiveWorkoutModal'
+import { CsvImportModal } from '@/components/admin/CsvImportModal'
+import { AdminWorkoutsToolbar } from '@/components/admin/AdminWorkoutsToolbar'
 import { WorkoutFormModal } from '@/components/admin/WorkoutFormModal'
 import { WorkoutLibraryTable } from '@/components/admin/WorkoutLibraryTable'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useToast } from '@/components/ui/toast-provider'
 import {
   useAdminWorkoutsQuery,
   useArchiveWorkoutMutation,
@@ -16,6 +17,7 @@ import {
   useUnarchiveWorkoutMutation,
   useUpdateWorkoutMutation,
 } from '@/hooks/use-admin-workouts'
+import { useAdminWorkoutsCsv } from '@/hooks/use-admin-workouts-csv'
 import type {
   Workout,
   WorkoutCreatePayload,
@@ -30,6 +32,7 @@ type WorkoutStatusFilter = 'all' | 'active' | 'archived'
 type FormMode = 'create' | 'edit'
 
 export function AdminWorkoutsPage() {
+  const { showToast } = useToast()
   const [page, setPage] = useState(1)
   const [searchDraft, setSearchDraft] = useState('')
   const [search, setSearch] = useState<string>('')
@@ -65,22 +68,30 @@ export function AdminWorkoutsPage() {
   const archiveWorkoutMutation = useArchiveWorkoutMutation()
   const unarchiveWorkoutMutation = useUnarchiveWorkoutMutation()
   const createMuscleGroupMutation = useCreateMuscleGroupMutation()
+  const csvTools = useAdminWorkoutsCsv({
+    onError: (message) => setActionError(message),
+    onToast: showToast,
+  })
 
   async function handleSaveWorkout(payload: WorkoutCreatePayload | WorkoutUpdatePayload) {
     try {
       setActionError(null)
       if (formMode === 'create') {
         await createWorkoutMutation.mutateAsync(payload as WorkoutCreatePayload)
+        showToast('Workout created successfully.', 'success')
       } else if (selectedWorkout) {
         await updateWorkoutMutation.mutateAsync({
           workoutId: selectedWorkout.id,
           payload: payload as WorkoutUpdatePayload,
         })
+        showToast('Workout updated successfully.', 'success')
       }
       setIsFormOpen(false)
       setSelectedWorkout(null)
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to save workout.')
+      const message = error instanceof Error ? error.message : 'Unable to save workout.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -94,10 +105,12 @@ export function AdminWorkoutsPage() {
       setActionError(null)
       await archiveWorkoutMutation.mutateAsync(archiveCandidate.id)
       setArchiveCandidate(null)
+      showToast('Workout archived.', 'success')
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unable to archive workout.'
       setArchiveError(message)
       setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -105,8 +118,11 @@ export function AdminWorkoutsPage() {
     try {
       setActionError(null)
       await unarchiveWorkoutMutation.mutateAsync(workout.id)
+      showToast('Workout unarchived.', 'success')
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to unarchive workout.')
+      const message = error instanceof Error ? error.message : 'Unable to unarchive workout.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -115,104 +131,46 @@ export function AdminWorkoutsPage() {
       title="Workout Library"
       description="Create, update, archive, and restore workouts used in coach plans."
     >
-      <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-        <div className="grid gap-3 md:grid-cols-4">
-          <div className="space-y-1.5 md:col-span-2">
-            <label htmlFor="workout-search" className="text-sm font-medium text-slate-700">
-              Search
-            </label>
-            <Input
-              id="workout-search"
-              value={searchDraft}
-              placeholder="Name or description"
-              onChange={(event) => setSearchDraft(event.target.value)}
-            />
-          </div>
+      <AdminWorkoutsToolbar
+        searchDraft={searchDraft}
+        typeFilter={typeFilter}
+        statusFilter={statusFilter}
+        muscleGroupFilter={muscleGroupFilter}
+        muscleGroups={muscleGroupsQuery.data ?? []}
+        isExporting={csvTools.exportWorkoutsMutation.isPending}
+        onSearchDraftChange={setSearchDraft}
+        onTypeFilterChange={(value) => {
+          setTypeFilter(value)
+          setPage(1)
+        }}
+        onStatusFilterChange={(value) => {
+          setStatusFilter(value)
+          setPage(1)
+        }}
+        onMuscleGroupFilterChange={(value) => {
+          setMuscleGroupFilter(value)
+          setPage(1)
+        }}
+        onApplyFilters={() => {
+          setSearch(searchDraft.trim())
+          setPage(1)
+        }}
+        onCreateWorkout={() => {
+          setFormMode('create')
+          setSelectedWorkout(null)
+          setIsFormOpen(true)
+        }}
+        onExportCsv={() => {
+          setActionError(null)
+          void csvTools.handleExportWorkoutsCsv()
+        }}
+        onImportCsv={() => {
+          csvTools.setImportResult(null)
+          csvTools.setIsImportOpen(true)
+        }}
+      />
 
-          <div className="space-y-1.5">
-            <label htmlFor="workout-type" className="text-sm font-medium text-slate-700">
-              Type
-            </label>
-            <select
-              id="workout-type"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              value={typeFilter}
-              onChange={(event) => {
-                setTypeFilter(event.target.value as WorkoutFilterType)
-                setPage(1)
-              }}
-            >
-              <option value="all">All</option>
-              <option value="strength">Strength</option>
-              <option value="cardio">Cardio</option>
-            </select>
-          </div>
-
-          <div className="space-y-1.5">
-            <label htmlFor="workout-status" className="text-sm font-medium text-slate-700">
-              Status
-            </label>
-            <select
-              id="workout-status"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              value={statusFilter}
-              onChange={(event) => {
-                setStatusFilter(event.target.value as WorkoutStatusFilter)
-                setPage(1)
-              }}
-            >
-              <option value="active">Active</option>
-              <option value="archived">Archived</option>
-              <option value="all">All</option>
-            </select>
-          </div>
-
-          <div className="space-y-1.5 md:col-span-2">
-            <label htmlFor="muscle-filter" className="text-sm font-medium text-slate-700">
-              Muscle Group
-            </label>
-            <select
-              id="muscle-filter"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              value={muscleGroupFilter}
-              onChange={(event) => {
-                setMuscleGroupFilter(event.target.value)
-                setPage(1)
-              }}
-            >
-              <option value="all">All groups</option>
-              {(muscleGroupsQuery.data ?? []).map((group) => (
-                <option key={group.id} value={group.id}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Button
-            variant="outline"
-            onClick={() => {
-              setSearch(searchDraft.trim())
-              setPage(1)
-            }}
-          >
-            Apply Filters
-          </Button>
-          <Button
-            onClick={() => {
-              setFormMode('create')
-              setSelectedWorkout(null)
-              setIsFormOpen(true)
-            }}
-          >
-            Create Workout
-          </Button>
-        </div>
-
-        {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
-      </section>
+      {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
 
       <WorkoutLibraryTable
         workouts={workoutsQuery.data?.items ?? []}
@@ -269,6 +227,18 @@ export function AdminWorkoutsPage() {
           onConfirmArchive={handleArchiveWorkout}
         />
       ) : null}
+
+      <CsvImportModal
+        open={csvTools.isImportOpen}
+        title="Import Workouts"
+        description="Upload a CSV with workout columns (name, type, muscle_groups, and required type-specific fields)."
+        isSubmitting={csvTools.importWorkoutsMutation.isPending}
+        result={csvTools.importResult}
+        onClose={() => {
+          csvTools.setIsImportOpen(false)
+        }}
+        onSubmit={csvTools.handleImportWorkoutsCsv}
+      />
     </AdminShell>
   )
 }

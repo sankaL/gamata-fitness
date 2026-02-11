@@ -6,6 +6,7 @@ import { PlanBuilderForm } from '@/components/plan/PlanBuilderForm'
 import { UserAssignmentPanel } from '@/components/plan/UserAssignmentPanel'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useToast } from '@/components/ui/toast-provider'
 import {
   useArchivePlanMutation,
   useAssignPlanMutation,
@@ -13,11 +14,13 @@ import {
   useCoachPlansQuery,
   useCoachRosterQuery,
   useCreatePlanMutation,
+  useExportPlanCsvMutation,
   useSoftDeletePlanMutation,
   useUnarchivePlanMutation,
   useUpdatePlanMutation,
   useWorkoutPickerQuery,
 } from '@/hooks/use-coach-plans'
+import { downloadFile } from '@/lib/download'
 import type { PlanCreatePayload, PlanUpdatePayload } from '@/types/plans'
 
 const PAGE_SIZE = 10
@@ -27,6 +30,7 @@ type PlanStatusFilter = 'all' | 'active' | 'archived'
 type BuilderMode = 'create' | 'edit'
 
 export function CoachPlansPage() {
+  const { showToast } = useToast()
   const [page, setPage] = useState(1)
   const [searchDraft, setSearchDraft] = useState('')
   const [search, setSearch] = useState('')
@@ -58,6 +62,7 @@ export function CoachPlansPage() {
   const unarchivePlanMutation = useUnarchivePlanMutation()
   const deletePlanMutation = useSoftDeletePlanMutation()
   const assignPlanMutation = useAssignPlanMutation()
+  const exportPlanMutation = useExportPlanCsvMutation()
 
   async function handleSavePlan(payload: PlanCreatePayload | PlanUpdatePayload) {
     try {
@@ -67,14 +72,18 @@ export function CoachPlansPage() {
         const created = await createPlanMutation.mutateAsync(payload as PlanCreatePayload)
         setSelectedPlanId(created.id)
         setBuilderMode('edit')
+        showToast('Plan created successfully.', 'success')
       } else if (selectedPlanId) {
         await updatePlanMutation.mutateAsync({
           planId: selectedPlanId,
           payload: payload as PlanUpdatePayload,
         })
+        showToast('Plan updated successfully.', 'success')
       }
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to save plan.')
+      const message = error instanceof Error ? error.message : 'Unable to save plan.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -93,8 +102,27 @@ export function CoachPlansPage() {
         payload: { user_ids: selectedUserIds },
       })
       setSelectedUserIds([])
+      showToast('Plan assigned to selected athletes.', 'success')
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to assign plan.')
+      const message = error instanceof Error ? error.message : 'Unable to assign plan.'
+      setActionError(message)
+      showToast(message, 'error')
+    }
+  }
+
+  async function handleExportSelectedPlan() {
+    if (!selectedPlanId) {
+      return
+    }
+    try {
+      setActionError(null)
+      const file = await exportPlanMutation.mutateAsync(selectedPlanId)
+      downloadFile(file)
+      showToast('Plan CSV downloaded.', 'success')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to export plan CSV.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -154,6 +182,15 @@ export function CoachPlansPage() {
           >
             New Plan
           </Button>
+          <Button
+            variant="outline"
+            disabled={!selectedPlanId || exportPlanMutation.isPending}
+            onClick={() => {
+              void handleExportSelectedPlan()
+            }}
+          >
+            {exportPlanMutation.isPending ? 'Exporting...' : 'Export Plan CSV'}
+          </Button>
         </div>
 
         {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
@@ -173,24 +210,33 @@ export function CoachPlansPage() {
           try {
             setActionError(null)
             await archivePlanMutation.mutateAsync(plan.id)
+            showToast('Plan archived.', 'success')
           } catch (error) {
-            setActionError(error instanceof Error ? error.message : 'Unable to archive plan.')
+            const message = error instanceof Error ? error.message : 'Unable to archive plan.'
+            setActionError(message)
+            showToast(message, 'error')
           }
         }}
         onUnarchive={async (plan) => {
           try {
             setActionError(null)
             await unarchivePlanMutation.mutateAsync(plan.id)
+            showToast('Plan unarchived.', 'success')
           } catch (error) {
-            setActionError(error instanceof Error ? error.message : 'Unable to unarchive plan.')
+            const message = error instanceof Error ? error.message : 'Unable to unarchive plan.'
+            setActionError(message)
+            showToast(message, 'error')
           }
         }}
         onDelete={async (plan) => {
           try {
             setActionError(null)
             await deletePlanMutation.mutateAsync(plan.id)
+            showToast('Plan deleted (archived).', 'success')
           } catch (error) {
-            setActionError(error instanceof Error ? error.message : 'Unable to delete plan.')
+            const message = error instanceof Error ? error.message : 'Unable to delete plan.'
+            setActionError(message)
+            showToast(message, 'error')
           }
         }}
       />

@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     supabase_anon_key: str = Field(alias="SUPABASE_ANON_KEY")
     supabase_service_role_key: str = Field(alias="SUPABASE_SERVICE_ROLE_KEY")
     cors_allowed_origins: str = Field(alias="CORS_ALLOWED_ORIGINS")
+    api_rate_limit: str = Field(default="120/minute", alias="API_RATE_LIMIT")
+    enable_rate_limit: bool = Field(default=True, alias="ENABLE_RATE_LIMIT")
+    enable_request_logging: bool = Field(default=True, alias="ENABLE_REQUEST_LOGGING")
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -54,6 +57,16 @@ class Settings(BaseSettings):
         if not origins:
             raise ValueError("CORS_ALLOWED_ORIGINS must contain at least one origin.")
         return origins
+
+    @field_validator("api_rate_limit")
+    @classmethod
+    def validate_api_rate_limit(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("API_RATE_LIMIT must be non-empty.")
+        if "/" not in cleaned:
+            raise ValueError("API_RATE_LIMIT must be in a slowapi-compatible format.")
+        return cleaned
 
 
 settings = Settings()

@@ -2,6 +2,7 @@ import type { AdminUserListItem } from '@/types/users'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
 interface UsersTableProps {
@@ -67,8 +68,12 @@ export function UsersTable({
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="py-6 text-center text-slate-600">
-                    Loading users...
+                  <td colSpan={6} className="py-4">
+                    <div className="space-y-2">
+                      <Skeleton className="h-5 w-full" />
+                      <Skeleton className="h-5 w-full" />
+                      <Skeleton className="h-5 w-full" />
+                    </div>
                   </td>
                 </tr>
               ) : null}
@@ -76,7 +81,7 @@ export function UsersTable({
               {!isLoading && users.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-6 text-center text-slate-600">
-                    No users match the current filters.
+                    No users match your current filters. Try adjusting role, status, or search.
                   </td>
                 </tr>
               ) : null}

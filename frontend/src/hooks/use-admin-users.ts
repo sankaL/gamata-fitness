@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { exportUsersCsv, importUsersCsv } from '@/lib/import-export-api-client'
 import {
   assignCoaches,
   createUser,
@@ -35,6 +36,7 @@ export function useAdminOverviewQuery() {
   return useQuery({
     queryKey: ADMIN_OVERVIEW_QUERY_KEY,
     queryFn: () => getAdminOverview(assertToken(accessToken)),
+    staleTime: 60 * 1000,
   })
 }
 
@@ -71,6 +73,7 @@ export function useCoachOptionsQuery() {
         role: 'coach',
         is_active: true,
       }),
+    staleTime: 10 * 60 * 1000,
   })
 }
 
@@ -149,6 +152,27 @@ export function useRemoveCoachAssignmentMutation() {
       void queryClient.invalidateQueries({
         queryKey: [...ADMIN_USER_DETAIL_QUERY_KEY, variables.userId],
       })
+    },
+  })
+}
+
+export function useExportUsersCsvMutation() {
+  const { accessToken } = useAuth()
+  return useMutation({
+    mutationFn: () => exportUsersCsv(assertToken(accessToken)),
+  })
+}
+
+export function useImportUsersCsvMutation() {
+  const { accessToken } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (file: File) => importUsersCsv(assertToken(accessToken), file),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ADMIN_USERS_QUERY_KEY })
+      void queryClient.invalidateQueries({ queryKey: ADMIN_OVERVIEW_QUERY_KEY })
+      void queryClient.invalidateQueries({ queryKey: COACH_OPTIONS_QUERY_KEY })
     },
   })
 }

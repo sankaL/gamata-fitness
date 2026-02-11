@@ -1,5 +1,6 @@
 import { Mail } from 'lucide-react'
 
+import { EmptyState } from '@/components/shared/EmptyState'
 import { UserShell } from '@/components/user/UserShell'
 import { useUserCoachesQuery } from '@/hooks/use-user-progress'
 
@@ -12,7 +13,10 @@ export function MyCoachesPage() {
         {coachesQuery.isLoading ? (
           <p className="text-sm text-slate-600">Loading coaches...</p>
         ) : (coachesQuery.data?.coaches.length ?? 0) === 0 ? (
-          <p className="text-sm text-slate-600">No coaches are currently assigned.</p>
+          <EmptyState
+            title="No Coaches Assigned"
+            description="Your account is not assigned to any coach yet."
+          />
         ) : (
           coachesQuery.data?.coaches.map((coach) => (
             <div

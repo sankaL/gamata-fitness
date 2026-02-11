@@ -1,9 +1,16 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
 
+import { PlanActivationModal } from '@/components/user/PlanActivationModal'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/toast-provider'
 import { useAuth } from '@/hooks/use-auth'
+import {
+  useActivatePendingPlanMutation,
+  useDeclinePendingPlanMutation,
+  useUserPendingPlansQuery,
+} from '@/hooks/use-user-plan-activation'
 import { cn } from '@/lib/utils'
 
 interface UserShellProps {
@@ -31,6 +38,39 @@ function NavItem({ to, label }: { to: string; label: string }) {
 
 export function UserShell({ title, description, children }: UserShellProps) {
   const { user, logout } = useAuth()
+  const { showToast } = useToast()
+  const [modalError, setModalError] = useState<string | null>(null)
+  const pendingPlansQuery = useUserPendingPlansQuery()
+  const activateMutation = useActivatePendingPlanMutation()
+  const declineMutation = useDeclinePendingPlanMutation()
+
+  const pendingAssignments = pendingPlansQuery.data?.pending_assignments ?? []
+  const showActivationModal = pendingAssignments.length > 0
+  const isSubmitting = activateMutation.isPending || declineMutation.isPending
+
+  async function handleActivate(assignmentId: string) {
+    try {
+      setModalError(null)
+      await activateMutation.mutateAsync(assignmentId)
+      showToast('Pending plan activated.', 'success')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to activate pending plan.'
+      setModalError(message)
+      showToast(message, 'error')
+    }
+  }
+
+  async function handleDecline(assignmentId: string) {
+    try {
+      setModalError(null)
+      await declineMutation.mutateAsync(assignmentId)
+      showToast('Pending plan declined.', 'success')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to decline pending plan.'
+      setModalError(message)
+      showToast(message, 'error')
+    }
+  }
 
   return (
     <main className="min-h-screen bg-slate-100 p-4 md:p-8">
@@ -55,13 +95,24 @@ export function UserShell({ title, description, children }: UserShellProps) {
 
           <nav className="mt-4 flex flex-wrap items-center gap-2">
             <NavItem to="/user/dashboard" label="Dashboard" />
+            <NavItem to="/user/plans" label="Plans" />
             <NavItem to="/user/coaches" label="My Coaches" />
             <NavItem to="/user/progress" label="Progress" />
           </nav>
+
+          {modalError ? <p className="mt-3 text-sm text-rose-700">{modalError}</p> : null}
         </header>
 
         {children}
       </section>
+
+      <PlanActivationModal
+        open={showActivationModal}
+        plans={pendingAssignments}
+        isSubmitting={isSubmitting}
+        onActivate={handleActivate}
+        onDecline={handleDecline}
+      />
     </main>
   )
 }

@@ -1,6 +1,7 @@
 import { Activity, Calendar, Flame, Trophy } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { UserQuickStatsResponse } from '@/types/user-dashboard'
 
 interface QuickStatsCardsProps {
@@ -44,7 +45,11 @@ export function QuickStatsCards({ stats, isLoading }: QuickStatsCardsProps) {
               <Icon className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold text-slate-900">{isLoading ? '-' : value}</p>
+              {isLoading ? (
+                <Skeleton className="h-9 w-16" />
+              ) : (
+                <p className="text-3xl font-semibold text-slate-900">{value}</p>
+              )}
             </CardContent>
           </Card>
         )

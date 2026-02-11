@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { UserShell } from '@/components/user/UserShell'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/toast-provider'
 import { CardioExerciseCard } from '@/components/workout/CardioExerciseCard'
 import { StrengthExerciseCard } from '@/components/workout/StrengthExerciseCard'
 import { WorkoutCelebration } from '@/components/workout/WorkoutCelebration'
@@ -15,6 +16,7 @@ import {
 import type { Session } from '@/types/sessions'
 
 export function WorkoutExecutionPage() {
+  const { showToast } = useToast()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const sessionId = searchParams.get('sessionId')
@@ -102,7 +104,9 @@ export function WorkoutExecutionPage() {
         const createdLog = created.logs[0]
         setLogId(createdLog?.id ?? null)
       } catch (error) {
-        setSyncError(error instanceof Error ? error.message : 'Unable to initialize workout log.')
+        const message = error instanceof Error ? error.message : 'Unable to initialize workout log.'
+        setSyncError(message)
+        showToast(message, 'error')
       }
     }
 
@@ -114,6 +118,7 @@ export function WorkoutExecutionPage() {
     addLogMutation,
     strengthState,
     cardioState,
+    showToast,
   ])
 
   const updatePayload = useMemo(() => {
@@ -160,14 +165,16 @@ export function WorkoutExecutionPage() {
           payload: updatePayload,
         })
       } catch (error) {
-        setSyncError(error instanceof Error ? error.message : 'Unable to sync workout log.')
+        const message = error instanceof Error ? error.message : 'Unable to sync workout log.'
+        setSyncError(message)
+        showToast(message, 'error')
       }
     }, 800)
 
     return () => {
       window.clearTimeout(timer)
     }
-  }, [activeSession, updatePayload, completedSession, updateSessionMutation])
+  }, [activeSession, updatePayload, completedSession, showToast, updateSessionMutation])
 
   async function handleFinishWorkout() {
     if (!activeSession || !updatePayload) {
@@ -182,8 +189,11 @@ export function WorkoutExecutionPage() {
       })
       const completed = await completeSessionMutation.mutateAsync(activeSession.id)
       setCompletedSession(completed)
+      showToast('Workout completed. Great work.', 'success')
     } catch (error) {
-      setSyncError(error instanceof Error ? error.message : 'Unable to finish workout.')
+      const message = error instanceof Error ? error.message : 'Unable to finish workout.'
+      setSyncError(message)
+      showToast(message, 'error')
     } finally {
       setIsFinishing(false)
     }

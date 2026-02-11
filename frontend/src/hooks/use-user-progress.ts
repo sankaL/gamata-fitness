@@ -43,6 +43,7 @@ export function useUserMuscleGroupsQuery() {
   return useQuery({
     queryKey: USER_MUSCLE_GROUP_OPTIONS_QUERY_KEY,
     queryFn: () => getMuscleGroups(assertToken(accessToken)),
+    staleTime: 30 * 60 * 1000,
   })
 }
 

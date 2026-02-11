@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { Workout } from '@/types/workouts'
 
 interface WorkoutLibraryTableProps {
@@ -50,8 +51,12 @@ export function WorkoutLibraryTable({
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="py-6 text-center text-slate-600">
-                    Loading workouts...
+                  <td colSpan={5} className="py-4">
+                    <div className="space-y-2">
+                      <Skeleton className="h-5 w-full" />
+                      <Skeleton className="h-5 w-full" />
+                      <Skeleton className="h-5 w-full" />
+                    </div>
                   </td>
                 </tr>
               ) : null}
@@ -59,7 +64,7 @@ export function WorkoutLibraryTable({
               {!isLoading && workouts.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-6 text-center text-slate-600">
-                    No workouts match the current filters.
+                    No workouts match your filters. Try broadening your search.
                   </td>
                 </tr>
               ) : null}

@@ -1,7 +1,9 @@
 import { ArrowRightLeft, Play, Sparkles } from 'lucide-react'
 
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { UserTodayWorkoutResponse } from '@/types/user-dashboard'
 
 interface TodaysWorkoutCardProps {
@@ -34,7 +36,11 @@ export function TodaysWorkoutCard({
       </CardHeader>
       <CardContent className="space-y-4">
         {isLoading ? (
-          <p className="text-sm text-slate-600">Loading today's workout...</p>
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-2/3" />
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-20 w-full" />
+          </div>
         ) : primaryWorkout ? (
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
             <p className="text-base font-semibold text-slate-900">{primaryWorkout.name}</p>
@@ -47,9 +53,10 @@ export function TodaysWorkoutCard({
             ) : null}
           </div>
         ) : (
-          <p className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-            Rest day. Start an ad hoc workout if you want extra training.
-          </p>
+          <EmptyState
+            title="Rest Day"
+            description="No assigned workout for today. Start an ad hoc session if you want extra training."
+          />
         )}
 
         <div className="flex flex-wrap gap-2">

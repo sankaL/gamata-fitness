@@ -20,6 +20,10 @@ import type {
   UserTodayWorkoutResponse,
   UserWeekPlanResponse,
 } from '@/types/user-dashboard'
+import type {
+  PlanAssignmentActionResponse,
+  UserPendingPlansResponse,
+} from '@/types/plan-activation'
 import type { Workout } from '@/types/workouts'
 
 interface ApiErrorPayload {
@@ -200,5 +204,33 @@ export async function getFrequencyProgress(
   })
   return request<FrequencyProgressResponse>(`/users/me/progress/frequency${query}`, token, {
     method: 'GET',
+  })
+}
+
+export async function getPendingPlans(token: string): Promise<UserPendingPlansResponse> {
+  return request<UserPendingPlansResponse>('/users/me/pending-plans', token, {
+    method: 'GET',
+  })
+}
+
+export async function activatePendingPlan(
+  token: string,
+  assignmentId: string,
+): Promise<PlanAssignmentActionResponse> {
+  return request<PlanAssignmentActionResponse>(
+    `/plan-assignments/${assignmentId}/activate`,
+    token,
+    {
+      method: 'POST',
+    },
+  )
+}
+
+export async function declinePendingPlan(
+  token: string,
+  assignmentId: string,
+): Promise<PlanAssignmentActionResponse> {
+  return request<PlanAssignmentActionResponse>(`/plan-assignments/${assignmentId}/decline`, token, {
+    method: 'POST',
   })
 }

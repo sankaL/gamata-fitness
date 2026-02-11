@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { exportPlanCsv } from '@/lib/import-export-api-client'
 import {
   archivePlan,
   assignPlan,
@@ -83,6 +84,7 @@ export function useCoachRosterQuery() {
     queryKey: [...COACH_USERS_QUERY_KEY, user?.id],
     queryFn: () => getCoachUsers(assertToken(accessToken), assertCoachId(user?.id)),
     enabled: Boolean(user?.id),
+    staleTime: 60 * 1000,
   })
 }
 
@@ -182,5 +184,12 @@ export function useAssignPlanMutation() {
       void queryClient.invalidateQueries({ queryKey: [...PLAN_USERS_QUERY_KEY, variables.planId] })
       void queryClient.invalidateQueries({ queryKey: COACH_USERS_QUERY_KEY })
     },
+  })
+}
+
+export function useExportPlanCsvMutation() {
+  const { accessToken } = useAuth()
+  return useMutation({
+    mutationFn: (planId: string) => exportPlanCsv(assertToken(accessToken), planId),
   })
 }

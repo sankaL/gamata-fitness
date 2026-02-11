@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { SessionHistoryItem } from '@/types/progress'
 
 interface SessionHistoryListProps {
@@ -24,11 +26,22 @@ export function SessionHistoryList({
   const [expandedSessionIds, setExpandedSessionIds] = useState<string[]>([])
 
   if (isLoading) {
-    return <p className="text-sm text-slate-600">Loading session history...</p>
+    return (
+      <div className="space-y-2">
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+    )
   }
 
   if (sessions.length === 0) {
-    return <p className="text-sm text-slate-600">No sessions match these filters.</p>
+    return (
+      <EmptyState
+        title="No Sessions Found"
+        description="Adjust your filters or complete a workout to see history here."
+      />
+    )
   }
 
   return (

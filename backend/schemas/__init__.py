@@ -17,6 +17,13 @@ from schemas.dashboard import (
     UserWeekPlanDayResponse,
     UserWeekPlanResponse,
 )
+from schemas.import_export import CSVImportErrorItem, CSVImportResponse
+from schemas.plan_activation import (
+    ActivePlanSummaryResponse,
+    PendingPlanAssignmentResponse,
+    PlanAssignmentActionResponse,
+    UserPendingPlansResponse,
+)
 from schemas.plans import (
     CoachRosterResponse,
     PaginatedPlansResponse,
@@ -119,6 +126,12 @@ __all__ = [
     "UserQuickStatsResponse",
     "UserCoachResponse",
     "UserCoachesResponse",
+    "ActivePlanSummaryResponse",
+    "PendingPlanAssignmentResponse",
+    "UserPendingPlansResponse",
+    "PlanAssignmentActionResponse",
+    "CSVImportErrorItem",
+    "CSVImportResponse",
     "SessionLogInput",
     "SessionLogCreateRequest",
     "SessionLogUpdateRequest",

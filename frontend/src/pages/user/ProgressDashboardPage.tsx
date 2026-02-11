@@ -12,6 +12,7 @@ import { UserShell } from '@/components/user/UserShell'
 import { WeeklyFrequencyChart } from '@/components/user/WeeklyFrequencyChart'
 import { MuscleGroupChart } from '@/components/user/MuscleGroupChart'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/toast-provider'
 import {
   useFrequencyProgressQuery,
   useMuscleGroupProgressQuery,
@@ -44,6 +45,7 @@ function getPresetDates(preset: DateRangePreset): { startDate: string; endDate: 
 }
 
 export function ProgressDashboardPage() {
+  const { showToast } = useToast()
   const [activeTab, setActiveTab] = useState<ProgressTab>('history')
   const [page, setPage] = useState(1)
   const [rangePreset, setRangePreset] = useState<DateRangePreset>('30d')
@@ -228,11 +230,16 @@ export function ProgressDashboardPage() {
         isSaving={updateSessionMutation.isPending}
         onClose={() => setEditingSession(null)}
         onSave={async (sessionId, logs) => {
-          await updateSessionMutation.mutateAsync({
-            sessionId,
-            payload: { logs },
-          })
-          setEditingSession(null)
+          try {
+            await updateSessionMutation.mutateAsync({
+              sessionId,
+              payload: { logs },
+            })
+            showToast('Session updated successfully.', 'success')
+            setEditingSession(null)
+          } catch (error) {
+            showToast(error instanceof Error ? error.message : 'Unable to update session.', 'error')
+          }
         }}
       />
     </UserShell>

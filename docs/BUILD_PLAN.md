@@ -250,11 +250,11 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 10.1 | Create `GET /users/me/pending-plans` endpoint | BE | ⬜ | | Return pending plan assignments |
-| 10.2 | Create `POST /plan-assignments/{id}/activate` endpoint | BE | ⬜ | | Activate pending plan; deactivate current |
-| 10.3 | Create `POST /plan-assignments/{id}/decline` endpoint | BE | ⬜ | | Decline pending plan |
-| 10.4 | Create Plan Activation modal | FE | ⬜ | | Show on login if pending plan exists |
-| 10.5 | Create Plans Settings page | FE | ⬜ | | View active plan, pending plans; manage activation |
+| 10.1 | Create `GET /users/me/pending-plans` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: added user pending-plan endpoint with active-plan summary and pending assignment metadata |
+| 10.2 | Create `POST /plan-assignments/{id}/activate` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: activation now promotes selected pending assignment and deactivates current active assignment(s) |
+| 10.3 | Create `POST /plan-assignments/{id}/decline` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: users can decline pending assignments, marking them inactive with timestamp |
+| 10.4 | Create Plan Activation modal | FE | 🟢 | Codex | Completed February 11, 2026: added user-shell modal that appears when pending plans exist and supports activate/decline actions |
+| 10.5 | Create Plans Settings page | FE | 🟢 | Codex | Completed February 11, 2026: added `/user/plans` page showing active plan context and pending assignment management |
 
 ---
 
@@ -262,15 +262,15 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 11.1 | Create `GET /users/export` endpoint (admin) | BE | ⬜ | | Export users as CSV |
-| 11.2 | Create `GET /workouts/export` endpoint (admin) | BE | ⬜ | | Export workouts as CSV |
-| 11.3 | Create `GET /plans/{id}/export` endpoint (coach) | BE | ⬜ | | Export plan as CSV |
-| 11.4 | Create `POST /users/import` endpoint (admin) | BE | ⬜ | | Import users from CSV; return validation errors |
-| 11.5 | Create `POST /workouts/import` endpoint (admin) | BE | ⬜ | | Import workouts from CSV |
-| 11.6 | Implement CSV validation with error reporting | BE | ⬜ | | Return row-by-row errors for invalid data |
-| 11.7 | Create Export buttons in Admin UI | FE | ⬜ | | Download CSV files |
-| 11.8 | Create Import modal with file upload | FE | ⬜ | | Upload CSV; show validation results |
-| 11.9 | Create import error display | FE | ⬜ | | Table showing invalid rows and reasons |
+| 11.1 | Create `GET /users/export` endpoint (admin) | BE | 🟢 | Codex | Completed February 11, 2026: added admin users CSV export endpoint with assignment count metadata |
+| 11.2 | Create `GET /workouts/export` endpoint (admin) | BE | 🟢 | Codex | Completed February 11, 2026: added admin workouts CSV export endpoint including type-specific workout fields |
+| 11.3 | Create `GET /plans/{id}/export` endpoint (coach) | BE | 🟢 | Codex | Completed February 11, 2026: added coach-scoped plan CSV export endpoint with day/workout rows |
+| 11.4 | Create `POST /users/import` endpoint (admin) | BE | 🟢 | Codex | Completed February 11, 2026: added admin user CSV import endpoint with per-row validation/result reporting |
+| 11.5 | Create `POST /workouts/import` endpoint (admin) | BE | 🟢 | Codex | Completed February 11, 2026: added admin workout CSV import endpoint with type-aware validation and creation |
+| 11.6 | Implement CSV validation with error reporting | BE | 🟢 | Codex | Completed February 11, 2026: import services now return row-by-row field errors for invalid records |
+| 11.7 | Create Export buttons in Admin UI | FE | 🟢 | Codex | Completed February 11, 2026: added CSV export actions on Admin Users/Admin Workouts pages |
+| 11.8 | Create Import modal with file upload | FE | 🟢 | Codex | Completed February 11, 2026: added reusable `CsvImportModal` file-upload flow for admin imports |
+| 11.9 | Create import error display | FE | 🟢 | Codex | Completed February 11, 2026: import modal now displays row/field/message error table for validation failures |
 
 ---
 
@@ -278,18 +278,18 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 12.1 | Implement loading states across all pages | FE | ⬜ | | Skeleton loaders; spinners |
-| 12.2 | Implement error boundary component | FE | ⬜ | | Graceful error handling |
-| 12.3 | Add toast notifications | FE | ⬜ | | Success/error feedback on actions |
-| 12.4 | Implement empty states | FE | ⬜ | | Friendly messages when no data |
-| 12.5 | Optimize TanStack Query caching | FE | ⬜ | | Configure stale times; prefetching |
-| 12.6 | Implement code splitting with React.lazy | FE | ⬜ | | Split by route; reduce initial bundle |
-| 12.7 | Add API rate limiting | BE | ⬜ | | Prevent abuse; use slowapi |
-| 12.8 | Add request logging | BE | ⬜ | | Log all API requests for debugging |
-| 12.9 | Write unit tests for critical backend services | BE | ⬜ | | pytest; focus on business logic |
-| 12.10 | Write integration tests for API endpoints | BE | ⬜ | | pytest + Python standard library request utilities (`urllib.request`) |
-| 12.11 | Write frontend component tests | FE | ⬜ | | Vitest + React Testing Library |
-| 12.12 | Performance audit with Lighthouse | OTHER | ⬜ | | Target 90+ score on mobile |
+| 12.1 | Implement loading states across all pages | FE | 🟢 | Codex | Completed February 11, 2026: added skeleton loaders/spinner states across dashboard, table, and plan views |
+| 12.2 | Implement error boundary component | FE | 🟢 | Codex | Completed February 11, 2026: added global `AppErrorBoundary` fallback with safe reload action |
+| 12.3 | Add toast notifications | FE | 🟢 | Codex | Completed February 11, 2026: added toast provider and success/error action feedback across admin/coach/user workflows |
+| 12.4 | Implement empty states | FE | 🟢 | Codex | Completed February 11, 2026: introduced reusable empty-state component and upgraded no-data UX messaging |
+| 12.5 | Optimize TanStack Query caching | FE | 🟢 | Codex | Completed February 11, 2026: configured query defaults, stale times, and role-aware prefetching |
+| 12.6 | Implement code splitting with React.lazy | FE | 🟢 | Codex | Completed February 11, 2026: migrated route pages to lazy-loaded chunks with suspense fallback |
+| 12.7 | Add API rate limiting | BE | 🟢 | Codex | Completed February 11, 2026: integrated slowapi default limiter with env-driven limits |
+| 12.8 | Add request logging | BE | 🟢 | Codex | Completed February 11, 2026: added request logging middleware with status and duration metadata |
+| 12.9 | Write unit tests for critical backend services | BE | 🟢 | Codex | Completed February 11, 2026: added service tests for plan activation and CSV import validation workflows |
+| 12.10 | Write integration tests for API endpoints | BE | 🟢 | Codex | Completed February 11, 2026: added urllib-based API integration test suite for health/auth contract checks |
+| 12.11 | Write frontend component tests | FE | 🟢 | Codex | Completed February 11, 2026: added Vitest + Testing Library component tests under root `tests/frontend` |
+| 12.12 | Performance audit with Lighthouse | OTHER | 🟢 | Codex | Completed February 11, 2026: mobile Lighthouse audit recorded 97/100 in `tests/performance/lighthouse-mobile-report.md` |
 | 12.13 | Accessibility audit | OTHER | ⬜ | | WCAG 2.1 AA compliance check |
 | 12.14 | Mobile responsiveness QA | OTHER | ⬜ | | Test on 320px, 375px, 428px viewports |
 | 12.15 | Cross-browser testing | OTHER | ⬜ | | Chrome, Safari, Firefox, Edge |

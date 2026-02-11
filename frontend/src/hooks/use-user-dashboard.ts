@@ -32,6 +32,7 @@ export function useUserTodayWorkoutQuery() {
   return useQuery({
     queryKey: USER_TODAY_QUERY_KEY,
     queryFn: () => getUserTodayWorkout(assertToken(accessToken)),
+    staleTime: 15 * 1000,
   })
 }
 
@@ -40,6 +41,7 @@ export function useUserWeekPlanQuery() {
   return useQuery({
     queryKey: USER_WEEK_PLAN_QUERY_KEY,
     queryFn: () => getUserWeekPlan(assertToken(accessToken)),
+    staleTime: 30 * 1000,
   })
 }
 
@@ -48,6 +50,7 @@ export function useUserQuickStatsQuery() {
   return useQuery({
     queryKey: USER_STATS_QUERY_KEY,
     queryFn: () => getUserQuickStats(assertToken(accessToken)),
+    staleTime: 15 * 1000,
   })
 }
 

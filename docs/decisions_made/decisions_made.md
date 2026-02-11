@@ -394,4 +394,103 @@ Plan-day indexing and completion metrics required a stable definition to avoid m
 
 ---
 
+### [DECISION-013] Pending Plan Activation as User-Owned Assignment State Transitions
+
+**Date:** 2026-02-11  
+**Status:** Accepted
+
+**Context:**  
+Phase 10 requires users to explicitly manage pending plan assignments while preserving the one-active-plan rule and preventing archived-plan activation.
+
+**Decision:**  
+- Add dedicated user-side endpoints:
+  - `GET /users/me/pending-plans`
+  - `POST /plan-assignments/{id}/activate`
+  - `POST /plan-assignments/{id}/decline`
+- Activation flow deactivates existing active assignments (`status=inactive`, `deactivated_at`) before promoting the selected pending assignment to `active`.
+- Expose pending plan actions in both a login-time modal and a persistent `/user/plans` settings page.
+
+**Rationale:**  
+- Assignment-level transitions keep historical plan relationships intact while honoring one-active-plan behavior.
+- Explicit activate/decline actions make user intent auditable and reduce accidental status changes.
+- Presenting actions in modal plus settings page supports both immediate handling and later review.
+
+**Alternatives Considered:**  
+- Auto-activate newest pending plan (rejected: removes user choice and can disrupt current training unexpectedly).
+- Replace assignment rows instead of status transitions (rejected: loses assignment history and deactivation traceability).
+
+**Consequences:**  
+- Positive: clear lifecycle for plan handoffs with traceable status history.
+- Negative/Risks: requires additional UX handling when multiple pending assignments are present.
+
+---
+
+### [DECISION-014] CSV Import/Export Contract with Partial-Success Row Validation
+
+**Date:** 2026-02-11  
+**Status:** Accepted
+
+**Context:**  
+Phase 11 requires bulk transfer of users/workouts/plans and explicit validation feedback for malformed CSV data.
+
+**Decision:**  
+- Add CSV endpoints:
+  - Exports: `GET /users/export`, `GET /workouts/export`, `GET /plans/{id}/export`
+  - Imports: `POST /users/import`, `POST /workouts/import`
+- Use row-level validation with structured `{row_number, field, message}` errors.
+- Allow partial-success imports by importing valid rows while reporting invalid rows in the same response.
+- Standardize admin UI around reusable import modal/error table and direct CSV download actions.
+
+**Rationale:**  
+- Row-level error reporting gives operators actionable feedback without requiring trial-and-error reruns for every issue.
+- Partial-success processing is pragmatic for operational CSV uploads and avoids blocking entire batches.
+- Reusable modal patterns reduce duplicate UI logic across user/workout admin screens.
+
+**Alternatives Considered:**  
+- All-or-nothing transactional imports (rejected: high friction for large CSV cleanup loops).
+- Separate validation endpoint before import (rejected for MVP: extra API complexity and user flow overhead).
+
+**Consequences:**  
+- Positive: faster operator workflow and clearer data-quality feedback.
+- Negative/Risks: partial imports require operators to review result summaries to reconcile remaining errors.
+
+---
+
+### [DECISION-015] Phase 12 Baseline: Global Resilience, Feedback, and Performance Defaults
+
+**Date:** 2026-02-11  
+**Status:** Accepted
+
+**Context:**  
+Phase 12 calls for production-readiness improvements spanning UX polish, observability, abuse protection, and performance validation.
+
+**Decision:**  
+- Frontend:
+  - Add global error boundary and toast provider.
+  - Introduce skeleton/empty-state patterns across key dashboards and tables.
+  - Enable route-level code splitting with `React.lazy` + suspense fallbacks.
+  - Set TanStack Query default cache/retry behavior and role-based prefetching.
+- Backend:
+  - Add request logging middleware with method/path/status/duration metadata.
+  - Add `slowapi` default rate limiting with env-driven limits.
+- Quality:
+  - Add backend unit tests for new critical services and urllib-based integration checks.
+  - Add frontend component tests under root `tests/frontend`.
+  - Record Lighthouse mobile audit artifacts under `tests/performance`.
+
+**Rationale:**  
+- Centralized resilience/feedback primitives improve runtime stability and operator/user confidence.
+- Default caching and code splitting reduce perceived latency and bundle overhead for first loads.
+- Rate limiting and request logs provide baseline production safeguards and diagnostics.
+
+**Alternatives Considered:**  
+- Keep per-page ad-hoc error/loading/notification handling (rejected: inconsistent UX and higher maintenance).
+- Defer rate limiting/logging to infrastructure layer only (rejected: weaker app-level guarantees for local and containerized runs).
+
+**Consequences:**  
+- Positive: stronger UX consistency, better debugging visibility, and measurable performance baseline.
+- Negative/Risks: more cross-cutting plumbing increases integration surface and regression-test scope.
+
+---
+
 <!-- Add new decisions above this line -->

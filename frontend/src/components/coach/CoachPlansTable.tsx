@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { PlanListItem } from '@/types/plans'
 
 interface CoachPlansTableProps {
@@ -43,8 +44,12 @@ export function CoachPlansTable({
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="py-6 text-center text-slate-600">
-                  Loading plans...
+                <td colSpan={5} className="py-4">
+                  <div className="space-y-2">
+                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-5 w-full" />
+                  </div>
                 </td>
               </tr>
             ) : null}
@@ -52,7 +57,7 @@ export function CoachPlansTable({
             {!isLoading && plans.length === 0 ? (
               <tr>
                 <td colSpan={5} className="py-6 text-center text-slate-600">
-                  No plans found.
+                  No plans found. Create a new plan to get started.
                 </td>
               </tr>
             ) : null}

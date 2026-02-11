@@ -2,11 +2,12 @@ import { useMemo, useState } from 'react'
 
 import { AdminShell } from '@/components/admin/AdminShell'
 import { CoachAssignmentModal } from '@/components/admin/CoachAssignmentModal'
+import { CsvImportModal } from '@/components/admin/CsvImportModal'
 import { DeactivateUserModal } from '@/components/admin/DeactivateUserModal'
+import { AdminUsersToolbar } from '@/components/admin/AdminUsersToolbar'
 import { UserFormModal } from '@/components/admin/UserFormModal'
 import { UsersTable } from '@/components/admin/UsersTable'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useToast } from '@/components/ui/toast-provider'
 import {
   useAdminUserDetailQuery,
   useAdminUsersQuery,
@@ -17,6 +18,7 @@ import {
   useRemoveCoachAssignmentMutation,
   useUpdateUserMutation,
 } from '@/hooks/use-admin-users'
+import { useAdminUsersCsv } from '@/hooks/use-admin-users-csv'
 import type { UserRole } from '@/types/auth'
 import type { AdminUserListItem, UserCreatePayload, UserUpdatePayload } from '@/types/users'
 
@@ -27,6 +29,7 @@ type StatusFilter = 'all' | 'active' | 'inactive'
 type FormMode = 'create' | 'edit'
 
 export function AdminUsersPage() {
+  const { showToast } = useToast()
   const [page, setPage] = useState(1)
   const [searchDraft, setSearchDraft] = useState('')
   const [search, setSearch] = useState<string>('')
@@ -60,6 +63,10 @@ export function AdminUsersPage() {
   const deactivateUserMutation = useDeactivateUserMutation()
   const assignCoachesMutation = useAssignCoachesMutation()
   const removeCoachMutation = useRemoveCoachAssignmentMutation()
+  const csvTools = useAdminUsersCsv({
+    onError: (message) => setActionError(message),
+    onToast: showToast,
+  })
 
   const users = usersQuery.data?.items ?? []
   const total = usersQuery.data?.total ?? 0
@@ -70,16 +77,20 @@ export function AdminUsersPage() {
       setActionError(null)
       if (userFormMode === 'create') {
         await createUserMutation.mutateAsync(payload as UserCreatePayload)
+        showToast('User created successfully.', 'success')
       } else if (selectedUser) {
         await updateUserMutation.mutateAsync({
           userId: selectedUser.id,
           payload: payload as UserUpdatePayload,
         })
+        showToast('User updated successfully.', 'success')
       }
       setIsUserFormOpen(false)
       setSelectedUser(null)
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to save user.')
+      const message = error instanceof Error ? error.message : 'Unable to save user.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -92,8 +103,11 @@ export function AdminUsersPage() {
       await deactivateUserMutation.mutateAsync(selectedUser.id)
       setIsDeactivateOpen(false)
       setSelectedUser(null)
+      showToast('User deactivated.', 'success')
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to deactivate user.')
+      const message = error instanceof Error ? error.message : 'Unable to deactivate user.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -107,8 +121,11 @@ export function AdminUsersPage() {
         userId: coachModalUserId,
         payload: { coach_ids: coachIds },
       })
+      showToast('Coach assignments updated.', 'success')
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to assign coaches.')
+      const message = error instanceof Error ? error.message : 'Unable to assign coaches.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -119,8 +136,11 @@ export function AdminUsersPage() {
     try {
       setActionError(null)
       await removeCoachMutation.mutateAsync({ userId: coachModalUserId, coachId })
+      showToast('Coach assignment removed.', 'success')
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Unable to remove coach assignment.')
+      const message = error instanceof Error ? error.message : 'Unable to remove coach assignment.'
+      setActionError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -129,85 +149,40 @@ export function AdminUsersPage() {
       title="Admin User Management"
       description="Create, update, and deactivate users, and manage coach assignments."
     >
-      <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div className="grid w-full gap-3 md:grid-cols-3">
-            <div className="space-y-1.5 md:col-span-1">
-              <label htmlFor="search-users" className="text-sm font-medium text-slate-700">
-                Search
-              </label>
-              <Input
-                id="search-users"
-                value={searchDraft}
-                placeholder="Name or email"
-                onChange={(event) => setSearchDraft(event.target.value)}
-              />
-            </div>
+      <AdminUsersToolbar
+        searchDraft={searchDraft}
+        roleFilter={roleFilter}
+        statusFilter={statusFilter}
+        isExporting={csvTools.exportUsersMutation.isPending}
+        onSearchDraftChange={setSearchDraft}
+        onRoleFilterChange={(value) => {
+          setRoleFilter(value)
+          setPage(1)
+        }}
+        onStatusFilterChange={(value) => {
+          setStatusFilter(value)
+          setPage(1)
+        }}
+        onApplyFilters={() => {
+          setSearch(searchDraft.trim())
+          setPage(1)
+        }}
+        onCreateUser={() => {
+          setUserFormMode('create')
+          setSelectedUser(null)
+          setIsUserFormOpen(true)
+        }}
+        onExportCsv={() => {
+          setActionError(null)
+          void csvTools.handleExportUsersCsv()
+        }}
+        onImportCsv={() => {
+          csvTools.setImportResult(null)
+          csvTools.setIsImportOpen(true)
+        }}
+      />
 
-            <div className="space-y-1.5">
-              <label htmlFor="role-filter" className="text-sm font-medium text-slate-700">
-                Role
-              </label>
-              <select
-                id="role-filter"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                value={roleFilter}
-                onChange={(event) => {
-                  setRoleFilter(event.target.value as RoleFilter)
-                  setPage(1)
-                }}
-              >
-                <option value="all">All roles</option>
-                <option value="admin">Admin</option>
-                <option value="coach">Coach</option>
-                <option value="user">User</option>
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="status-filter" className="text-sm font-medium text-slate-700">
-                Status
-              </label>
-              <select
-                id="status-filter"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                value={statusFilter}
-                onChange={(event) => {
-                  setStatusFilter(event.target.value as StatusFilter)
-                  setPage(1)
-                }}
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="all">All</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearch(searchDraft.trim())
-                setPage(1)
-              }}
-            >
-              Apply Filters
-            </Button>
-            <Button
-              onClick={() => {
-                setUserFormMode('create')
-                setSelectedUser(null)
-                setIsUserFormOpen(true)
-              }}
-            >
-              Create User
-            </Button>
-          </div>
-        </div>
-
-        {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
-      </section>
+      {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
 
       <UsersTable
         users={users}
@@ -275,6 +250,18 @@ export function AdminUsersPage() {
           onRemove={handleRemoveCoach}
         />
       ) : null}
+
+      <CsvImportModal
+        open={csvTools.isImportOpen}
+        title="Import Users"
+        description="Upload a CSV with columns: name, email, role, password."
+        isSubmitting={csvTools.importUsersMutation.isPending}
+        result={csvTools.importResult}
+        onClose={() => {
+          csvTools.setIsImportOpen(false)
+        }}
+        onSubmit={csvTools.handleImportUsersCsv}
+      />
     </AdminShell>
   )
 }

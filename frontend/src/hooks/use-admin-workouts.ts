@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { exportWorkoutsCsv, importWorkoutsCsv } from '@/lib/import-export-api-client'
 import {
   archiveWorkout,
   createMuscleGroup,
@@ -58,6 +59,7 @@ export function useMuscleGroupsQuery() {
   return useQuery({
     queryKey: MUSCLE_GROUPS_QUERY_KEY,
     queryFn: () => getMuscleGroups(assertToken(accessToken)),
+    staleTime: 30 * 60 * 1000,
   })
 }
 
@@ -66,6 +68,7 @@ export function useCardioTypesQuery() {
   return useQuery({
     queryKey: CARDIO_TYPES_QUERY_KEY,
     queryFn: () => getCardioTypes(assertToken(accessToken)),
+    staleTime: 30 * 60 * 1000,
   })
 }
 
@@ -132,6 +135,25 @@ export function useCreateMuscleGroupMutation() {
       createMuscleGroup(assertToken(accessToken), payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: MUSCLE_GROUPS_QUERY_KEY })
+    },
+  })
+}
+
+export function useExportWorkoutsCsvMutation() {
+  const { accessToken } = useAuth()
+  return useMutation({
+    mutationFn: () => exportWorkoutsCsv(assertToken(accessToken)),
+  })
+}
+
+export function useImportWorkoutsCsvMutation() {
+  const { accessToken } = useAuth()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (file: File) => importWorkoutsCsv(assertToken(accessToken), file),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: WORKOUTS_QUERY_KEY })
+      void queryClient.invalidateQueries({ queryKey: WORKOUT_DETAIL_QUERY_KEY })
     },
   })
 }

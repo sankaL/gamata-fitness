@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { EmptyState } from '@/components/shared/EmptyState'
 import { UserShell } from '@/components/user/UserShell'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useToast } from '@/components/ui/toast-provider'
 import { useCreateSessionMutation, useUserWorkoutLibraryQuery } from '@/hooks/use-user-dashboard'
 import type { Workout } from '@/types/workouts'
 
 export function AdHocWorkoutPage() {
+  const { showToast } = useToast()
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -23,9 +26,13 @@ export function AdHocWorkoutPage() {
         session_type: 'adhoc',
         plan_id: null,
       })
+      showToast('Ad hoc workout started.', 'success')
       navigate(`/user/workout?sessionId=${session.id}`)
     } catch (mutationError) {
-      setError(mutationError instanceof Error ? mutationError.message : 'Unable to start workout.')
+      const message =
+        mutationError instanceof Error ? mutationError.message : 'Unable to start workout.'
+      setError(message)
+      showToast(message, 'error')
     }
   }
 
@@ -52,7 +59,10 @@ export function AdHocWorkoutPage() {
             <p className="text-sm text-slate-600">Loading workouts...</p>
           ) : null}
           {!workoutsQuery.isLoading && (workoutsQuery.data?.items.length ?? 0) === 0 ? (
-            <p className="text-sm text-slate-600">No workouts found.</p>
+            <EmptyState
+              title="No Workouts Found"
+              description="Try a broader search to discover available workouts."
+            />
           ) : null}
 
           {workoutsQuery.data?.items.map((workout) => (
