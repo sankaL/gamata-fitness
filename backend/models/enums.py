@@ -25,6 +25,12 @@ class WorkoutType(str, Enum):
     CARDIO = "cardio"
 
 
+class CardioDifficultyLevel(str, Enum):
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
+
+
 class PlanAssignmentStatus(str, Enum):
     PENDING = "pending"
     ACTIVE = "active"

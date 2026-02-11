@@ -9,6 +9,18 @@ from services.auth import (
     update_password,
     verify_access_token,
 )
+from services.plans import (
+    PlanServiceError,
+    archive_plan,
+    assign_plan_to_users,
+    create_plan,
+    get_coach_roster,
+    get_plan_detail,
+    get_plan_users_status,
+    list_plans,
+    unarchive_plan,
+    update_plan,
+)
 from services.users import (
     UserServiceError,
     assign_coaches_to_user,
@@ -20,6 +32,18 @@ from services.users import (
     remove_coach_assignment,
     update_user,
 )
+from services.workouts import (
+    WorkoutServiceError,
+    archive_workout,
+    create_muscle_group,
+    create_workout,
+    get_workout_detail,
+    list_cardio_types,
+    list_muscle_groups,
+    list_workouts,
+    unarchive_workout,
+)
+from services.workouts import update_workout as update_workout_library_item
 
 __all__ = [
     "AuthServiceError",
@@ -38,4 +62,24 @@ __all__ = [
     "assign_coaches_to_user",
     "remove_coach_assignment",
     "get_admin_overview",
+    "WorkoutServiceError",
+    "list_workouts",
+    "get_workout_detail",
+    "create_workout",
+    "update_workout_library_item",
+    "archive_workout",
+    "unarchive_workout",
+    "list_muscle_groups",
+    "create_muscle_group",
+    "list_cardio_types",
+    "PlanServiceError",
+    "list_plans",
+    "get_plan_detail",
+    "create_plan",
+    "update_plan",
+    "archive_plan",
+    "unarchive_plan",
+    "assign_plan_to_users",
+    "get_plan_users_status",
+    "get_coach_roster",
 ]

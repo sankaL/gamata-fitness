@@ -307,4 +307,91 @@ Phase 4 requires admin-managed user CRUD, coach assignment management, and dashb
 
 ---
 
+### [DECISION-010] Phase 5/6 Schema Expansion to Persist Workout Prescription Fields and Plan Archive State
+
+**Date:** 2026-02-11  
+**Status:** Accepted
+
+**Context:**  
+Phase 5 and 6 requirements include workout prescription defaults (strength/cardio-specific targets) and soft deletion for plans, but Phase 2 schema lacked these persisted fields.
+
+**Decision:**  
+- Add `cardio_difficulty_level` enum (`easy`, `medium`, `hard`).
+- Add workout columns: `target_sets`, `target_reps`, `suggested_weight`, `target_duration`, `difficulty_level`.
+- Add plan archive columns: `workout_plans.is_archived`, `workout_plans.archived_at`, plus index `ix_workout_plans_is_archived`.
+- Enforce type-specific workout integrity through DB check constraints and matching service/schema validation.
+
+**Rationale:**  
+- Persisted target fields are required for consistent plan building, assignment, and execution workflows.
+- Plan archival state must be explicit to support soft-delete semantics and filtering.
+- DB constraints protect integrity if API validations are bypassed and keep behavior deterministic.
+
+**Alternatives Considered:**  
+- Defer new fields and keep transient frontend-only values (rejected: data loss and inconsistent behavior across users).
+- Add only plan archive fields now (rejected: leaves workout contract incomplete for Phase 5 deliverables).
+
+**Consequences:**  
+- Positive: full Phase 5/6 feature parity with persisted data contracts and stronger integrity guarantees.
+- Negative/Risks: migration complexity increased due backfilling seeded workouts before applying strict constraints.
+
+---
+
+### [DECISION-011] Explicit Archive/Unarchive Action Endpoints for Workouts and Plans
+
+**Date:** 2026-02-11  
+**Status:** Accepted
+
+**Context:**  
+Archive operations need business-rule checks, predictable UX messaging, and reversible transitions for both workouts and plans.
+
+**Decision:**  
+- Use explicit action routes:
+  - Workouts: `POST /workouts/{id}/archive`, `POST /workouts/{id}/unarchive`
+  - Plans: `POST /plans/{id}/archive`, `POST /plans/{id}/unarchive`
+- Keep `DELETE /plans/{id}` as a soft-delete alias to `archive` for Build Plan compatibility.
+
+**Rationale:**  
+- Action endpoints communicate intent clearly and avoid accidental archive-state toggles.
+- They provide clear places to run dependency guards and return business-rule conflicts.
+- Preserving `DELETE` keeps existing plan task semantics while introducing explicit operations.
+
+**Alternatives Considered:**  
+- Single `PUT` toggle (`is_archived`) endpoint (rejected: weaker intent semantics and harder policy handling).
+- `DELETE`-only soft delete for both resources (rejected: no explicit unarchive action contract).
+
+**Consequences:**  
+- Positive: clearer API contracts, safer archive workflows, and direct FE affordances for archive/unarchive actions.
+- Negative/Risks: additional endpoints increase surface area and test coverage requirements.
+
+---
+
+### [DECISION-012] Monday-First Week Indexing and UTC Weekly Completion Window
+
+**Date:** 2026-02-11  
+**Status:** Accepted
+
+**Context:**  
+Plan-day indexing and completion metrics required a stable definition to avoid mismatches between backend calculations and frontend grid rendering.
+
+**Decision:**  
+- Standardize `plan_days.day_of_week` mapping as Monday=`0` through Sunday=`6`.
+- Compute weekly completion using a UTC Monday-Sunday window.
+- Define completion as: `completed scheduled workouts this week / scheduled workouts this week`.
+
+**Rationale:**  
+- Monday-first indexing aligns with Python weekday conventions and simplifies backend calculations.
+- A single UTC window avoids ambiguity until user-level timezone preferences are modeled.
+- Workout-level completion reflects schedule adherence more accurately than day-binary metrics.
+
+**Alternatives Considered:**  
+- Sunday-first indexing (rejected: more remapping overhead and less alignment with backend defaults).
+- User-local timezone-based windows now (rejected: schema currently lacks explicit timezone preferences).
+- Day-level completion metric (rejected: loses workout-level fidelity).
+
+**Consequences:**  
+- Positive: consistent FE/BE interpretation and deterministic percentage calculations.
+- Negative/Risks: UTC windows may not match all users’ local week boundaries until timezone support is added.
+
+---
+
 <!-- Add new decisions above this line -->

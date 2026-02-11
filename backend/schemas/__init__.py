@@ -9,6 +9,18 @@ from schemas.auth import (
     RegisterRequest,
     UserResponse,
 )
+from schemas.plans import (
+    CoachRosterResponse,
+    PaginatedPlansResponse,
+    PlanAssignRequest,
+    PlanAssignResponse,
+    PlanCreateRequest,
+    PlanDetailResponse,
+    PlanListItemResponse,
+    PlanListQuery,
+    PlanUpdateRequest,
+    PlanUsersResponse,
+)
 from schemas.users import (
     AdminOverviewResponse,
     CoachAssignmentRequest,
@@ -20,6 +32,19 @@ from schemas.users import (
     UserListItemResponse,
     UserListQuery,
     UserUpdateRequest,
+)
+from schemas.workouts import (
+    CardioTypeResponse,
+    MuscleGroupCreateRequest,
+    MuscleGroupResponse,
+    PaginatedWorkoutsResponse,
+    WorkoutArchiveResponse,
+    WorkoutCreateRequest,
+    WorkoutListQuery,
+)
+from schemas.workouts import WorkoutResponse as WorkoutLibraryResponse
+from schemas.workouts import (
+    WorkoutUpdateRequest,
 )
 
 __all__ = [
@@ -40,4 +65,23 @@ __all__ = [
     "CoachAssignmentRequest",
     "CoachAssignmentResponse",
     "AdminOverviewResponse",
+    "WorkoutLibraryResponse",
+    "WorkoutCreateRequest",
+    "WorkoutUpdateRequest",
+    "WorkoutListQuery",
+    "PaginatedWorkoutsResponse",
+    "WorkoutArchiveResponse",
+    "MuscleGroupResponse",
+    "MuscleGroupCreateRequest",
+    "CardioTypeResponse",
+    "PlanListQuery",
+    "PlanListItemResponse",
+    "PaginatedPlansResponse",
+    "PlanDetailResponse",
+    "PlanCreateRequest",
+    "PlanUpdateRequest",
+    "PlanAssignRequest",
+    "PlanAssignResponse",
+    "PlanUsersResponse",
+    "CoachRosterResponse",
 ]

@@ -6,12 +6,14 @@ import { RoleGuard } from '@/components/auth/RoleGuard'
 import { useAuth } from '@/hooks/use-auth'
 import { getDashboardPath } from '@/lib/auth-routing'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
+import { AdminWorkoutsPage } from '@/pages/admin/AdminWorkoutsPage'
 import { AdminUsersPage } from '@/pages/admin/AdminUsersPage'
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { UpdatePasswordPage } from '@/pages/auth/UpdatePasswordPage'
 import { CoachDashboardPage } from '@/pages/coach/CoachDashboardPage'
+import { CoachPlansPage } from '@/pages/coach/CoachPlansPage'
 import { UserDashboardPage } from '@/pages/user/UserDashboardPage'
 
 function RootRedirect() {
@@ -76,11 +78,31 @@ function App() {
         }
       />
       <Route
+        path="/admin/workouts"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['admin']}>
+              <AdminWorkoutsPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/coach/dashboard"
         element={
           <ProtectedRoute>
             <RoleGuard allowedRoles={['coach']}>
               <CoachDashboardPage />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/coach/plans"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={['coach']}>
+              <CoachPlansPage />
             </RoleGuard>
           </ProtectedRoute>
         }

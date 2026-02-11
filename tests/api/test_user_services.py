@@ -5,16 +5,22 @@ from __future__ import annotations
 from uuid import uuid4
 
 import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
 from models import Base
 from models.enums import UserRole, WorkoutType
 from models.user import CoachUserAssignment, User
 from models.workout import Workout
 from schemas.users import UserListQuery
-from services.users import (MAX_USERS_PER_COACH, UserServiceError,
-                            assign_coaches_to_user, deactivate_user,
-                            get_admin_overview, list_users)
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from services.users import (
+    MAX_USERS_PER_COACH,
+    UserServiceError,
+    assign_coaches_to_user,
+    deactivate_user,
+    get_admin_overview,
+    list_users,
+)
 
 
 @pytest.fixture()
@@ -197,6 +203,8 @@ def test_get_admin_overview_counts_dashboard_metrics(db_session: Session) -> Non
             id=uuid4(),
             name="Overview Workout",
             type=WorkoutType.STRENGTH,
+            target_sets=3,
+            target_reps=10,
             is_archived=False,
         )
     )

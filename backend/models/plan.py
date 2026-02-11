@@ -7,6 +7,7 @@ from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     Date,
     DateTime,
@@ -43,6 +44,14 @@ class WorkoutPlan(TimestampMixin, Base):
     )
     start_date: Mapped[date] = mapped_column(Date, nullable=False)
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
+    is_archived: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="false",
+        index=True,
+    )
+    archived_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     coach: Mapped["User"] = relationship(back_populates="workout_plans")
     days: Mapped[list["PlanDay"]] = relationship(
@@ -57,7 +66,9 @@ class WorkoutPlan(TimestampMixin, Base):
 class PlanDay(Base):
     __tablename__ = "plan_days"
     __table_args__ = (
-        CheckConstraint("day_of_week >= 0 AND day_of_week <= 6", name="ck_plan_days_day_of_week"),
+        CheckConstraint(
+            "day_of_week >= 0 AND day_of_week <= 6", name="ck_plan_days_day_of_week"
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(

@@ -137,23 +137,23 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 5.1 | Create Pydantic schemas for workouts | BE | ⬜ | | Create, update, list schemas with muscle groups |
-| 5.2 | Create `GET /workouts` endpoint | BE | ⬜ | | Filter by type, muscle group, archived status; paginated |
-| 5.3 | Create `GET /workouts/{id}` endpoint | BE | ⬜ | | Return workout with muscle groups |
-| 5.4 | Create `POST /workouts` endpoint (admin only) | BE | ⬜ | | Create workout with muscle group assignments |
-| 5.5 | Create `PUT /workouts/{id}` endpoint (admin only) | BE | ⬜ | | Update workout details |
-| 5.6 | Create `POST /workouts/{id}/archive` endpoint (admin only) | BE | ⬜ | | Soft delete with dependency check |
-| 5.7 | Implement active plan dependency check | BE | ⬜ | | Query plan_day_workouts for active plans; block if found |
-| 5.8 | Create `GET /muscle-groups` endpoint | BE | ⬜ | | Return all muscle groups |
-| 5.9 | Create `POST /muscle-groups` endpoint (admin only) | BE | ⬜ | | Add custom muscle group |
-| 5.10 | Create `GET /cardio-types` endpoint | BE | ⬜ | | Return all cardio types |
-| 5.11 | Create Workout Library page | FE | ⬜ | | Card grid or table; filter sidebar; search |
-| 5.12 | Create Workout Create/Edit form | FE | ⬜ | | Dynamic fields based on type (strength vs cardio) |
-| 5.13 | Create strength workout fields | FE | ⬜ | | Target sets, reps, suggested weight inputs |
-| 5.14 | Create cardio workout fields | FE | ⬜ | | Duration, difficulty dropdown (Easy/Medium/Hard), cardio type |
-| 5.15 | Create muscle group multi-select component | FE | ⬜ | | Checkbox group with icons |
-| 5.16 | Create archive confirmation modal with dependency warning | FE | ⬜ | | Show active plan count if blocked |
-| 5.17 | Create unarchive functionality | BE/FE | ⬜ | | Restore archived workouts |
+| 5.1 | Create Pydantic schemas for workouts | BE | 🟢 | Codex | Completed February 11, 2026: added `backend/schemas/workouts.py` with create/update/list/archive and lookup response contracts |
+| 5.2 | Create `GET /workouts` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented paginated listing with type/muscle-group/archive/search filters |
+| 5.3 | Create `GET /workouts/{id}` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: returns workout detail with cardio type and muscle groups |
+| 5.4 | Create `POST /workouts` endpoint (admin only) | BE | 🟢 | Codex | Completed February 11, 2026: admin create flow with workout-type validation and muscle-group assignment |
+| 5.5 | Create `PUT /workouts/{id}` endpoint (admin only) | BE | 🟢 | Codex | Completed February 11, 2026: admin update flow with type-safe field normalization and relationship updates |
+| 5.6 | Create `POST /workouts/{id}/archive` endpoint (admin only) | BE | 🟢 | Codex | Completed February 11, 2026: added archive action endpoint with business-rule validation and conflict handling |
+| 5.7 | Implement active plan dependency check | BE | 🟢 | Codex | Completed February 11, 2026: archive is blocked when workout is linked to active plan assignments |
+| 5.8 | Create `GET /muscle-groups` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented authenticated lookup endpoint returning all muscle groups |
+| 5.9 | Create `POST /muscle-groups` endpoint (admin only) | BE | 🟢 | Codex | Completed February 11, 2026: implemented admin custom muscle-group creation |
+| 5.10 | Create `GET /cardio-types` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented authenticated cardio-type lookup endpoint |
+| 5.11 | Create Workout Library page | FE | 🟢 | Codex | Completed February 11, 2026: added `/admin/workouts` with table, search, filters, and pagination |
+| 5.12 | Create Workout Create/Edit form | FE | 🟢 | Codex | Completed February 11, 2026: added `WorkoutFormModal` with create/edit workflows |
+| 5.13 | Create strength workout fields | FE | 🟢 | Codex | Completed February 11, 2026: added target sets/reps/suggested weight controls for strength workouts |
+| 5.14 | Create cardio workout fields | FE | 🟢 | Codex | Completed February 11, 2026: added cardio type, duration, and difficulty controls |
+| 5.15 | Create muscle group multi-select component | FE | 🟢 | Codex | Completed February 11, 2026: added reusable `MuscleGroupMultiSelect` checkbox selector |
+| 5.16 | Create archive confirmation modal with dependency warning | FE | 🟢 | Codex | Completed February 11, 2026: added archive modal that surfaces backend dependency conflict messaging |
+| 5.17 | Create unarchive functionality | BE/FE | 🟢 | Codex | Completed February 11, 2026: implemented unarchive endpoint and UI action from workout table |
 
 ---
 
@@ -161,23 +161,24 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 | # | Task | Type | Status | Assigned To | Notes |
 |---|------|------|--------|-------------|-------|
-| 6.1 | Create Pydantic schemas for plans | BE | ⬜ | | Plan create, update, assignment schemas |
-| 6.2 | Create `GET /plans` endpoint (coach) | BE | ⬜ | | Return plans created by coach |
-| 6.3 | Create `GET /plans/{id}` endpoint | BE | ⬜ | | Return plan with days and workouts |
-| 6.4 | Create `POST /plans` endpoint (coach) | BE | ⬜ | | Create plan with days and workout assignments |
-| 6.5 | Create `PUT /plans/{id}` endpoint (coach) | BE | ⬜ | | Update plan details and workouts |
-| 6.6 | Create `DELETE /plans/{id}` endpoint (coach) | BE | ⬜ | | Soft delete plan |
-| 6.7 | Create `POST /plans/{id}/assign` endpoint | BE | ⬜ | | Assign plan to user(s); handle pending status |
-| 6.8 | Create `GET /plans/{id}/users` endpoint | BE | ⬜ | | Return users assigned to plan with status |
-| 6.9 | Implement one-active-plan logic | BE | ⬜ | | New assignment = pending if user has active plan |
-| 6.10 | Create `GET /coaches/{id}/users` endpoint | BE | ⬜ | | Return users assigned to coach |
-| 6.11 | Create Plan Builder page | FE | ⬜ | | Weekly grid layout (7 columns) |
-| 6.12 | Create day workout selector component | FE | ⬜ | | Click day → modal to select workouts |
-| 6.13 | Create workout picker modal | FE | ⬜ | | Search/filter workouts; multi-select |
-| 6.14 | Create plan save functionality | FE | ⬜ | | Validate at least one workout assigned |
-| 6.15 | Create user assignment panel | FE | ⬜ | | Select users from coach's roster |
-| 6.16 | Create Coach Dashboard | FE | ⬜ | | List of assigned users; plan status per user |
-| 6.17 | Create plan completion status display | FE | ⬜ | | Show % of workouts completed this week |
+| 6.1 | Create Pydantic schemas for plans | BE | 🟢 | Codex | Completed February 11, 2026: added `backend/schemas/plans.py` for list/detail/create/update/assign/roster contracts |
+| 6.2 | Create `GET /plans` endpoint (coach) | BE | 🟢 | Codex | Completed February 11, 2026: implemented coach-scoped paginated plan listing with archive/search filters |
+| 6.3 | Create `GET /plans/{id}` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented coach-scoped plan detail endpoint with days/workouts |
+| 6.4 | Create `POST /plans` endpoint (coach) | BE | 🟢 | Codex | Completed February 11, 2026: implemented plan creation with day/workout assignments |
+| 6.5 | Create `PUT /plans/{id}` endpoint (coach) | BE | 🟢 | Codex | Completed February 11, 2026: implemented plan update flow with day/workout replacement logic |
+| 6.6 | Create `DELETE /plans/{id}` endpoint (coach) | BE | 🟢 | Codex | Completed February 11, 2026: implemented soft-delete alias that archives the plan |
+| 6.7 | Create `POST /plans/{id}/assign` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented assignment endpoint with roster/role/activity checks |
+| 6.8 | Create `GET /plans/{id}/users` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: returns latest assignment status per user plus weekly completion percent |
+| 6.9 | Implement one-active-plan logic | BE | 🟢 | Codex | Completed February 11, 2026: users with an active plan receive new assignments as `pending` |
+| 6.10 | Create `GET /coaches/{id}/users` endpoint | BE | 🟢 | Codex | Completed February 11, 2026: implemented coach roster endpoint with plan status and completion metrics |
+| 6.11 | Create Plan Builder page | FE | 🟢 | Codex | Completed February 11, 2026: added `/coach/plans` with builder workflow and plan list management |
+| 6.12 | Create day workout selector component | FE | 🟢 | Codex | Completed February 11, 2026: added `DayWorkoutSelector` weekly grid editor |
+| 6.13 | Create workout picker modal | FE | 🟢 | Codex | Completed February 11, 2026: added searchable `WorkoutPickerModal` for day assignment |
+| 6.14 | Create plan save functionality | FE | 🟢 | Codex | Completed February 11, 2026: validates date/name/weekly assignments before save |
+| 6.15 | Create user assignment panel | FE | 🟢 | Codex | Completed February 11, 2026: added `UserAssignmentPanel` backed by coach roster endpoint |
+| 6.16 | Create Coach Dashboard | FE | 🟢 | Codex | Completed February 11, 2026: replaced placeholder dashboard with roster + quick actions |
+| 6.17 | Create plan completion status display | FE | 🟢 | Codex | Completed February 11, 2026: dashboard and plan views show weekly completion percentages |
+| 6.18 | Add explicit archive/unarchive action endpoints for plans | ENHANCEMENT | 🟢 | Codex | Completed February 11, 2026: added `POST /plans/{id}/archive` and `POST /plans/{id}/unarchive` while preserving DELETE soft-delete alias |
 
 ---
 
@@ -354,7 +355,7 @@ Phase 5 (Workouts)─┘        ↓
 | 3. Authentication | 15 | 8 | 6 | 1 | 0 | 0 |
 | 4. User Management | 14 | 5 | 8 | 0 | 0 | 1 |
 | 5. Workout Library | 17 | 7 | 9 | 0 | 0 | 1 |
-| 6. Plan Management | 17 | 7 | 10 | 0 | 0 | 0 |
+| 6. Plan Management | 18 | 7 | 10 | 0 | 0 | 1 |
 | 7. Dashboard & Execution | 24 | 18 | 6 | 0 | 0 | 0 |
 | 8. Swap & Ad Hoc | 6 | 4 | 2 | 0 | 0 | 0 |
 | 9. Progress Dashboard | 13 | 10 | 3 | 0 | 0 | 0 |
@@ -362,7 +363,7 @@ Phase 5 (Workouts)─┘        ↓
 | 11. CSV Import/Export | 9 | 3 | 6 | 0 | 0 | 0 |
 | 12. Polish | 15 | 7 | 4 | 0 | 0 | 4 |
 | 13. Documentation | 17 | 0 | 1 | 8 | 0 | 8 |
-| **TOTAL** | **196** | **77** | **65** | **22** | **16** | **16** |
+| **TOTAL** | **197** | **77** | **65** | **22** | **16** | **17** |
 
 ---
 

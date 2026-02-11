@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 
-interface AdminShellProps {
+interface CoachShellProps {
   title: string
   description: string
   children: ReactNode
@@ -29,7 +29,7 @@ function NavItem({ to, label }: { to: string; label: string }) {
   )
 }
 
-export function AdminShell({ title, description, children }: AdminShellProps) {
+export function CoachShell({ title, description, children }: CoachShellProps) {
   const { user, logout } = useAuth()
 
   return (
@@ -54,9 +54,8 @@ export function AdminShell({ title, description, children }: AdminShellProps) {
           </div>
 
           <nav className="mt-4 flex flex-wrap items-center gap-2">
-            <NavItem to="/admin/dashboard" label="Overview" />
-            <NavItem to="/admin/users" label="Users" />
-            <NavItem to="/admin/workouts" label="Workouts" />
+            <NavItem to="/coach/dashboard" label="Dashboard" />
+            <NavItem to="/coach/plans" label="Plans" />
           </nav>
         </header>
 

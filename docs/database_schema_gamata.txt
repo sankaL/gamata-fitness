@@ -1,7 +1,7 @@
 # GamataFitness Database Schema (Source of Truth)
 
-Version: 2.1.0  
-Last Updated: 2026-02-09
+Version: 3.0.0  
+Last Updated: 2026-02-11
 
 This document is the source of truth for the implemented Phase 2 schema.
 
@@ -12,11 +12,13 @@ This document is the source of truth for the implemented Phase 2 schema.
 | 1.0.0 | 2026-02-08 | Initial draft schema |
 | 2.0.0 | 2026-02-09 | Implemented Phase 2 schema, seed data, and RLS in Alembic |
 | 2.1.0 | 2026-02-09 | Added user soft-deactivation columns and user filtering indexes for Phase 4 admin management |
+| 3.0.0 | 2026-02-11 | Added workout prescription fields, cardio difficulty enum, and workout-plan archival columns for Phases 5 and 6 |
 
 ## Enums
 
 - `user_role`: `admin`, `coach`, `user`
 - `workout_type`: `strength`, `cardio`
+- `cardio_difficulty_level`: `easy`, `medium`, `hard`
 - `plan_assignment_status`: `pending`, `active`, `inactive`
 - `session_type`: `assigned`, `swap`, `adhoc`
 
@@ -67,9 +69,22 @@ Constraints:
 - `instructions` TEXT, nullable
 - `type` `workout_type`, not null
 - `cardio_type_id` UUID FK -> `cardio_types.id`, nullable
+- `target_sets` SMALLINT, nullable
+- `target_reps` SMALLINT, nullable
+- `suggested_weight` NUMERIC(8,2), nullable
+- `target_duration` INTEGER, nullable
+- `difficulty_level` `cardio_difficulty_level`, nullable
 - `is_archived` BOOLEAN, not null, default `false`
 - `created_at` TIMESTAMPTZ, not null, default `now()`
 - `updated_at` TIMESTAMPTZ, not null, default `now()`
+
+Constraints:
+- `target_sets > 0` when present
+- `target_reps > 0` when present
+- `suggested_weight >= 0` when present
+- `target_duration > 0` when present
+- Strength workouts require: `target_sets`, `target_reps`; and disallow cardio-only fields
+- Cardio workouts require: `cardio_type_id`, `target_duration`, `difficulty_level`; and disallow strength-only fields
 
 ### `workout_muscle_groups`
 - `workout_id` UUID FK -> `workouts.id`, not null
@@ -84,6 +99,8 @@ Constraints:
 - `coach_id` UUID FK -> `users.id`, not null
 - `start_date` DATE, not null
 - `end_date` DATE, not null
+- `is_archived` BOOLEAN, not null, default `false`
+- `archived_at` TIMESTAMPTZ, nullable
 - `created_at` TIMESTAMPTZ, not null, default `now()`
 - `updated_at` TIMESTAMPTZ, not null, default `now()`
 
@@ -97,6 +114,7 @@ Constraints:
 
 Constraints:
 - Check: `day_of_week >= 0 AND day_of_week <= 6`
+- Mapping: Monday=`0`, Tuesday=`1`, Wednesday=`2`, Thursday=`3`, Friday=`4`, Saturday=`5`, Sunday=`6`
 - Unique: (`plan_id`, `day_of_week`)
 
 ### `plan_day_workouts`
@@ -150,6 +168,7 @@ Constraints:
 - `ix_workouts_type`
 - `ix_workouts_is_archived`
 - `ix_workout_plans_coach_id`
+- `ix_workout_plans_is_archived`
 - `ix_plan_days_plan_id`
 - `ix_plan_assignments_plan_id`
 - `ix_plan_assignments_user_id`
@@ -231,3 +250,4 @@ Policy implementation and helper functions are in:
 - `202602090002_phase2_seed_data.py`: default muscle groups, cardio types, workout library
 - `202602090003_phase2_rls_policies.py`: RLS helper functions and policies
 - `202602090004_phase4_user_deactivation.py`: `users.is_active`, `users.deactivated_at`, and supporting user list indexes
+- `202602110001_phase56_schema_expansion.py`: cardio difficulty enum, workout target fields, workout field constraints, and plan archive columns/index

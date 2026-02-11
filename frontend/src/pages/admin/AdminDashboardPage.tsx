@@ -56,8 +56,8 @@ export function AdminDashboardPage() {
           <Button asChild variant="outline">
             <Link to="/admin/users">Manage Coach Assignments</Link>
           </Button>
-          <Button variant="outline" disabled>
-            Workout Library (Phase 5)
+          <Button asChild variant="outline">
+            <Link to="/admin/workouts">Workout Library</Link>
           </Button>
         </div>
       </section>

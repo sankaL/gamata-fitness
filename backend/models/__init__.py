@@ -1,7 +1,13 @@
 """SQLAlchemy models export surface."""
 
 from models.base import Base
-from models.enums import PlanAssignmentStatus, SessionType, UserRole, WorkoutType
+from models.enums import (
+    CardioDifficultyLevel,
+    PlanAssignmentStatus,
+    SessionType,
+    UserRole,
+    WorkoutType,
+)
 from models.plan import PlanAssignment, PlanDay, PlanDayWorkout, WorkoutPlan
 from models.session import ExerciseLog, WorkoutSession
 from models.user import CoachUserAssignment, User
@@ -11,6 +17,7 @@ __all__ = [
     "Base",
     "UserRole",
     "WorkoutType",
+    "CardioDifficultyLevel",
     "PlanAssignmentStatus",
     "SessionType",
     "User",
