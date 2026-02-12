@@ -41,7 +41,7 @@ export function LoginPage() {
       footer={
         <span>
           New to GamataFitness?{' '}
-          <Link className="font-medium text-slate-900 underline" to="/register">
+          <Link className="font-medium text-primary underline" to="/register">
             Create an account
           </Link>
         </span>
@@ -53,7 +53,7 @@ export function LoginPage() {
             Email
           </label>
           <Input id="email" type="email" autoComplete="email" {...register('email')} />
-          {errors.email ? <p className="text-sm text-rose-700">{errors.email.message}</p> : null}
+          {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
         </div>
 
         <div className="space-y-1.5">
@@ -67,18 +67,18 @@ export function LoginPage() {
             {...register('password')}
           />
           {errors.password ? (
-            <p className="text-sm text-rose-700">{errors.password.message}</p>
+            <p className="text-sm text-destructive">{errors.password.message}</p>
           ) : null}
         </div>
 
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <Button className="w-full" type="submit" disabled={isSubmitting || isLoading}>
           {isSubmitting || isLoading ? 'Signing in...' : 'Sign in'}
         </Button>
 
         <p className="text-center text-sm">
-          <Link className="text-slate-900 underline" to="/forgot-password">
+          <Link className="text-primary underline" to="/forgot-password">
             Forgot your password?
           </Link>
         </p>

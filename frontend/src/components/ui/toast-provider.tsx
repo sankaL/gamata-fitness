@@ -29,9 +29,9 @@ const TOAST_DURATION_MS = 3600
 
 function ToastCard({ item }: { item: ToastItem }) {
   const toneStyles: Record<ToastType, string> = {
-    success: 'border-emerald-200 bg-emerald-50 text-emerald-900',
-    error: 'border-rose-200 bg-rose-50 text-rose-900',
-    info: 'border-slate-200 bg-white text-slate-900',
+    success: 'border-emerald-800 bg-emerald-900/80 text-emerald-200',
+    error: 'border-rose-800 bg-rose-900/80 text-rose-200',
+    info: 'border-border bg-card text-foreground',
   }
 
   return (
@@ -82,7 +82,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="pointer-events-none fixed right-4 top-4 z-[100] flex w-full max-w-sm flex-col gap-2">
+      <div className="pointer-events-none fixed left-4 right-4 top-4 z-[100] mx-auto flex max-w-[430px] flex-col gap-2">
         {toasts.map((item) => (
           <button
             key={item.id}

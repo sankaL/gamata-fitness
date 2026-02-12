@@ -10,23 +10,37 @@ interface WeeklyFrequencyChartProps {
 
 export function WeeklyFrequencyChart({ buckets, isLoading }: WeeklyFrequencyChartProps) {
   return (
-    <Card className="border-slate-300 shadow-sm">
+    <Card className="border-border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-900">Weekly Frequency</CardTitle>
+        <CardTitle className="text-lg text-foreground">Weekly Frequency</CardTitle>
       </CardHeader>
       <CardContent className="h-72">
         {isLoading ? (
-          <p className="text-sm text-slate-600">Loading chart...</p>
+          <p className="text-sm text-muted-foreground">Loading chart...</p>
         ) : buckets.length === 0 ? (
-          <p className="text-sm text-slate-600">No data for selected range.</p>
+          <p className="text-sm text-muted-foreground">No data for selected range.</p>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={buckets}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="label" interval={0} angle={-20} textAnchor="end" height={70} />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="session_count" fill="#1d4ed8" radius={[6, 6, 0, 0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(0, 0%, 18%)" />
+              <XAxis
+                dataKey="label"
+                interval={0}
+                angle={-20}
+                textAnchor="end"
+                height={70}
+                tick={{ fill: 'hsl(0, 0%, 60%)' }}
+              />
+              <YAxis allowDecimals={false} tick={{ fill: 'hsl(0, 0%, 60%)' }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(0, 0%, 11%)',
+                  border: '1px solid hsl(0, 0%, 18%)',
+                  borderRadius: '8px',
+                  color: 'hsl(0, 0%, 90%)',
+                }}
+              />
+              <Bar dataKey="session_count" fill="hsl(14, 100%, 55%)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}

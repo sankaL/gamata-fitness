@@ -10,23 +10,30 @@ interface MuscleGroupChartProps {
 
 export function MuscleGroupChart({ items, isLoading }: MuscleGroupChartProps) {
   return (
-    <Card className="border-slate-300 shadow-sm">
+    <Card className="border-border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-900">Muscle Group Volume</CardTitle>
+        <CardTitle className="text-lg text-foreground">Muscle Group Volume</CardTitle>
       </CardHeader>
       <CardContent className="h-72">
         {isLoading ? (
-          <p className="text-sm text-slate-600">Loading chart...</p>
+          <p className="text-sm text-muted-foreground">Loading chart...</p>
         ) : items.length === 0 ? (
-          <p className="text-sm text-slate-600">No data for selected range.</p>
+          <p className="text-sm text-muted-foreground">No data for selected range.</p>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={items}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="muscle_group_name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="total_volume" fill="#0f172a" radius={[6, 6, 0, 0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(0, 0%, 18%)" />
+              <XAxis dataKey="muscle_group_name" tick={{ fill: 'hsl(0, 0%, 60%)' }} />
+              <YAxis tick={{ fill: 'hsl(0, 0%, 60%)' }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(0, 0%, 11%)',
+                  border: '1px solid hsl(0, 0%, 18%)',
+                  borderRadius: '8px',
+                  color: 'hsl(0, 0%, 90%)',
+                }}
+              />
+              <Bar dataKey="total_volume" fill="hsl(14, 100%, 55%)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}

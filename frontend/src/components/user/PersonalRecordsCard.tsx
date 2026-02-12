@@ -33,22 +33,22 @@ export function PersonalRecordsCard({ sessions }: PersonalRecordsCardProps) {
     .slice(0, 6)
 
   return (
-    <Card className="border-slate-300 shadow-sm">
+    <Card className="border-border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-900">Max Weight Records</CardTitle>
+        <CardTitle className="text-lg text-foreground">Max Weight Records</CardTitle>
       </CardHeader>
       <CardContent>
         {records.length === 0 ? (
-          <p className="text-sm text-slate-600">No weight PRs logged yet.</p>
+          <p className="text-sm text-muted-foreground">No weight PRs logged yet.</p>
         ) : (
           <div className="space-y-2">
             {records.map((record) => (
               <div
                 key={record.workoutName}
-                className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+                className="flex items-center justify-between rounded-lg border border-border bg-secondary px-3 py-2"
               >
-                <p className="text-sm font-medium text-slate-800">{record.workoutName}</p>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-medium text-foreground">{record.workoutName}</p>
+                <p className="text-sm font-semibold text-foreground">
                   {record.maxWeight.toFixed(1)} kg
                 </p>
               </div>

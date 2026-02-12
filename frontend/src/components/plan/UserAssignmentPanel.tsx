@@ -19,11 +19,11 @@ export function UserAssignmentPanel({
   onAssign,
 }: UserAssignmentPanelProps) {
   return (
-    <section className="rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
+    <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Assign Plan</h2>
-          <p className="text-sm text-slate-600">
+          <h2 className="text-lg font-semibold text-foreground">Assign Plan</h2>
+          <p className="text-sm text-muted-foreground">
             Select athletes from your roster and assign the selected plan.
           </p>
         </div>
@@ -38,9 +38,9 @@ export function UserAssignmentPanel({
         </Button>
       </div>
 
-      <div className="mt-4 max-h-64 overflow-y-auto rounded-md border border-slate-200 p-2">
+      <div className="mt-4 max-h-64 overflow-y-auto rounded-md border border-border p-2">
         {users.length === 0 ? (
-          <p className="text-sm text-slate-500">No assigned athletes found.</p>
+          <p className="text-sm text-muted-foreground">No assigned athletes found.</p>
         ) : null}
 
         <ul className="space-y-1">
@@ -48,10 +48,10 @@ export function UserAssignmentPanel({
             const isChecked = selectedUserIds.includes(user.user_id)
             return (
               <li key={user.user_id}>
-                <label className="flex items-center justify-between gap-3 rounded-md px-2 py-1.5 hover:bg-slate-50">
+                <label className="flex items-center justify-between gap-3 rounded-md px-2 py-1.5 hover:bg-secondary">
                   <div>
-                    <p className="text-sm font-medium text-slate-800">{user.user_name}</p>
-                    <p className="text-xs text-slate-500">{user.user_email}</p>
+                    <p className="text-sm font-medium text-foreground">{user.user_name}</p>
+                    <p className="text-xs text-muted-foreground">{user.user_email}</p>
                   </div>
                   <input
                     type="checkbox"

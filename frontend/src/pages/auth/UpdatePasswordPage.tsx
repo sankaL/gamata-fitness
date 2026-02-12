@@ -65,13 +65,13 @@ export function UpdatePasswordPage() {
       title="Set a new password"
       description="Choose a new password for your account."
       footer={
-        <Link className="font-medium text-slate-900 underline" to="/login">
+        <Link className="font-medium text-primary underline" to="/login">
           Back to sign in
         </Link>
       }
     >
       {!token ? (
-        <p className="text-sm text-rose-700">
+        <p className="text-sm text-destructive">
           Password reset token is missing or invalid. Request a new reset link from the login page.
         </p>
       ) : (
@@ -87,7 +87,7 @@ export function UpdatePasswordPage() {
               {...register('password')}
             />
             {errors.password ? (
-              <p className="text-sm text-rose-700">{errors.password.message}</p>
+              <p className="text-sm text-destructive">{errors.password.message}</p>
             ) : null}
           </div>
 
@@ -102,12 +102,12 @@ export function UpdatePasswordPage() {
               {...register('confirmPassword')}
             />
             {errors.confirmPassword ? (
-              <p className="text-sm text-rose-700">{errors.confirmPassword.message}</p>
+              <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
             ) : null}
           </div>
 
-          {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-          {successMessage ? <p className="text-sm text-emerald-700">{successMessage}</p> : null}
+          {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          {successMessage ? <p className="text-sm text-success">{successMessage}</p> : null}
 
           <Button className="w-full" type="submit" disabled={isSubmitting || isLoading}>
             {isSubmitting || isLoading ? 'Updating password...' : 'Update password'}

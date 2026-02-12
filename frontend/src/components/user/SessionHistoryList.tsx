@@ -49,14 +49,16 @@ export function SessionHistoryList({
       {sessions.map((session) => {
         const isExpanded = expandedSessionIds.includes(session.id)
         return (
-          <div key={session.id} className="rounded-lg border border-slate-200 bg-white p-3">
+          <div key={session.id} className="rounded-lg border border-border bg-card p-3">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <p className="font-medium text-slate-900">{session.workout_name}</p>
-                <p className="text-xs text-slate-600 capitalize">
+                <p className="font-medium text-foreground">{session.workout_name}</p>
+                <p className="text-xs text-muted-foreground capitalize">
                   {session.workout_type} • {session.session_type}
                 </p>
-                <p className="text-xs text-slate-500">{formatDateTime(session.completed_at)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {formatDateTime(session.completed_at)}
+                </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -78,8 +80,8 @@ export function SessionHistoryList({
             </div>
 
             {isExpanded ? (
-              <div className="mt-3 space-y-2 border-t border-slate-200 pt-3 text-sm">
-                <p className="text-slate-700">
+              <div className="mt-3 space-y-2 border-t border-border pt-3 text-sm">
+                <p className="text-foreground">
                   Sets: {session.total_sets} | Reps: {session.total_reps} | Duration:{' '}
                   {session.total_duration}s | Volume: {session.total_volume}
                 </p>
@@ -87,7 +89,7 @@ export function SessionHistoryList({
                   {session.logs.map((log) => (
                     <div
                       key={log.id}
-                      className="rounded border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-700"
+                      className="rounded border border-border bg-secondary px-2 py-1 text-xs text-foreground"
                     >
                       sets={log.sets ?? '-'} reps={log.reps ?? '-'} weight={log.weight ?? '-'}{' '}
                       duration=

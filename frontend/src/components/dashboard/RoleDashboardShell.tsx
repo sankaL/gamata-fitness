@@ -13,13 +13,13 @@ export function RoleDashboardShell({ heading, description }: RoleDashboardShellP
   const { user, logout } = useAuth()
 
   return (
-    <main className="min-h-screen bg-slate-100 p-4 md:p-8">
-      <section className="mx-auto max-w-3xl">
-        <Card className="border-slate-300 shadow-sm">
+    <main className="min-h-screen bg-background p-4">
+      <section className="mx-auto max-w-[430px]">
+        <Card className="border-border bg-card shadow-sm">
           <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
             <div className="space-y-1">
               <CardTitle className="text-2xl">{heading}</CardTitle>
-              <p className="text-sm text-slate-700">{description}</p>
+              <p className="text-sm text-muted-foreground">{description}</p>
             </div>
             <Button variant="outline" onClick={logout}>
               <LogOut className="h-4 w-4" />

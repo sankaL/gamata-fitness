@@ -21,14 +21,14 @@ export function DeactivateUserModal({
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 p-4">
-      <div className="w-full max-w-md rounded-xl border border-slate-300 bg-white p-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-slate-900">Deactivate User</h2>
-        <p className="mt-2 text-sm text-slate-700">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4">
+      <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-lg">
+        <h2 className="text-xl font-semibold text-foreground">Deactivate User</h2>
+        <p className="mt-2 text-sm text-foreground">
           You are about to deactivate <span className="font-medium">{user.name}</span>. This keeps
           the record but blocks access to protected app features.
         </p>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           This action can only be reversed in the database.
         </p>
 

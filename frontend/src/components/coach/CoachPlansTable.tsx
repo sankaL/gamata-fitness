@@ -26,103 +26,90 @@ export function CoachPlansTable({
   onDelete,
 }: CoachPlansTableProps) {
   return (
-    <section className="rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-      <h2 className="text-lg font-semibold text-slate-900">Saved Plans</h2>
-      <p className="text-sm text-slate-600">Select a plan to edit or assign.</p>
+    <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
+      <h2 className="text-lg font-semibold text-foreground">Saved Plans</h2>
+      <p className="text-sm text-muted-foreground">Select a plan to edit or assign.</p>
 
-      <div className="mt-4 overflow-x-auto">
-        <table className="min-w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-slate-200 text-left text-slate-600">
-              <th className="py-2 pr-4 font-medium">Name</th>
-              <th className="py-2 pr-4 font-medium">Date Range</th>
-              <th className="py-2 pr-4 font-medium">Workouts</th>
-              <th className="py-2 pr-4 font-medium">Status</th>
-              <th className="py-2 pr-4 font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan={5} className="py-4">
-                  <div className="space-y-2">
-                    <Skeleton className="h-5 w-full" />
-                    <Skeleton className="h-5 w-full" />
-                    <Skeleton className="h-5 w-full" />
+      <div className="mt-4 space-y-3">
+        {isLoading ? (
+          <div className="space-y-3">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        ) : null}
+
+        {!isLoading && plans.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">
+            No plans found. Create a new plan to get started.
+          </p>
+        ) : null}
+
+        {!isLoading
+          ? plans.map((plan) => (
+              <div key={plan.id} className="rounded-lg border border-border bg-secondary/40 p-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground">{plan.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {plan.start_date} to {plan.end_date}
+                    </p>
                   </div>
-                </td>
-              </tr>
-            ) : null}
-
-            {!isLoading && plans.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="py-6 text-center text-slate-600">
-                  No plans found. Create a new plan to get started.
-                </td>
-              </tr>
-            ) : null}
-
-            {plans.map((plan) => (
-              <tr key={plan.id} className="border-b border-slate-100 align-top">
-                <td className="py-3 pr-4 text-slate-900">{plan.name}</td>
-                <td className="py-3 pr-4 text-slate-700">
-                  {plan.start_date} to {plan.end_date}
-                </td>
-                <td className="py-3 pr-4 text-slate-700">{plan.total_workouts}</td>
-                <td className="py-3 pr-4">
                   <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
                       plan.is_archived
-                        ? 'bg-amber-100 text-amber-700'
-                        : 'bg-emerald-100 text-emerald-700'
+                        ? 'bg-amber-900/40 text-amber-300'
+                        : 'bg-emerald-900/40 text-emerald-300'
                     }`}
                   >
                     {plan.is_archived ? 'Archived' : 'Active'}
                   </span>
-                </td>
-                <td className="py-3 pr-4">
-                  <div className="flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline" onClick={() => onEdit(plan)}>
-                      Edit
-                    </Button>
+                </div>
 
-                    {plan.is_archived ? (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          void onUnarchive(plan)
-                        }}
-                      >
-                        Unarchive
-                      </Button>
-                    ) : (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          void onArchive(plan)
-                        }}
-                      >
-                        Archive
-                      </Button>
-                    )}
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {plan.total_workouts} workout(s)
+                </p>
 
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" onClick={() => onEdit(plan)}>
+                    Edit
+                  </Button>
+
+                  {plan.is_archived ? (
                     <Button
                       size="sm"
-                      variant="destructive"
+                      variant="outline"
                       onClick={() => {
-                        void onDelete(plan)
+                        void onUnarchive(plan)
                       }}
                     >
-                      Delete
+                      Unarchive
                     </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        void onArchive(plan)
+                      }}
+                    >
+                      Archive
+                    </Button>
+                  )}
+
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => {
+                      void onDelete(plan)
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            ))
+          : null}
       </div>
 
       <div className="mt-4 flex items-center justify-end gap-2">
@@ -134,7 +121,7 @@ export function CoachPlansTable({
         >
           Previous
         </Button>
-        <span className="text-sm text-slate-600">
+        <span className="text-sm text-muted-foreground">
           Page {page} of {Math.max(totalPages, 1)}
         </span>
         <Button

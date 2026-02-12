@@ -39,7 +39,7 @@ export function ForgotPasswordPage() {
       title="Reset your password"
       description="Enter your email and we will send you a reset link."
       footer={
-        <Link className="font-medium text-slate-900 underline" to="/login">
+        <Link className="font-medium text-primary underline" to="/login">
           Back to sign in
         </Link>
       }
@@ -50,11 +50,11 @@ export function ForgotPasswordPage() {
             Email
           </label>
           <Input id="email" type="email" autoComplete="email" {...register('email')} />
-          {errors.email ? <p className="text-sm text-rose-700">{errors.email.message}</p> : null}
+          {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
         </div>
 
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-        {submittedMessage ? <p className="text-sm text-emerald-700">{submittedMessage}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
+        {submittedMessage ? <p className="text-sm text-success">{submittedMessage}</p> : null}
 
         <Button className="w-full" type="submit" disabled={isSubmitting || isLoading}>
           {isSubmitting || isLoading ? 'Sending reset link...' : 'Send reset link'}

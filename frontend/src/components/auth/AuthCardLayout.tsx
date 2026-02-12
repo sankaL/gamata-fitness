@@ -11,11 +11,12 @@ interface AuthCardLayoutProps {
 
 export function AuthCardLayout({ title, description, children, footer }: AuthCardLayoutProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
-      <Card className="w-full max-w-md border-slate-300">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <span className="mb-6 text-2xl font-bold italic text-primary">GamataFitness</span>
+      <Card className="w-full max-w-md border-border bg-card">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-2xl">{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle className="text-2xl text-foreground">{title}</CardTitle>
+          <CardDescription className="text-muted-foreground">{description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {children}

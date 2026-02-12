@@ -53,48 +53,45 @@ export function PlanSettingsPage() {
   }
 
   return (
-    <UserShell
-      title="Plan Settings"
-      description="Review your active plan and manage newly assigned pending plans."
-    >
-      <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-        <h2 className="text-lg font-semibold text-slate-900">Current Active Plan</h2>
+    <UserShell>
+      <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
+        <h2 className="text-lg font-semibold text-foreground">Current Active Plan</h2>
         {weekPlanQuery.isLoading || pendingPlansQuery.isLoading ? (
-          <p className="text-sm text-slate-600">Loading plan settings...</p>
+          <p className="text-sm text-muted-foreground">Loading plan settings...</p>
         ) : activePlan ? (
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="font-semibold text-slate-900">{activePlan.plan_name}</p>
-            <p className="text-sm text-slate-600">
+          <div className="rounded-lg border border-border bg-secondary p-4">
+            <p className="font-semibold text-foreground">{activePlan.plan_name}</p>
+            <p className="text-sm text-muted-foreground">
               Week of {new Date(weekPlanQuery.data?.week_start ?? '').toLocaleDateString()}
             </p>
           </div>
         ) : (
-          <p className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+          <p className="rounded-lg border border-border bg-secondary p-4 text-sm text-foreground">
             No active plan is currently assigned.
           </p>
         )}
       </section>
 
-      <section className="space-y-3 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-        <h2 className="text-lg font-semibold text-slate-900">Pending Plans</h2>
+      <section className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
+        <h2 className="text-lg font-semibold text-foreground">Pending Plans</h2>
         {pendingPlansQuery.isLoading ? (
-          <p className="text-sm text-slate-600">Loading pending plans...</p>
+          <p className="text-sm text-muted-foreground">Loading pending plans...</p>
         ) : pendingAssignments.length === 0 ? (
-          <p className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+          <p className="rounded-lg border border-border bg-secondary p-4 text-sm text-foreground">
             You have no pending plan assignments.
           </p>
         ) : (
           pendingAssignments.map((assignment) => (
             <div
               key={assignment.assignment_id}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+              className="rounded-lg border border-border bg-secondary p-4"
             >
-              <p className="font-semibold text-slate-900">{assignment.plan_name}</p>
-              <p className="text-sm text-slate-600">Coach: {assignment.coach_name}</p>
-              <p className="text-sm text-slate-600">
+              <p className="font-semibold text-foreground">{assignment.plan_name}</p>
+              <p className="text-sm text-muted-foreground">Coach: {assignment.coach_name}</p>
+              <p className="text-sm text-muted-foreground">
                 {formatDateRange(assignment.start_date, assignment.end_date)}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted-foreground">
                 {assignment.total_days} day(s), {assignment.total_workouts} workout(s)
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -121,13 +118,13 @@ export function PlanSettingsPage() {
         )}
 
         {pendingPlansQuery.error ? (
-          <p className="text-sm text-rose-700">
+          <p className="text-sm text-destructive">
             {pendingPlansQuery.error instanceof Error
               ? pendingPlansQuery.error.message
               : 'Unable to load pending plans.'}
           </p>
         ) : null}
-        {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
+        {actionError ? <p className="text-sm text-destructive">{actionError}</p> : null}
       </section>
     </UserShell>
   )

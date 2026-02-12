@@ -39,10 +39,10 @@ export function AdminWorkoutsToolbar({
   onImportCsv,
 }: AdminWorkoutsToolbarProps) {
   return (
-    <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-      <div className="grid gap-3 md:grid-cols-4">
-        <div className="space-y-1.5 md:col-span-2">
-          <label htmlFor="workout-search" className="text-sm font-medium text-slate-700">
+    <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="grid gap-3">
+        <div className="space-y-1.5">
+          <label htmlFor="workout-search" className="text-sm font-medium text-foreground">
             Search
           </label>
           <Input
@@ -54,7 +54,7 @@ export function AdminWorkoutsToolbar({
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="workout-type" className="text-sm font-medium text-slate-700">
+          <label htmlFor="workout-type" className="text-sm font-medium text-foreground">
             Type
           </label>
           <select
@@ -70,7 +70,7 @@ export function AdminWorkoutsToolbar({
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="workout-status" className="text-sm font-medium text-slate-700">
+          <label htmlFor="workout-status" className="text-sm font-medium text-foreground">
             Status
           </label>
           <select
@@ -85,8 +85,8 @@ export function AdminWorkoutsToolbar({
           </select>
         </div>
 
-        <div className="space-y-1.5 md:col-span-2">
-          <label htmlFor="muscle-filter" className="text-sm font-medium text-slate-700">
+        <div className="space-y-1.5">
+          <label htmlFor="muscle-filter" className="text-sm font-medium text-foreground">
             Muscle Group
           </label>
           <select

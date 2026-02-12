@@ -38,11 +38,15 @@ export function CardioTimer({ initialSeconds, onChange }: CardioTimerProps) {
   }, [seconds])
 
   return (
-    <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-center">
-      <p className="text-xs text-slate-500">Elapsed Time</p>
-      <p className="text-4xl font-semibold tracking-widest text-slate-900">{formattedTime}</p>
+    <div className="space-y-3 rounded-lg border border-border bg-secondary p-4 text-center">
+      <p className="text-xs text-muted-foreground">Elapsed Time</p>
+      <p className="text-4xl font-semibold tracking-widest text-foreground">{formattedTime}</p>
       <div className="flex flex-wrap justify-center gap-2">
-        <Button type="button" onClick={() => setIsRunning((current) => !current)}>
+        <Button
+          type="button"
+          className="bg-primary h-14"
+          onClick={() => setIsRunning((current) => !current)}
+        >
           {isRunning ? 'Pause' : 'Start'}
         </Button>
         <Button

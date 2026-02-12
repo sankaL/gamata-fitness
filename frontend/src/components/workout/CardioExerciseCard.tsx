@@ -15,10 +15,10 @@ interface CardioExerciseCardProps {
 
 export function CardioExerciseCard({ workout, value, onChange }: CardioExerciseCardProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
+    <div className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">{workout.name}</h2>
-        <p className="mt-1 text-sm text-slate-600">
+        <h2 className="text-xl font-semibold text-foreground">{workout.name}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Target duration: {workout.target_duration ?? 20} minutes
         </p>
       </div>
@@ -34,7 +34,7 @@ export function CardioExerciseCard({ workout, value, onChange }: CardioExerciseC
       />
 
       <div className="space-y-1">
-        <label htmlFor="cardio-notes" className="text-sm font-medium text-slate-700">
+        <label htmlFor="cardio-notes" className="text-sm font-medium text-foreground">
           Notes
         </label>
         <Input

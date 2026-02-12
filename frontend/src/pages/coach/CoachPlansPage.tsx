@@ -127,14 +127,11 @@ export function CoachPlansPage() {
   }
 
   return (
-    <CoachShell
-      title="Plan Management"
-      description="Build weekly plans, assign athletes, and manage archived templates."
-    >
-      <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-        <div className="grid gap-3 md:grid-cols-3">
-          <div className="space-y-1.5 md:col-span-2">
-            <label htmlFor="plan-search" className="text-sm font-medium text-slate-700">
+    <CoachShell>
+      <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
+        <div className="grid gap-3">
+          <div className="space-y-1.5">
+            <label htmlFor="plan-search" className="text-sm font-medium text-foreground">
               Search
             </label>
             <Input
@@ -145,7 +142,7 @@ export function CoachPlansPage() {
             />
           </div>
           <div className="space-y-1.5">
-            <label htmlFor="plan-status" className="text-sm font-medium text-slate-700">
+            <label htmlFor="plan-status" className="text-sm font-medium text-foreground">
               Status
             </label>
             <select
@@ -193,7 +190,7 @@ export function CoachPlansPage() {
           </Button>
         </div>
 
-        {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
+        {actionError ? <p className="text-sm text-destructive">{actionError}</p> : null}
       </section>
 
       <CoachPlansTable

@@ -32,10 +32,10 @@ export function ProgressFilters({
   onToggleMuscleGroup,
 }: ProgressFiltersProps) {
   return (
-    <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
-      <div className="grid gap-4 md:grid-cols-3">
+    <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="grid gap-4">
         <div className="space-y-1.5">
-          <p className="text-sm font-medium text-slate-700">Date Range</p>
+          <p className="text-sm font-medium text-foreground">Date Range</p>
           <select
             value={rangePreset}
             className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -48,7 +48,7 @@ export function ProgressFilters({
         </div>
 
         <div className="space-y-1.5">
-          <p className="text-sm font-medium text-slate-700">Workout Type</p>
+          <p className="text-sm font-medium text-foreground">Workout Type</p>
           <select
             value={workoutType}
             className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -61,9 +61,9 @@ export function ProgressFilters({
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3">
         <div className="space-y-1.5">
-          <label htmlFor="progress-start-date" className="text-sm font-medium text-slate-700">
+          <label htmlFor="progress-start-date" className="text-sm font-medium text-foreground">
             Start Date
           </label>
           <Input
@@ -75,7 +75,7 @@ export function ProgressFilters({
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="progress-end-date" className="text-sm font-medium text-slate-700">
+          <label htmlFor="progress-end-date" className="text-sm font-medium text-foreground">
             End Date
           </label>
           <Input
@@ -89,7 +89,7 @@ export function ProgressFilters({
       </div>
 
       <div className="space-y-1.5">
-        <p className="text-sm font-medium text-slate-700">Muscle Group Filter</p>
+        <p className="text-sm font-medium text-foreground">Muscle Group Filter</p>
         <div className="flex flex-wrap gap-2">
           {muscleGroups.map((group) => {
             const isChecked = selectedMuscleGroupIds.includes(group.id)
@@ -100,8 +100,8 @@ export function ProgressFilters({
                 onClick={() => onToggleMuscleGroup(group.id)}
                 className={`rounded-full border px-3 py-1 text-xs ${
                   isChecked
-                    ? 'border-slate-900 bg-slate-900 text-white'
-                    : 'border-slate-300 bg-white text-slate-700'
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-border bg-card text-foreground'
                 }`}
               >
                 {group.name}

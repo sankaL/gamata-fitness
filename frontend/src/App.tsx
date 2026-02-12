@@ -37,9 +37,9 @@ function RootRedirect() {
 
 function RouteLoader() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
-      <section className="rounded-xl border border-slate-300 bg-white px-6 py-4 shadow-sm">
-        <p className="text-sm text-slate-700">Loading page...</p>
+    <main className="flex min-h-screen items-center justify-center bg-background p-4">
+      <section className="rounded-xl border border-border bg-card px-6 py-4 shadow-sm">
+        <p className="text-sm text-muted-foreground">Loading page...</p>
       </section>
     </main>
   )

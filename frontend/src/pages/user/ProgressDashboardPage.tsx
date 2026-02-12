@@ -110,10 +110,7 @@ export function ProgressDashboardPage() {
   const tabs: ProgressTab[] = ['history', 'trends', 'stats']
 
   return (
-    <UserShell
-      title="Progress Dashboard"
-      description="Review session history, trends, and lifting records."
-    >
+    <UserShell>
       <ProgressFilters
         rangePreset={rangePreset}
         startDate={startDate}
@@ -137,16 +134,21 @@ export function ProgressDashboardPage() {
         }
       />
 
-      <section className="space-y-3 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
+      <section className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
         <div className="flex flex-wrap gap-2">
           {tabs.map((tab) => (
-            <Button
+            <button
               key={tab}
-              variant={activeTab === tab ? 'default' : 'outline'}
+              type="button"
               onClick={() => setActiveTab(tab)}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                activeTab === tab
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-muted-foreground hover:bg-secondary'
+              }`}
             >
               {tab[0].toUpperCase() + tab.slice(1)}
-            </Button>
+            </button>
           ))}
         </div>
 
@@ -165,7 +167,7 @@ export function ProgressDashboardPage() {
               >
                 Previous
               </Button>
-              <p className="text-sm text-slate-700">
+              <p className="text-sm text-muted-foreground">
                 Page {sessionsQuery.data?.page ?? page} / {sessionsQuery.data?.total_pages ?? 1}
               </p>
               <Button
@@ -180,7 +182,7 @@ export function ProgressDashboardPage() {
         ) : null}
 
         {activeTab === 'trends' ? (
-          <div className="grid gap-4 xl:grid-cols-2">
+          <div className="grid gap-4">
             <MuscleGroupChart
               items={filteredMuscleProgress}
               isLoading={muscleProgressQuery.isLoading}
@@ -193,20 +195,20 @@ export function ProgressDashboardPage() {
         ) : null}
 
         {activeTab === 'stats' ? (
-          <div className="grid gap-4 xl:grid-cols-2">
+          <div className="grid gap-4">
             <PersonalRecordsCard sessions={filteredSessions} />
-            <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <h3 className="text-lg font-semibold text-slate-900">Totals</h3>
-              <p className="mt-2 text-sm text-slate-700">
+            <section className="rounded-xl border border-border bg-secondary p-4">
+              <h3 className="text-lg font-semibold text-foreground">Totals</h3>
+              <p className="mt-2 text-sm text-foreground">
                 Sessions: {sessionsQuery.data?.total ?? 0}
               </p>
-              <p className="text-sm text-slate-700">
+              <p className="text-sm text-foreground">
                 Volume:{' '}
                 {filteredSessions
                   .reduce((sum, session) => sum + session.total_volume, 0)
                   .toFixed(1)}
               </p>
-              <p className="text-sm text-slate-700">
+              <p className="text-sm text-foreground">
                 Duration:{' '}
                 {filteredSessions.reduce((sum, session) => sum + session.total_duration, 0)}s
               </p>
@@ -215,7 +217,7 @@ export function ProgressDashboardPage() {
         ) : null}
 
         {sessionsQuery.error ? (
-          <p className="text-sm text-rose-700">
+          <p className="text-sm text-destructive">
             {sessionsQuery.error instanceof Error
               ? sessionsQuery.error.message
               : 'Unable to load sessions.'}

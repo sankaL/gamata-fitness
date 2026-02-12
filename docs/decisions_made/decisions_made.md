@@ -493,4 +493,42 @@ Phase 12 calls for production-readiness improvements spanning UX polish, observa
 
 ---
 
+### [DECISION-016] Mobile-First Dark UI Redesign — Always-Dark, Bottom Nav, Orange Accent
+
+**Date:** 2026-02-11
+**Status:** Accepted
+
+**Context:**
+The app was visually bland (light theme, desktop-oriented layout, basic card styling) and the target usage is exclusively on mobile devices (~375px viewport). The team wanted a redesign inspired by the Barbold fitness app: dark theme, orange accent, mobile-optimized layout, bold section headers, bottom nav, and progress rings.
+
+**Decision:**
+- **Always-dark theme:** Remove the `.dark` class toggle; all CSS variables are dark by default. No theme switch needed.
+- **Orange-red primary accent:** `hsl(14, 100%, 55%)` as `--primary`, used for CTAs, active nav tabs, section header bars, and focus rings.
+- **Color palette:** Near-black background (`hsl(0,0%,7%)`), dark card surface (`hsl(0,0%,11%)`), elevated secondary (`hsl(0,0%,15%)`), subtle border (`hsl(0,0%,18%)`), subdued text (`hsl(0,0%,60%)`), green success (`hsl(142,70%,45%)`).
+- **Max-width 430px body:** All content is constrained to `430px` centered — no desktop-wide layouts.
+- **Sticky TopBar + fixed BottomNav:** Replace all top header/link navs with a 14px-height top bar (brand name + avatar + logout) and a 16px-height bottom nav with role-specific tabs. User: 4 tabs. Admin: 3 tabs. Coach: 2 tabs.
+- **Shell API simplified:** `UserShell`, `AdminShell`, `CoachShell` no longer accept `title`/`description` props — they just wrap children with TopBar + BottomNav.
+- **Table → Card conversion:** All admin and coach tables (`UsersTable`, `WorkoutLibraryTable`, `CoachRosterTable`, `CoachPlansTable`) converted from `<table>` elements to card-based vertical lists for mobile readability.
+- **New dashboard components:** `CalendarWeekStrip` (M–S strip with green dots), `ProgressRing` (SVG donut), `RecentWorkoutsList` (last 3 sessions with stats).
+- **Enlarged touch targets:** Workout execution buttons increased to `h-14`–`h-16` (56–64px). Primary CTAs use `h-12 rounded-xl` (`Start Workout`, `Finish Workout`).
+- **Dark Recharts config:** Orange bars, dark grid/axis strokes, dark tooltip backgrounds for all charts.
+- **Badge colors:** Role/status badges use translucent dark variants (e.g. `bg-violet-900/40 text-violet-300`) instead of light pastel backgrounds.
+
+**Rationale:**
+- App is phone-only; no desktop users to support, so removing `md:`/`lg:`/`xl:` breakpoints reduces layout complexity and ensures a focused mobile experience.
+- Always-dark removes toggle complexity and aligns with fitness app conventions (dark = lower eye strain during workouts).
+- Semantic CSS variable usage (`text-foreground`, `bg-card`, `text-muted-foreground`, etc.) means future theme changes are a one-file edit.
+- Card lists over tables are far more usable on narrow viewports — no horizontal scrolling, better tap targets per action.
+
+**Alternatives Considered:**
+- Dark/light toggle with class-based theming (rejected: unnecessary complexity for a phone-only app with no preference to preserve).
+- Keeping table layouts with horizontal scroll (rejected: poor UX on 375px; too small tap targets for action buttons).
+- CSS-only palette swap via media query `prefers-color-scheme` (rejected: doesn't match the always-dark product requirement; Tailwind `darkMode: class` removed).
+
+**Consequences:**
+- Positive: consistent, branded mobile experience; no slate/light colors remain; single-file palette changes; larger touch targets reduce mis-taps during workouts.
+- Negative/Risks: desktop browsers will see the 430px-constrained centered layout with wide margins; acceptable given phone-only usage requirement.
+
+---
+
 <!-- Add new decisions above this line -->

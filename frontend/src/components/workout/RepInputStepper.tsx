@@ -18,19 +18,19 @@ export function RepInputStepper({ value, min = 0, max = 100, onChange }: RepInpu
         <Button
           type="button"
           variant="outline"
-          className="h-14 w-14"
+          className="h-16 w-16"
           onClick={() => onChange(clamp(value - 1))}
         >
           -
         </Button>
-        <div className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center">
-          <p className="text-xs text-slate-500">Reps</p>
-          <p className="text-2xl font-semibold text-slate-900">{value}</p>
+        <div className="flex-1 rounded-lg border border-border bg-secondary px-3 py-2 text-center">
+          <p className="text-xs text-muted-foreground">Reps</p>
+          <p className="text-2xl font-semibold text-foreground">{value}</p>
         </div>
         <Button
           type="button"
           variant="outline"
-          className="h-14 w-14"
+          className="h-16 w-16"
           onClick={() => onChange(clamp(value + 1))}
         >
           +

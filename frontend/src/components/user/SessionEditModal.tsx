@@ -55,12 +55,12 @@ export function SessionEditModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 p-4 md:items-center">
-      <div className="w-full max-w-2xl rounded-xl border border-slate-300 bg-white p-4 shadow-xl md:p-6">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4">
+      <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-4 shadow-xl">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Edit Session</h2>
-            <p className="text-sm text-slate-600">{session.workout_name}</p>
+            <h2 className="text-lg font-semibold text-foreground">Edit Session</h2>
+            <p className="text-sm text-muted-foreground">{session.workout_name}</p>
           </div>
           <Button variant="outline" onClick={onClose}>
             Close
@@ -69,10 +69,7 @@ export function SessionEditModal({
 
         <div className="mt-4 max-h-[55vh] space-y-3 overflow-y-auto">
           {logs.map((log, index) => (
-            <div
-              key={log.id}
-              className="grid gap-2 rounded-lg border border-slate-200 p-3 md:grid-cols-5"
-            >
+            <div key={log.id} className="grid gap-2 rounded-lg border border-border p-3">
               <Input
                 type="number"
                 value={log.sets ?? ''}

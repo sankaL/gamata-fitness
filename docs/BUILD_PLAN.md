@@ -323,6 +323,44 @@ This build plan breaks down the GamataFitness MVP into actionable tasks for the 
 
 ---
 
+## Phase 14: Mobile UI Redesign — Dark Theme & Mobile-First Layout
+
+| # | Task | Type | Status | Assigned To | Notes |
+|---|------|------|--------|-------------|-------|
+| 14.1 | Replace CSS variables with always-dark palette; remove `.dark` block; constrain body to 430px | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.2 | Remove `darkMode: ['class']` from Tailwind; add `success` and `surface-elevated` color tokens | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.3 | Add `viewport-fit=cover` and `theme-color` meta to `index.html` | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.4 | Create `SectionHeader` shared component (bold italic text + orange left-border bar) | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.5 | Create `UserAvatar` shared component (circle with user initial, orange bg) | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.6 | Create `TopBar` shared component (sticky: brand + avatar + logout) | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.7 | Create `BottomNav` shared component (fixed bottom tabs, role-specific, active = orange) | FE | 🟢 | Claude | Completed February 11, 2026; User: 4 tabs, Admin: 3 tabs, Coach: 2 tabs |
+| 14.8 | Rewrite `UserShell`, `AdminShell`, `CoachShell` — remove header nav, add TopBar + BottomNav, `pb-20 pt-14 px-4` content area | FE | 🟢 | Claude | Completed February 11, 2026; removed `title`/`description` props from all 11 page usages |
+| 14.9 | Update `AuthCardLayout` — dark bg, brand name above card in bold italic orange | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.10 | Update `EmptyState` — `border-border bg-secondary` replacing slate colors | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.11 | Update `ToastProvider` — dark toast styles, full-width mobile positioning | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.12 | Update auth pages (Login, Register, ForgotPassword, UpdatePassword) — links to `text-primary`, errors to `text-destructive` | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.13 | Create `CalendarWeekStrip` — horizontal M–S strip with green dots for workout days, orange highlight on today | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.14 | Create `ProgressRing` — SVG donut chart showing weekly workout completion percentage | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.15 | Create `RecentWorkoutsList` — last 3 sessions as dark cards with exercise/volume/duration stats | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.16 | Redesign `TodaysWorkoutCard` — `SectionHeader`, `bg-secondary` workout card, large `h-12` Start button | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.17 | Update `QuickStatsCards` — `grid-cols-2`, icons `text-primary`, semantic dark colors | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.18 | Reorder `UserDashboardPage` layout: CalendarWeekStrip → ProgressRing → QuickStats → TodaysWorkout → Recent | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.19 | Update workout execution components (9 files) — dark theme, `h-14`/`h-16` touch targets, orange primary | FE | 🟢 | Claude | Completed February 11, 2026; StrengthExerciseCard, CardioExerciseCard, SetCompletionChecklist, RepInputStepper, WeightInputSlider, CardioTimer, WorkoutCelebration, SwapWorkoutModal, WorkoutExecutionPage |
+| 14.20 | Update progress/analytics components — dark Recharts (orange bars, dark grid/tooltips), single-column layout | FE | 🟢 | Claude | Completed February 11, 2026; WeeklyFrequencyChart, MuscleGroupChart, ProgressFilters, SessionHistoryList, PersonalRecordsCard, SessionEditModal, ProgressDashboardPage |
+| 14.21 | Update other user pages — PlanSettingsPage, MyCoachesPage, AdHocWorkoutPage, PlanActivationModal | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.22 | Convert `UsersTable` from `<table>` to card list with dark badge variants | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.23 | Convert `WorkoutLibraryTable` from `<table>` to card list | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.24 | Update `AdminUsersToolbar` and `AdminWorkoutsToolbar` — single-column stacked filters, dark theme | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.25 | Update admin modals (6 files) and `MuscleGroupMultiSelect` — dark theme, `bg-black/60` backdrop | FE | 🟢 | Claude | Completed February 11, 2026; UserFormModal, CoachAssignmentModal, DeactivateUserModal, ArchiveWorkoutModal, WorkoutFormModal, CsvImportModal |
+| 14.26 | Update `AdminDashboardPage` — `grid-cols-2` metric cards, `SectionHeader` for quick actions | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.27 | Update admin pages (AdminUsersPage, AdminWorkoutsPage) — dark theme | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.28 | Convert `CoachRosterTable` and `CoachPlansTable` from `<table>` to card lists | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.29 | Update coach pages and plan builder components — dark theme, remove desktop breakpoints | FE | 🟢 | Claude | Completed February 11, 2026; CoachDashboardPage, CoachPlansPage, PlanBuilderForm, UserAssignmentPanel, WorkoutPickerModal, DayWorkoutSelector |
+| 14.30 | Final cleanup — `AppErrorBoundary`, `RoleDashboardShell`, `App.tsx` RouteLoader, `skeleton.tsx` | FE | 🟢 | Claude | Completed February 11, 2026 |
+| 14.31 | Audit: zero remaining `slate-` or `bg-white` references; TypeScript compiles clean; ESLint passes | FE | 🟢 | Claude | Completed February 11, 2026 |
+
+---
+
 ## Task Dependencies
 
 ```
@@ -366,7 +404,8 @@ Phase 5 (Workouts)─┘        ↓
 | 11. CSV Import/Export | 9 | 3 | 6 | 0 | 0 | 0 |
 | 12. Polish | 15 | 7 | 4 | 0 | 0 | 4 |
 | 13. Documentation | 19 | 0 | 1 | 8 | 0 | 10 |
-| **TOTAL** | **199** | **77** | **65** | **22** | **16** | **19** |
+| 14. Mobile UI Redesign | 31 | 31 | 0 | 0 | 0 | 0 |
+| **TOTAL** | **230** | **108** | **65** | **22** | **16** | **19** |
 
 ---
 
@@ -402,7 +441,7 @@ This table tracks issues discovered during development that were not part of the
 | ENH-002 | February 9, 2026 | Add root `.gitignore` for frontend/backend/test artifacts including Playwright traces/results and Locust reports | P1 | 🟢 | Codex | Added comprehensive ignore rules with test-output coverage |
 | ENH-003 | February 9, 2026 | Add root `.env.example` and enforce updating env-example files whenever new variables are introduced | P1 | 🟢 | Codex | Added root template and synced agent documentation rules in AGENTS/CLAUDE |
 | ENH-004 | February 9, 2026 | Add one-command local profile runner with local Supabase (`local`, `prod-like`, `down`) and document workflow in README/AGENTS/CLAUDE | P1 | 🟢 | Codex | Added `scripts/run-profile.sh`, root `Makefile` targets, root `README.md`, and repo instructions updates |
-| ENH-005 | | | | ⬜ | | |
+| ENH-005 | February 11, 2026 | Full mobile UI redesign: always-dark theme, orange accent, BottomNav, TopBar, card-based admin/coach tables, new dashboard components (CalendarWeekStrip, ProgressRing, RecentWorkoutsList), enlarged touch targets throughout | P1 | 🟢 | Claude | 7 new components; ~50 modified files; zero remaining slate/bg-white classes; TypeScript + ESLint clean |
 
 ### Priority Legend
 | Level | Meaning |

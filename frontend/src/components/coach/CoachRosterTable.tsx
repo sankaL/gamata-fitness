@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { CoachRosterUser } from '@/types/plans'
 
 interface CoachRosterTableProps {
@@ -8,58 +9,53 @@ interface CoachRosterTableProps {
 
 export function CoachRosterTable({ users, isLoading }: CoachRosterTableProps) {
   return (
-    <Card className="border-slate-300 shadow-sm">
+    <Card>
       <CardHeader>
         <CardTitle className="text-lg">Assigned Athletes</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-slate-200 text-left text-slate-600">
-                <th className="py-2 pr-4 font-medium">Athlete</th>
-                <th className="py-2 pr-4 font-medium">Active Plan</th>
-                <th className="py-2 pr-4 font-medium">Pending Plans</th>
-                <th className="py-2 pr-4 font-medium">Weekly Completion</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={4} className="py-6 text-center text-slate-600">
-                    Loading assigned athletes...
-                  </td>
-                </tr>
-              ) : null}
+        {isLoading ? (
+          <div className="space-y-3">
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+          </div>
+        ) : null}
 
-              {!isLoading && users.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="py-6 text-center text-slate-600">
-                    No athletes are currently assigned to you.
-                  </td>
-                </tr>
-              ) : null}
+        {!isLoading && users.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">
+            No athletes are currently assigned to you.
+          </p>
+        ) : null}
 
-              {!isLoading
-                ? users.map((user) => (
-                    <tr key={user.user_id} className="border-b border-slate-100 align-top">
-                      <td className="py-3 pr-4 text-slate-900">
-                        <p className="font-medium">{user.user_name}</p>
-                        <p className="text-xs text-slate-500">{user.user_email}</p>
-                      </td>
-                      <td className="py-3 pr-4 text-slate-700">
-                        {user.active_plan_name ?? 'None'}
-                      </td>
-                      <td className="py-3 pr-4 text-slate-700">{user.pending_plan_count}</td>
-                      <td className="py-3 pr-4 text-slate-700">
-                        {user.weekly_completion_percent.toFixed(2)}%
-                      </td>
-                    </tr>
-                  ))
-                : null}
-            </tbody>
-          </table>
-        </div>
+        {!isLoading && users.length > 0 ? (
+          <ul className="space-y-3">
+            {users.map((user) => (
+              <li
+                key={user.user_id}
+                className="rounded-lg border border-border bg-secondary/40 p-3"
+              >
+                <p className="font-medium text-foreground">{user.user_name}</p>
+                <p className="text-xs text-muted-foreground">{user.user_email}</p>
+
+                <div className="mt-2 grid grid-cols-3 gap-2 text-sm">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Active Plan</p>
+                    <p className="text-foreground">{user.active_plan_name ?? 'None'}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Pending</p>
+                    <p className="text-foreground">{user.pending_plan_count}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Weekly</p>
+                    <p className="text-foreground">{user.weekly_completion_percent.toFixed(1)}%</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </CardContent>
     </Card>
   )

@@ -37,13 +37,10 @@ export function AdHocWorkoutPage() {
   }
 
   return (
-    <UserShell
-      title="Ad Hoc Workout"
-      description="Browse the workout library and start immediately."
-    >
-      <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
+    <UserShell>
+      <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
         <div className="space-y-1">
-          <label htmlFor="workout-search" className="text-sm font-medium text-slate-700">
+          <label htmlFor="workout-search" className="text-sm font-medium text-foreground">
             Search workouts
           </label>
           <Input
@@ -56,7 +53,7 @@ export function AdHocWorkoutPage() {
 
         <div className="space-y-2">
           {workoutsQuery.isLoading ? (
-            <p className="text-sm text-slate-600">Loading workouts...</p>
+            <p className="text-sm text-muted-foreground">Loading workouts...</p>
           ) : null}
           {!workoutsQuery.isLoading && (workoutsQuery.data?.items.length ?? 0) === 0 ? (
             <EmptyState
@@ -68,11 +65,11 @@ export function AdHocWorkoutPage() {
           {workoutsQuery.data?.items.map((workout) => (
             <div
               key={workout.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 p-3"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-3"
             >
               <div>
-                <p className="font-medium text-slate-900">{workout.name}</p>
-                <p className="text-xs text-slate-600 capitalize">{workout.type}</p>
+                <p className="font-medium text-foreground">{workout.name}</p>
+                <p className="text-xs text-muted-foreground capitalize">{workout.type}</p>
               </div>
               <Button
                 disabled={createSessionMutation.isPending}
@@ -85,13 +82,13 @@ export function AdHocWorkoutPage() {
         </div>
 
         {workoutsQuery.error ? (
-          <p className="text-sm text-rose-700">
+          <p className="text-sm text-destructive">
             {workoutsQuery.error instanceof Error
               ? workoutsQuery.error.message
               : 'Unable to load workouts.'}
           </p>
         ) : null}
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
       </section>
     </UserShell>
   )

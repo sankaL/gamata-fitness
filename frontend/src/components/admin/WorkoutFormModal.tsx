@@ -159,16 +159,16 @@ export function WorkoutFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 p-4">
-      <div className="w-full max-w-2xl rounded-xl border border-slate-300 bg-white p-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
-        <p className="mt-1 text-sm text-slate-600">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4">
+      <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 shadow-lg">
+        <h2 className="text-xl font-semibold text-foreground">{title}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Configure workout details and target parameters.
         </p>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div className="space-y-1.5 md:col-span-2">
-            <label className="text-sm font-medium text-slate-700">Name</label>
+        <div className="mt-4 grid gap-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground">Name</label>
             <Input
               value={formState.name}
               onChange={(event) =>
@@ -178,7 +178,7 @@ export function WorkoutFormModal({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700">Type</label>
+            <label className="text-sm font-medium text-foreground">Type</label>
             <select
               value={formState.type}
               onChange={(event) =>
@@ -195,7 +195,7 @@ export function WorkoutFormModal({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700">Muscle Groups</label>
+            <label className="text-sm font-medium text-foreground">Muscle Groups</label>
             <MuscleGroupMultiSelect
               options={muscleGroups}
               selectedIds={formState.muscle_group_ids}
@@ -205,8 +205,8 @@ export function WorkoutFormModal({
             />
           </div>
 
-          <div className="space-y-1.5 md:col-span-2">
-            <label className="text-sm font-medium text-slate-700">Description</label>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground">Description</label>
             <textarea
               value={formState.description}
               rows={2}
@@ -217,8 +217,8 @@ export function WorkoutFormModal({
             />
           </div>
 
-          <div className="space-y-1.5 md:col-span-2">
-            <label className="text-sm font-medium text-slate-700">Instructions</label>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground">Instructions</label>
             <textarea
               value={formState.instructions}
               rows={3}
@@ -232,7 +232,7 @@ export function WorkoutFormModal({
           {formState.type === 'strength' ? (
             <>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700">Target Sets</label>
+                <label className="text-sm font-medium text-foreground">Target Sets</label>
                 <Input
                   type="number"
                   min={1}
@@ -243,7 +243,7 @@ export function WorkoutFormModal({
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700">Target Reps</label>
+                <label className="text-sm font-medium text-foreground">Target Reps</label>
                 <Input
                   type="number"
                   min={1}
@@ -253,8 +253,8 @@ export function WorkoutFormModal({
                   }
                 />
               </div>
-              <div className="space-y-1.5 md:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-foreground">
                   Suggested Weight (optional)
                 </label>
                 <Input
@@ -274,7 +274,7 @@ export function WorkoutFormModal({
           ) : (
             <>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700">Cardio Type</label>
+                <label className="text-sm font-medium text-foreground">Cardio Type</label>
                 <select
                   value={formState.cardio_type_id}
                   onChange={(event) =>
@@ -291,7 +291,7 @@ export function WorkoutFormModal({
                 </select>
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-foreground">
                   Target Duration (minutes)
                 </label>
                 <Input
@@ -303,8 +303,8 @@ export function WorkoutFormModal({
                   }
                 />
               </div>
-              <div className="space-y-1.5 md:col-span-2">
-                <label className="text-sm font-medium text-slate-700">Difficulty</label>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-foreground">Difficulty</label>
                 <select
                   value={formState.difficulty_level}
                   onChange={(event) =>
@@ -324,9 +324,9 @@ export function WorkoutFormModal({
           )}
         </div>
 
-        <div className="mt-4 space-y-2 rounded-md border border-slate-200 p-3">
-          <p className="text-sm font-medium text-slate-700">Add Custom Muscle Group</p>
-          <div className="grid gap-2 md:grid-cols-3">
+        <div className="mt-4 space-y-2 rounded-md border border-border p-3">
+          <p className="text-sm font-medium text-foreground">Add Custom Muscle Group</p>
+          <div className="grid gap-2">
             <Input
               placeholder="Name"
               value={newMuscleName}
@@ -357,7 +357,7 @@ export function WorkoutFormModal({
           </div>
         </div>
 
-        {error ? <p className="mt-3 text-sm text-rose-700">{error}</p> : null}
+        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
         <div className="mt-6 flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>

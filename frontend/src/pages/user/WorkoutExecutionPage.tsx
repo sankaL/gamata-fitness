@@ -201,9 +201,9 @@ export function WorkoutExecutionPage() {
 
   if (!sessionId) {
     return (
-      <UserShell title="Workout Execution" description="Start a workout from your dashboard first.">
-        <section className="rounded-xl border border-slate-300 bg-white p-6 shadow-sm">
-          <p className="text-sm text-slate-700">No session selected.</p>
+      <UserShell>
+        <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <p className="text-sm text-foreground">No session selected.</p>
           <Button className="mt-4" asChild>
             <Link to="/user/dashboard">Go to Dashboard</Link>
           </Button>
@@ -214,9 +214,9 @@ export function WorkoutExecutionPage() {
 
   if (sessionQuery.isLoading) {
     return (
-      <UserShell title="Workout Execution" description="Loading workout session...">
-        <section className="rounded-xl border border-slate-300 bg-white p-6 shadow-sm">
-          <p className="text-sm text-slate-700">Loading session...</p>
+      <UserShell>
+        <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <p className="text-sm text-foreground">Loading session...</p>
         </section>
       </UserShell>
     )
@@ -224,9 +224,9 @@ export function WorkoutExecutionPage() {
 
   if (sessionQuery.error || !activeSession) {
     return (
-      <UserShell title="Workout Execution" description="Unable to load this session.">
-        <section className="rounded-xl border border-slate-300 bg-white p-6 shadow-sm">
-          <p className="text-sm text-rose-700">
+      <UserShell>
+        <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <p className="text-sm text-destructive">
             {sessionQuery.error instanceof Error
               ? sessionQuery.error.message
               : 'Unable to load session.'}
@@ -240,7 +240,7 @@ export function WorkoutExecutionPage() {
   }
 
   return (
-    <UserShell title="Workout Execution" description="Log your training with large touch controls.">
+    <UserShell>
       {completedSession ? (
         <WorkoutCelebration session={completedSession} onDone={() => navigate('/user/dashboard')} />
       ) : (
@@ -259,16 +259,20 @@ export function WorkoutExecutionPage() {
             />
           )}
 
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-300 bg-white p-4 shadow-sm">
-            <Button disabled={isFinishing} onClick={handleFinishWorkout}>
+          <div className="space-y-2 rounded-xl border border-border bg-card p-4 shadow-sm">
+            <Button
+              className="bg-primary h-14 w-full rounded-xl"
+              disabled={isFinishing}
+              onClick={handleFinishWorkout}
+            >
               Finish Workout
             </Button>
-            <Button variant="outline" asChild>
+            <Button className="w-full" variant="outline" asChild>
               <Link to="/user/dashboard">Save & Exit</Link>
             </Button>
           </div>
 
-          {syncError ? <p className="text-sm text-rose-700">{syncError}</p> : null}
+          {syncError ? <p className="text-sm text-destructive">{syncError}</p> : null}
         </section>
       )}
     </UserShell>

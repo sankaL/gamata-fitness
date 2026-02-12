@@ -8,10 +8,10 @@ export function MyCoachesPage() {
   const coachesQuery = useUserCoachesQuery()
 
   return (
-    <UserShell title="My Coaches" description="Your assigned coaching team and contact details.">
-      <section className="space-y-3 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
+    <UserShell>
+      <section className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
         {coachesQuery.isLoading ? (
-          <p className="text-sm text-slate-600">Loading coaches...</p>
+          <p className="text-sm text-muted-foreground">Loading coaches...</p>
         ) : (coachesQuery.data?.coaches.length ?? 0) === 0 ? (
           <EmptyState
             title="No Coaches Assigned"
@@ -21,15 +21,15 @@ export function MyCoachesPage() {
           coachesQuery.data?.coaches.map((coach) => (
             <div
               key={coach.id}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 p-3"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-3"
             >
               <div>
-                <p className="font-semibold text-slate-900">{coach.name}</p>
-                <p className="text-sm text-slate-600">{coach.email}</p>
+                <p className="font-semibold text-foreground">{coach.name}</p>
+                <p className="text-sm text-muted-foreground">{coach.email}</p>
               </div>
               <a
                 href={`mailto:${coach.email}`}
-                className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900"
+                className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80"
               >
                 <Mail className="h-4 w-4" />
                 Email
@@ -39,7 +39,7 @@ export function MyCoachesPage() {
         )}
 
         {coachesQuery.error ? (
-          <p className="text-sm text-rose-700">
+          <p className="text-sm text-destructive">
             {coachesQuery.error instanceof Error
               ? coachesQuery.error.message
               : 'Unable to load coaches.'}

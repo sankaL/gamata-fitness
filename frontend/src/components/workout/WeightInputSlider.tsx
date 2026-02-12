@@ -32,9 +32,9 @@ export function WeightInputSlider({
         >
           -
         </Button>
-        <div className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center">
-          <p className="text-xs text-slate-500">Weight</p>
-          <p className="text-2xl font-semibold text-slate-900">{value.toFixed(1)} kg</p>
+        <div className="flex-1 rounded-lg border border-border bg-secondary px-3 py-2 text-center">
+          <p className="text-xs text-muted-foreground">Weight</p>
+          <p className="text-2xl font-semibold text-foreground">{value.toFixed(1)} kg</p>
         </div>
         <Button
           type="button"
@@ -52,7 +52,7 @@ export function WeightInputSlider({
         step={step}
         value={value}
         onChange={(event) => onChange(clamp(Number(event.target.value)))}
-        className="h-3 w-full accent-slate-900"
+        className="h-3 w-full accent-primary"
       />
       <div className="flex flex-wrap gap-2">
         {presets.map((preset) => (

@@ -27,10 +27,10 @@ export function PlanActivationModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
-      <section className="w-full max-w-2xl rounded-xl border border-slate-300 bg-white p-5 shadow-xl">
-        <h2 className="text-xl font-semibold text-slate-900">New Plan Assignment Available</h2>
-        <p className="mt-1 text-sm text-slate-600">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+      <section className="w-full max-w-2xl rounded-xl border border-border bg-card p-5 shadow-xl">
+        <h2 className="text-xl font-semibold text-foreground">New Plan Assignment Available</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Your coach assigned one or more plans. Activate one now or decline.
         </p>
 
@@ -38,14 +38,14 @@ export function PlanActivationModal({
           {plans.map((plan) => (
             <div
               key={plan.assignment_id}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+              className="rounded-lg border border-border bg-secondary p-4"
             >
-              <p className="text-base font-semibold text-slate-900">{plan.plan_name}</p>
-              <p className="text-sm text-slate-600">Coach: {plan.coach_name}</p>
-              <p className="text-sm text-slate-600">
+              <p className="text-base font-semibold text-foreground">{plan.plan_name}</p>
+              <p className="text-sm text-muted-foreground">Coach: {plan.coach_name}</p>
+              <p className="text-sm text-muted-foreground">
                 {formatRange(plan.start_date, plan.end_date)}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted-foreground">
                 {plan.total_days} day(s), {plan.total_workouts} workout(s)
               </p>
               {plan.plan_is_archived ? (

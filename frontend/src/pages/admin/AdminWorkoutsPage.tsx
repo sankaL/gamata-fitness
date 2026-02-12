@@ -127,10 +127,7 @@ export function AdminWorkoutsPage() {
   }
 
   return (
-    <AdminShell
-      title="Workout Library"
-      description="Create, update, archive, and restore workouts used in coach plans."
-    >
+    <AdminShell>
       <AdminWorkoutsToolbar
         searchDraft={searchDraft}
         typeFilter={typeFilter}
@@ -170,7 +167,7 @@ export function AdminWorkoutsPage() {
         }}
       />
 
-      {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
+      {actionError ? <p className="text-sm text-destructive">{actionError}</p> : null}
 
       <WorkoutLibraryTable
         workouts={workoutsQuery.data?.items ?? []}

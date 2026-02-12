@@ -97,23 +97,23 @@ export function PlanBuilderForm({
   }
 
   return (
-    <section className="space-y-4 rounded-xl border border-slate-300 bg-white p-4 shadow-sm md:p-6">
+    <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
       <div>
-        <h2 className="text-lg font-semibold text-slate-900">
+        <h2 className="text-lg font-semibold text-foreground">
           {mode === 'create' ? 'Create Plan' : 'Edit Plan'}
         </h2>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-muted-foreground">
           Build a weekly template from Monday through Sunday.
         </p>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3">
-        <div className="space-y-1.5 md:col-span-1">
-          <label className="text-sm font-medium text-slate-700">Plan Name</label>
+      <div className="grid gap-3">
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-foreground">Plan Name</label>
           <Input value={name} onChange={(event) => setName(event.target.value)} />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-slate-700">Start Date</label>
+          <label className="text-sm font-medium text-foreground">Start Date</label>
           <Input
             type="date"
             value={startDate}
@@ -121,7 +121,7 @@ export function PlanBuilderForm({
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-slate-700">End Date</label>
+          <label className="text-sm font-medium text-foreground">End Date</label>
           <Input type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} />
         </div>
       </div>
@@ -132,7 +132,7 @@ export function PlanBuilderForm({
         onEditDay={(dayOfWeek) => setSelectedDay(dayOfWeek)}
       />
 
-      {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+      {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
       <div className="flex justify-end">
         <Button

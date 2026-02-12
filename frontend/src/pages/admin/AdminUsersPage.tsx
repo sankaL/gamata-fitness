@@ -145,10 +145,7 @@ export function AdminUsersPage() {
   }
 
   return (
-    <AdminShell
-      title="Admin User Management"
-      description="Create, update, and deactivate users, and manage coach assignments."
-    >
+    <AdminShell>
       <AdminUsersToolbar
         searchDraft={searchDraft}
         roleFilter={roleFilter}
@@ -182,7 +179,7 @@ export function AdminUsersPage() {
         }}
       />
 
-      {actionError ? <p className="text-sm text-rose-700">{actionError}</p> : null}
+      {actionError ? <p className="text-sm text-destructive">{actionError}</p> : null}
 
       <UsersTable
         users={users}

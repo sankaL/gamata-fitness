@@ -60,7 +60,7 @@ export function RegisterPage() {
       footer={
         <span>
           Already have an account?{' '}
-          <Link className="font-medium text-slate-900 underline" to="/login">
+          <Link className="font-medium text-primary underline" to="/login">
             Sign in
           </Link>
         </span>
@@ -72,7 +72,7 @@ export function RegisterPage() {
             Name
           </label>
           <Input id="name" type="text" autoComplete="name" {...register('name')} />
-          {errors.name ? <p className="text-sm text-rose-700">{errors.name.message}</p> : null}
+          {errors.name ? <p className="text-sm text-destructive">{errors.name.message}</p> : null}
         </div>
 
         <div className="space-y-1.5">
@@ -80,7 +80,7 @@ export function RegisterPage() {
             Email
           </label>
           <Input id="email" type="email" autoComplete="email" {...register('email')} />
-          {errors.email ? <p className="text-sm text-rose-700">{errors.email.message}</p> : null}
+          {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
         </div>
 
         <div className="space-y-1.5">
@@ -94,7 +94,7 @@ export function RegisterPage() {
             {...register('password')}
           />
           {errors.password ? (
-            <p className="text-sm text-rose-700">{errors.password.message}</p>
+            <p className="text-sm text-destructive">{errors.password.message}</p>
           ) : null}
         </div>
 
@@ -109,12 +109,12 @@ export function RegisterPage() {
             {...register('confirmPassword')}
           />
           {errors.confirmPassword ? (
-            <p className="text-sm text-rose-700">{errors.confirmPassword.message}</p>
+            <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
           ) : null}
         </div>
 
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-        {successMessage ? <p className="text-sm text-emerald-700">{successMessage}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
+        {successMessage ? <p className="text-sm text-success">{successMessage}</p> : null}
 
         <Button className="w-full" type="submit" disabled={isSubmitting || isLoading}>
           {isSubmitting || isLoading ? 'Creating account...' : 'Create account'}
